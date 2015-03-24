@@ -9,7 +9,6 @@ import java.util.Collection;
 public class BThread implements Serializable {
 
     Scriptable _scope;
-    String btJsName;
     ContinuationPending _cont;
     Object _request;
     Object _wait;
@@ -56,8 +55,8 @@ public class BThread implements Serializable {
 
     public void resume(Object event) {
         Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
-            cx.setOptimizationLevel(-1); // must use interpreter mode
             cx.resumeContinuation(_cont.getContinuation(), _scope, event);
         } catch (ContinuationPending pending) {
             RWB rwb = (RWB) pending.getApplicationState();

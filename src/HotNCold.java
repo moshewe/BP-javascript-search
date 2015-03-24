@@ -42,11 +42,12 @@ public class HotNCold {
             Object lastEvent = requested.get(0);
             System.out.println("last event is: " + lastEvent);
             for (BThread bt : bThreads) {
-                if (bt._request.equals(lastEvent)) {
+                if (bt._request.equals(lastEvent) ||
+                        bt._wait.equals(lastEvent)) {
                     bt.resume(lastEvent);
                 }
             }
-            System.out.println("pause for user");
+//            System.out.println("pause for user");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             try {
                 String name = br.readLine();
@@ -82,11 +83,11 @@ public class HotNCold {
             try {
                 String source = "java.lang.System.out.println(\"hotbt started!\")\n" +
                         "hotBt.bsync(\"hot\",[],[])\n" +
-                        "java.lang.System.out.println(\"HOT!\")\n" +
+                        "java.lang.System.out.println(\"HOT!1\")\n" +
                         "hotBt.bsync(\"hot\",[],[])\n" +
-                        "java.lang.System.out.println(\"HOT!\")\n" +
+                        "java.lang.System.out.println(\"HOT!2\")\n" +
                         "hotBt.bsync(\"hot\",[],[])\n" +
-                        "java.lang.System.out.println(\"HOT!\")\n";
+                        "java.lang.System.out.println(\"HOT!3\")\n";
                 _script = cx.compileString(source, "hotscript", 1, null);
             } finally {
                 Context.exit();
@@ -100,8 +101,14 @@ public class HotNCold {
         public ColdBt() {
             Context cx = ContextFactory.getGlobal().enterContext();
             try {
-                _script = cx.compileString("java.lang.System.out.println(\"coldbt started!\")\n" +
-                        "coldBt.bsync(\"cold\",[],[])", "hotscript", 1, null);
+                String source = "java.lang.System.out.println(\"coldbt started!\")\n" +
+                        "coldBt.bsync(\"cold\",[],[])\n" +
+                        "java.lang.System.out.println(\"COLD!1\")\n" +
+                        "coldBt.bsync(\"cold\",[],[])\n" +
+                        "java.lang.System.out.println(\"COLD!2\")\n" +
+                        "coldBt.bsync(\"cold\",[],[])\n" +
+                        "java.lang.System.out.println(\"COLD!3\")\n";
+                _script = cx.compileString(source, "hotscript", 1, null);
             } finally {
                 Context.exit();
             }
@@ -115,9 +122,15 @@ public class HotNCold {
         public AlternatorBt() {
             Context cx = ContextFactory.getGlobal().enterContext();
             try {
-                _script = cx.compileString("java.lang.System.out.println(\"alternator started!\")\n" +
+                String source = "java.lang.System.out.println(\"alternator started!\")\n" +
+                        "for(i=0;i<3;i++){\n" +
+                        "java.lang.System.out.println(\"blocking hot \" + i)\n" +
                         "alternatorBt.bsync([],\"cold\",\"hot\")\n" +
-                        "alternatorBt.bsync([],\"hot\",\"cold\")\n", "hotscript", 1, null);
+                        "java.lang.System.out.println(\"blocking cold \" + i)\n" +
+                        "alternatorBt.bsync([],\"hot\",\"cold\")\n" +
+                        "}\n" +
+                        "java.lang.System.out.println(\"alternator done!\")\n";
+                _script = cx.compileString(source, "hotscript", 1, null);
             } finally {
                 Context.exit();
             }
