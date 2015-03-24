@@ -47,7 +47,7 @@ public class HotNCold {
                     bt.resume(lastEvent);
                 }
             }
-//            System.out.println("pause for user");
+            System.out.println("pause for user");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             try {
                 String name = br.readLine();
