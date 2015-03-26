@@ -1,9 +1,10 @@
+package bp;
+
 import org.mozilla.javascript.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -30,16 +31,6 @@ public class HotNCold {
             bt.start();
         }
         while (!bThreads.isEmpty()) {
-            List requested = new ArrayList();
-            for (BThread bt : bThreads) {
-                requested.add(bt._request);
-            }
-            System.out.println("requested: " + requested);
-            for (BThread bt : bThreads) {
-                requested.remove(bt._block);
-            }
-
-            Object lastEvent = requested.get(0);
             System.out.println("last event is: " + lastEvent);
             for (BThread bt : bThreads) {
                 if (bt._request.equals(lastEvent) ||
@@ -108,7 +99,7 @@ public class HotNCold {
                         "java.lang.System.out.println(\"COLD!2\")\n" +
                         "coldBt.bsync(\"cold\",[],[])\n" +
                         "java.lang.System.out.println(\"COLD!3\")\n";
-                _script = cx.compileString(source, "hotscript", 1, null);
+                _script = cx.compileString(source, "coldscript", 1, null);
             } finally {
                 Context.exit();
             }
@@ -130,7 +121,7 @@ public class HotNCold {
                         "alternatorBt.bsync([],\"hot\",\"cold\")\n" +
                         "}\n" +
                         "java.lang.System.out.println(\"alternator done!\")\n";
-                _script = cx.compileString(source, "hotscript", 1, null);
+                _script = cx.compileString(source, "alternatorscript", 1, null);
             } finally {
                 Context.exit();
             }

@@ -1,13 +1,15 @@
+package bp;
+
 import org.mozilla.javascript.*;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 /**
  * Created by orelmosheweinstock on 3/24/15.
  */
-public class BThread implements Serializable {
+public abstract class BThread implements Serializable {
 
+    String _btname;
     Scriptable _scope;
     ContinuationPending _cont;
     Object _request;
@@ -23,7 +25,7 @@ public class BThread implements Serializable {
     }
 
     public String getClassName() {
-        return "BThread";
+        return "bp.BThread";
     }
 
     public RWB bsync(Object request, Object wait, Object block) {
@@ -39,8 +41,8 @@ public class BThread implements Serializable {
 
     public void start() {
         Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
-            cx.setOptimizationLevel(-1); // must use interpreter mode
             cx.executeScriptWithContinuations(_script, _scope);
         } catch (ContinuationPending pending) {
             RWB rwb = (RWB) pending.getApplicationState();
