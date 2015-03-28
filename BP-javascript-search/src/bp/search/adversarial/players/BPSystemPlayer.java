@@ -10,7 +10,7 @@ public class BPSystemPlayer extends BPPlayer {
 		return instance;
 	}
 
-	private BPSystemPlayer() {
+	protected BPSystemPlayer() {
 
 	}
 }

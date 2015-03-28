@@ -234,13 +234,7 @@ public class BProgram implements Cloneable, Serializable {
             next = dequeueExternalEvent();
         }
 
-        for (BThread bt : _bthreads) {
-            boolean requested = bt.getRequestedEvents().contains(next);
-            boolean waited = bt.getWaitedEvents().contains(next);
-            if (requested || waited) {
-                bt.resume(next);
-            }
-        }
+        triggerEvent(next);
 
         for (Iterator<BThread> it = _bthreads.iterator();
              it.hasNext(); ) {

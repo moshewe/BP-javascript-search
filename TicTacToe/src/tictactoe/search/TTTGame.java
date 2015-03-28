@@ -9,6 +9,8 @@ import bp.search.BPState;
 import bp.search.EnvironmentSimBThread;
 import bp.search.adversarial.BPGame;
 import bp.search.adversarial.BPPlayer;
+import bp.search.adversarial.players.BPSystemPlayer;
+import bp.search.adversarial.players.EnvironmentPlayer;
 import tictactoe.bThreads.DeclareWinner;
 import tictactoe.bThreads.DetectDraw;
 import tictactoe.bThreads.EnforceTurns;
@@ -29,8 +31,8 @@ import static tictactoe.events.StaticEvents.XEvents;
 
 public class TTTGame extends BPGame {
 
-    public static final BPPlayer xPlayer = new BPPlayer();
-    public static final BPPlayer oPlayer = new BPPlayer();
+    public static final BPPlayer xPlayer = new XPlayer();
+    public static final BPPlayer oPlayer = new YPlayer();
     public static final BPPlayer[] players = {xPlayer, oPlayer};
 
     protected static BPAction simOn = new BPAction(EnvironmentSimBThread.simOn);
@@ -182,5 +184,20 @@ public class TTTGame extends BPGame {
     public void bplog(String s) {
         System.out.println("[" + this.getClass().getSimpleName() + "]: "
                 + s);
+    }
+
+    private static class YPlayer extends BPSystemPlayer {
+        private YPlayer() {
+            super();
+        }
+    }
+
+    /**
+     * Created by orelmosheweinstock on 3/29/15.
+     */
+    public static class XPlayer extends EnvironmentPlayer {
+        protected XPlayer() {
+            super();
+        }
     }
 }

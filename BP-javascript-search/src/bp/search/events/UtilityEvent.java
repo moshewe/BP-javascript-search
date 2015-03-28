@@ -1,4 +1,4 @@
-package bp.search.bthreads;
+package bp.search.events;
 
 import bp.BEvent;
 

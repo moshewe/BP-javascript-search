@@ -6,7 +6,7 @@ public class EnvironmentPlayer extends BPPlayer {
 	
 	public static EnvironmentPlayer instance = new EnvironmentPlayer();
 
-	private EnvironmentPlayer(){
+	protected EnvironmentPlayer(){
 		
 	}
 

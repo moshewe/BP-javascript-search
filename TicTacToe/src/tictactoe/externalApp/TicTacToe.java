@@ -6,6 +6,8 @@ import bp.BProgram;
 import bp.BThread;
 import bp.search.adversarial.BPMinimaxSearch;
 import bp.search.adversarial.MinimaxSearchArbiter;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
 import tictactoe.bThreads.*;
 import tictactoe.search.TTTGame;
 
@@ -13,6 +15,9 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
+
+import static tictactoe.events.StaticEvents.XEvents;
+import static tictactoe.events.StaticEvents.OEvents;
 
 /**
  * The main entry point to the TicTacToe program.
@@ -62,6 +67,7 @@ public class TicTacToe extends BPJavascriptApplication {
     public TicTacToe() {
         _bp = new BProgram();
         _bp.setName("TicTacToe");
+        addBThreads();
         TTTGame game = new TTTGame(_bp, _turns, _squaresTaken, draw, _xwins, _owins,
                 declareWinner, this);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
@@ -81,8 +87,7 @@ public class TicTacToe extends BPJavascriptApplication {
         declareWinner = new DeclareWinner(this);
         ArrayList<BThread> stakenBThreadList = new ArrayList<BThread>(
                 _squaresTaken);
-        // draw = new DetectDraw();
-        draw = new DetectDrawShort();
+        draw = new DetectDraw();
 
         _bp.add(_updateDisplay);
         _bp.add(_xwins);
@@ -92,20 +97,23 @@ public class TicTacToe extends BPJavascriptApplication {
         _bp.add(stakenBThreadList);
         _bp.add(draw);
         // _bp.add(new BlockMiddle());
+    }
 
-        // _bp.add(ClickSimulator.constructInstances());
-
-        // removed strategy bthreads
-        // for (BThread sc : AddThirdO.constructInstances())
-        // _bp.add(sc);
-        //
-        // for (BThread sc : PreventThirdX.constructInstances())
-        // _bp.add(sc);
-        //
-        // _bp.add(new InterceptCornerCornerFork());
-        // _bp.add(new InterceptCornerEdgeFork());
-        //
-        // _bp.add(new DefaultMoves());
+    @Override
+    protected void setupScope() {
+        super.setupScope();
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            _globalScope.put("ttt", _globalScope,
+                    Context.javaToJS(this, _globalScope));
+            _globalScope.put("xevents", _globalScope,
+                    Context.javaToJS(XEvents, _globalScope));
+            _globalScope.put("oevents", _globalScope,
+                    Context.javaToJS(OEvents, _globalScope));
+        } finally {
+            Context.exit();
+        }
     }
 
     public static void main(String[] args) throws MalformedURLException,

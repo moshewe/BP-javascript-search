@@ -7,6 +7,8 @@ import org.mozilla.javascript.Scriptable;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
+import static bp.eventSets.EventSetConstants.none;
+
 /**
  * Created by orelmosheweinstock on 3/28/15.
  */
@@ -27,7 +29,6 @@ public abstract class BPJavascriptApplication {
     protected abstract void addBThreads();
 
     protected void start() {
-        addBThreads();
         setupScope();
         _bp.start();
     }
@@ -37,10 +38,13 @@ public abstract class BPJavascriptApplication {
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             _globalScope = cx.initStandardObjects();
+            _globalScope.put("none", _globalScope,
+                    Context.javaToJS(none, _globalScope));
             for (BThread bt : _bp.getBThreads()) {
                 bt.setScope(_globalScope);
                 String btJsName = bt.JSIdentifier();
-                bt.setScript(btJsName + ".runBThread();\n");
+                if (bt.getScript() == null)
+                    bt.setScript(btJsName + ".runBThread();\n");
                 _globalScope.put(btJsName,
                         _globalScope, Context.javaToJS(bt, _globalScope));
             }
