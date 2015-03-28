@@ -42,7 +42,9 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
 
 	@Override
 	public BPPlayer getPlayer(BPState state) {
+
 		return null;
+
 	}
 
 	@Override

@@ -5,8 +5,6 @@ import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
 import org.mozilla.javascript.ContinuationPending;
 
-import java.io.IOException;
-
 /**
  * 
  * A class for capturing be-thread states.
@@ -31,7 +29,7 @@ public class BTState {
 	public transient EventSetInterface watchedEvents;
 	public transient EventSetInterface blockedEvents;
 
-	public BTState(BThread bt) throws IOException, ClassNotFoundException {
+	public BTState(BThread bt) {
 		this.bt = bt;
 		this.requestedEvents = bt.getRequestedEvents();
 		this.watchedEvents = bt.getWaitedEvents();
@@ -80,6 +78,7 @@ public class BTState {
 		bt.setRequestedEvents(requestedEvents);
 		bt.setWaitedEvents(watchedEvents);
 		bt.setBlockedEvents(blockedEvents);
+		bt.setCont(cont);
 	}
 
 	public ContinuationPending getCont() {

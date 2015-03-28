@@ -4,6 +4,9 @@ import bp.Arbiter;
 import bp.BEvent;
 import bp.search.BPAction;
 import bp.search.BPState;
+import bp.search.adversarial.players.BPSystemPlayer;
+
+import java.io.IOException;
 
 /**
  * @author moshewe
@@ -22,18 +25,14 @@ public class MinimaxSearchArbiter extends Arbiter {
     @Override
     protected BEvent nextEvent() {
         if (gameOn) {
-            return null;
+            return makeDecision();
         } else {
-            return super.nextEvent();
-        }
-    }
-
-    protected BEvent getExternalEvent() {
-        if (gameOn) {
-            return null;
-        } else {
-//            return super.getExternalEvent();
-            return null;
+            BPState bps = new BPState(getProgram());
+            if (game.getPlayer(bps) == BPSystemPlayer.instance) {
+                return makeDecision();
+            } else {
+                return super.nextEvent();
+            }
         }
     }
 

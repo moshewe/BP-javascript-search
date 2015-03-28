@@ -17,7 +17,6 @@ public class EnforceTurns extends BThread {
 		while (true) {
 			bsync(none, XEvents, OEvents);
 			bsync(none, OEvents, XEvents);
-
 		}
 	}
 

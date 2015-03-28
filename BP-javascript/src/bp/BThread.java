@@ -189,5 +189,8 @@ public abstract class BThread implements Serializable {
         _alive = false;
     }
 
+    public void setCont(ContinuationPending cont) {
+        this._cont = cont;
+    }
 }
 

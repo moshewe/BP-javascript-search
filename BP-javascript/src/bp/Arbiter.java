@@ -3,6 +3,7 @@ package bp;
 import bp.exceptions.BPJRequestableSetException;
 
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Default arbiter - triggers events according to the RWB semantics but promises
@@ -12,36 +13,14 @@ import java.util.Iterator;
  */
 public class Arbiter {
 
-    /**
-     * A counter that counts how many of the be-thread in allBThreads are busy.
-     * B-Threads decrement this counter when they get into bSync just before
-     * they become dormant and wait to be awaken. When the counter gets to zero,
-     * the be-thread that decremented it from one to zero, awakes other
-     * be-threads and sets the counter to the number of be-threads that it
-     * awakes (the number of be-threads that are waiting to the next event)
-     */
-    transient volatile int busyBThreads = 0;
-
     private BProgram _program;
-
-    private final Object synchLock = new Object() {
-    };
 
     public BProgram getProgram() {
         return _program;
     }
 
     public void setProgram(BProgram program) {
-        if (this._program != program) {
-            this._program = program;
-            for (BThread bt : program.getBThreads()) {
-                bthreadAdded(bt);
-            }
-        }
-    }
-
-    public void bthreadAdded(BThread... bts) {
-        busyBThreads += bts.length;
+        this._program = program;
     }
 
     public static final BThread theUser = new BThread("The User") {
@@ -71,7 +50,8 @@ public class Arbiter {
     }
 
     protected BEvent selectEventFromProgram() {
-        Iterator<BEvent> it = _program.legalEvents().iterator();
+        Set<BEvent> legals = _program.legalEvents();
+        Iterator<BEvent> it = legals.iterator();
         if (it.hasNext()) {
             return it.next();
         } else {

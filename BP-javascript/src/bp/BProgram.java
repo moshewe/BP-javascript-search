@@ -49,7 +49,7 @@ public class BProgram implements Cloneable, Serializable {
 
     private Arbiter _arbiter;
 
-    private volatile BlockingQueue<BEvent> externalEventsQueue;
+    private volatile BlockingQueue<BEvent> _externalEventsQueue;
     private boolean debugMode;
 
     public void setArbiter(Arbiter arbiter) {
@@ -61,7 +61,7 @@ public class BProgram implements Cloneable, Serializable {
         setBThreads(new ArrayList<BThread>());
         _arbiter = new Arbiter();
         _arbiter.setProgram(this);
-        externalEventsQueue = new ArrayBlockingQueue<BEvent>(100);
+        _externalEventsQueue = new ArrayBlockingQueue<BEvent>(100);
         System.out.println("BProgram instantiated");
     }
 
@@ -311,13 +311,13 @@ public class BProgram implements Cloneable, Serializable {
     }
 
     public void fireExternalEvent(BEvent e) {
-        externalEventsQueue.add(e);
+        _externalEventsQueue.add(e);
     }
 
     public BEvent dequeueExternalEvent() {
         BEvent e = null;
         try {
-            e = externalEventsQueue.take();
+            e = _externalEventsQueue.take();
         } catch (InterruptedException ie) {
             // TODO Auto-generated catch block
             ie.printStackTrace();
