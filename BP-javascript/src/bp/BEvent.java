@@ -13,7 +13,7 @@ import java.util.Iterator;
 @SuppressWarnings("serial")
 public class BEvent implements EventSetInterface, RequestableInterface, Comparable<BEvent>{
 
-	private String name = this.getClass().getSimpleName();
+	private String _name = this.getClass().getSimpleName();
 
 	@Override
 	public boolean contains(Object o) {
@@ -27,20 +27,20 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
 	public BEvent() {
 	}
 
-	public BEvent(String name) {
-		this.name = name;
+	public BEvent(String _name) {
+		this._name = _name;
 	}
 
 	public String toString() {
-		return name;
+		return _name;
 	}
 
 	public String getName() {
-		return name;
+		return _name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this._name = name;
 	}
 
 	public BEvent get(int index) {
@@ -83,12 +83,12 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
 		if (getClass() != obj.getClass())
 			return false;
 		BEvent other = (BEvent) obj;
-		return name.equals(other.getName());
+		return _name.equals(other.getName());
 	}
 
 	@Override
 	public int compareTo(BEvent e) {
-		return name.compareTo(e.getName());
+		return _name.compareTo(e.getName());
 	}
 	
 	

@@ -3,9 +3,6 @@ package bp;
 import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -68,13 +65,8 @@ public class BProgram implements Cloneable, Serializable {
         System.out.println("BProgram instantiated");
     }
 
-    public void bplog(String s) {
+    public void log(String s) {
         System.out.println("[" + name + "]: " + s);
-    }
-
-    public void debugPrint(String s) {
-        if (debugMode)
-            System.out.println("Debug: " + s);
     }
 
     public Collection<BThread> getBThreads() {
@@ -119,7 +111,7 @@ public class BProgram implements Cloneable, Serializable {
      */
     public boolean isBlocked(BEvent e) {
         for (BThread bt : getBThreads()) {
-            // bplog("_bt=" + _bt + " blockedEvents=" + _bt.blockedEvents);
+            // log("_bt=" + _bt + " blockedEvents=" + _bt.blockedEvents);
             if (bt.getBlockedEvents().contains(e)) {
                 return true;
             }
@@ -134,7 +126,7 @@ public class BProgram implements Cloneable, Serializable {
     public void printAllBThreads() {
         int c = 0;
         for (BThread bt : getBThreads()) {
-            bplog("\t" + (c++) + ":" + bt);
+            log("\t" + (c++) + ":" + bt);
         }
     }
 
@@ -187,12 +179,12 @@ public class BProgram implements Cloneable, Serializable {
      */
     public void start() {
         // public void start() {
-        bplog("********* Starting " + getBThreads().size()
+        log("********* Starting " + getBThreads().size()
                 + " scenarios  **************");
         for (BThread bt : getBThreads()) {
             bt.start();
         }
-        bplog("********* " + getBThreads().size()
+        log("********* " + getBThreads().size()
                 + " scenarios started **************");
         bpLoop();
     }
@@ -232,13 +224,13 @@ public class BProgram implements Cloneable, Serializable {
 
     public void bpLoop() {
         if (_bthreads.isEmpty()) {
-            bplog("=== ALL DONE!!! ===");
+            log("=== ALL DONE!!! ===");
             return;
         }
 
         BEvent next = _arbiter.nextEvent();
         if (next == null) {
-            bplog("no event chosen, waiting for an external event to be fired...");
+            log("no event chosen, waiting for an external event to be fired...");
             next = dequeueExternalEvent();
         }
 
@@ -272,9 +264,9 @@ public class BProgram implements Cloneable, Serializable {
             _eventCounter++;
             setLastEvent(ec.getEvent());
             st = new String("Event #" + _eventCounter + ": " + getLastEvent());
-            bplog(st);
+            log(st);
             BEvent lastEvent = ec.getEvent();
-            bplog(">> starting bthread wakeup");
+            log(">> starting bthread wakeup");
             // Interrupt and notify the be-threads that need to be
             // awaken
             for (BThread bt : _bthreads) {
@@ -283,11 +275,11 @@ public class BProgram implements Cloneable, Serializable {
                     bt.resume(lastEvent);
                 }
             }
-            bplog("<< finished bthread wakeup");
+            log("<< finished bthread wakeup");
         } else { // lastEvent == null -> deadlock?
             st = new String(
                     "No events chosen. Waiting for external event or stuck in bsync...?");
-            bplog(st);
+            log(st);
         }
 
         if (_eventCounter < eventLogSize)

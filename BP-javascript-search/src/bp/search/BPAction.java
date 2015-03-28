@@ -41,13 +41,13 @@ public class BPAction implements Action, Comparable<BPAction> {
 		BPState newBps = bps.copy();
 		for (BTState bts : newBps.getBTstates()) {
 			// if (bts.bt instanceof UpdateDisplay) {
-			// bplog("inspecting update display");
+			// log("inspecting update display");
 			// }
 			// if (bts.bt instanceof EnforceTurns) {
-			// bplog("inspecting enforce turns");
+			// log("inspecting enforce turns");
 			// }
 			// if (bts.bt instanceof DetectDraw) {
-			// bplog("inspecting enforce turns");
+			// log("inspecting enforce turns");
 			// }
 
 			if (bts.watchedEvents.contains(event)
@@ -59,7 +59,7 @@ public class BPAction implements Action, Comparable<BPAction> {
 				bts.watchedEvents = bt.getWaitedEvents();
 				bts.blockedEvents = bt.getBlockedEvents();
 				// if (bt.isFinished()) {
-				// bplog(bt + " is finished!");
+				// log(bt + " is finished!");
 				// // finishedBThreads.add(bts);
 				// }
 			}
