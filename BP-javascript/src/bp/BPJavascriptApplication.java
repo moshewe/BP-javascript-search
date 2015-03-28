@@ -41,7 +41,7 @@ public abstract class BPJavascriptApplication {
                 bt.setScope(_globalScope);
                 String btJsName = bt.JSIdentifier();
                 bt.setScript(btJsName + ".runBThread();\n");
-                _globalScope.put(bt.getName() + bt.hashCode(),
+                _globalScope.put(btJsName,
                         _globalScope, Context.javaToJS(bt, _globalScope));
             }
         } finally {
