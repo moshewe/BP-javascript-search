@@ -54,7 +54,6 @@ public class BProgram implements Cloneable, Serializable {
 
     private volatile BlockingQueue<BEvent> externalEventsQueue;
     private boolean debugMode;
-    private boolean logMode;
 
     public void setArbiter(Arbiter arbiter) {
         this._arbiter = arbiter;
@@ -70,8 +69,7 @@ public class BProgram implements Cloneable, Serializable {
     }
 
     public void bplog(String s) {
-        if (logMode)
-            System.out.println("[" + name + "]: " + s);
+        System.out.println("[" + name + "]: " + s);
     }
 
     public void debugPrint(String s) {
@@ -233,6 +231,11 @@ public class BProgram implements Cloneable, Serializable {
     }
 
     public void bpLoop() {
+        if (_bthreads.isEmpty()) {
+            bplog("=== ALL DONE!!! ===");
+            return;
+        }
+
         BEvent next = _arbiter.nextEvent();
         if (next == null) {
             bplog("no event chosen, waiting for an external event to be fired...");
@@ -244,6 +247,14 @@ public class BProgram implements Cloneable, Serializable {
             boolean waited = bt.getWaitedEvents().contains(next);
             if (requested || waited) {
                 bt.resume(next);
+            }
+        }
+
+        for (Iterator<BThread> it = _bthreads.iterator();
+             it.hasNext(); ) {
+            BThread bt = it.next();
+            if (!bt.isAlive()) {
+                it.remove();
             }
         }
 

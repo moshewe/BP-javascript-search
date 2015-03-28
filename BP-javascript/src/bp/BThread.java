@@ -14,7 +14,8 @@ import java.io.Serializable;
  */
 public abstract class BThread implements Serializable {
 
-    private String name = this.getClass().getSimpleName();
+    protected String _name = this.getClass().getSimpleName();
+    private boolean _alive = true;
     transient protected BProgram bp = null;
     protected Scriptable _scope;
     protected Script _script;
@@ -23,6 +24,11 @@ public abstract class BThread implements Serializable {
     RequestableInterface _request;
     EventSetInterface _wait;
     EventSetInterface _block;
+
+    public boolean isAlive() {
+        return _alive;
+    }
+
 
     public BThread() {
         _request = none;
@@ -34,7 +40,7 @@ public abstract class BThread implements Serializable {
         return _cont;
     }
 
-    public void set_scope(Scriptable _scope) {
+    public void setScope(Scriptable _scope) {
         this._scope = _scope;
     }
 
@@ -99,12 +105,12 @@ public abstract class BThread implements Serializable {
      */
     transient protected EventSetInterface interruptingEvents = none;
 
-    public BThread(String name) {
-        this.setName(name);
+    public BThread(String _name) {
+        this.setName(_name);
     }
 
     public void setName(String name) {
-        this.name = name;
+        this._name = name;
     }
 
     /**
@@ -115,8 +121,12 @@ public abstract class BThread implements Serializable {
         return (_request.contains(event));
     }
 
+    public String getName() {
+        return _name;
+    }
+
     public String toString() {
-        return "[" + bp + ":" + name + "]";
+        return "[" + bp + ":" + _name + "]";
     }
 
     public BProgram getBProgram() {
@@ -137,7 +147,7 @@ public abstract class BThread implements Serializable {
         setRequestedEvents(requestedEvents);
         setWaitedEvents(waitedEvents);
         setBlockedEvents(blockedEvents);
-        bplog("bsynching with " + requestedEvents + ", " + waitedEvents + ", "
+        bplog("bsyncing with " + requestedEvents + ", " + waitedEvents + ", "
                 + blockedEvents);
         Context cx = ContextFactory.getGlobal().enterContext();
         try {
@@ -155,5 +165,25 @@ public abstract class BThread implements Serializable {
         // watchedEvents = EventSetConstants.none;
         // blockedEvents = EventSetConstants.none;
     }
+
+    public Script getScript() {
+        return _script;
+    }
+
+    public void setScript(String source) {
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        source += _name + ".finished();\n";
+        try {
+            _script = cx.compileString(source, _name + "-script", 1, null);
+        } finally {
+            Context.exit();
+        }
+    }
+
+    public void finished() {
+        _alive = false;
+    }
+
 }
 
