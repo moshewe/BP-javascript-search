@@ -13,9 +13,6 @@ import java.util.Iterator;
 @SuppressWarnings("serial")
 public class BEvent implements EventSetInterface, RequestableInterface, Comparable<BEvent>{
 
-	static int numerator = 0;
-	int id = numerator++;
-	
 	private String name = this.getClass().getSimpleName();
 
 	@Override
@@ -35,7 +32,7 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
 	}
 
 	public String toString() {
-		return name + "(ID=" + id+  ")";
+		return name;
 	}
 
 	public String getName() {
@@ -80,20 +77,13 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
 	}
 
 	@Override
-	public int hashCode() {
-		return id;
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		BEvent other = (BEvent) obj;
-		if (id != other.id)
-			return false;
-		return true;
+		return name.equals(other.getName());
 	}
 
 	@Override

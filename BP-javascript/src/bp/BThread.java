@@ -131,18 +131,6 @@ public abstract class BThread implements Serializable {
         System.out.println("[" + this + "]: " + string);
     }
 
-    // The code below makes sure that we get the same hashCode and equals for
-    // copies that come from serialization and then deserialization of the same
-    // object.
-
-    static int numerator = 0;
-    int hash = numerator++;
-
-    @Override
-    public int hashCode() {
-        return hash;
-    }
-
     public void bsync(RequestableInterface requestedEvents,
                       EventSetInterface waitedEvents,
                       EventSetInterface blockedEvents) {

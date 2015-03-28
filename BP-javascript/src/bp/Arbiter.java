@@ -47,12 +47,6 @@ public class Arbiter {
     public static final BThread theUser = new BThread("The User") {
     };
 
-    protected BEvent getExternalEvent() {
-        bplog("no event chosen, waiting for an external event to be fired...");
-        BEvent next = getProgram().dequeueExternalEvent();
-        return next;
-    }
-
     protected void bplog(String s) {
         System.out.println("[" + getProgram() + ":" + this + "]: " + s);
     }
@@ -72,11 +66,6 @@ public class Arbiter {
         BEvent ec = selectEventFromProgram();
         bplog("Event chosen from program is " + ec);
         // if no internal event was selected, wait for an external event
-        if (ec == null) {
-            ec = getExternalEvent();
-            bplog("External event given is " + ec);
-        }
-
         return ec;
 
     }

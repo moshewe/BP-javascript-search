@@ -28,22 +28,12 @@ public class HotNCold{
     @Test
     public void hotNColdTest() {
         System.out.println("starting BTs");
-        HotNCold hnc = new HotNCold();
-        hnc.setup();
+        setup();
         BProgram prog = new BProgram();
-        prog.add(new HotBt());
-        prog.add(new ColdBt());
-        prog.add(new AlternatorBt());
-
+        prog.add(_hotbt);
+        prog.add(_coldbt);
+        prog.add(_alternator);
         prog.start();
-
-        System.out.println("pause for user");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            String name = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void setup() {

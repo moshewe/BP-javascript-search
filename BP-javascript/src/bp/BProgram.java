@@ -3,6 +3,9 @@ package bp;
 import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -23,7 +26,7 @@ public class BProgram implements Cloneable, Serializable {
      * execution
      */
     // the index of the last event (= number of events -1)
-    transient public int eventCounter = -1;
+    transient public int _eventCounter = -1;
 
     static private Object error = null;
 
@@ -47,21 +50,21 @@ public class BProgram implements Cloneable, Serializable {
      */
     transient private String name = this.getClass().getSimpleName();
 
-    private Arbiter arbiter;
+    private Arbiter _arbiter;
 
     private volatile BlockingQueue<BEvent> externalEventsQueue;
     private boolean debugMode;
     private boolean logMode;
 
     public void setArbiter(Arbiter arbiter) {
-        this.arbiter = arbiter;
+        this._arbiter = arbiter;
         arbiter.setProgram(this);
     }
 
     public BProgram() {
         setBThreads(new ArrayList<BThread>());
-        arbiter = new Arbiter();
-        arbiter.setProgram(this);
+        _arbiter = new Arbiter();
+        _arbiter.setProgram(this);
         externalEventsQueue = new ArrayBlockingQueue<BEvent>(100);
         System.out.println("BProgram instantiated");
     }
@@ -89,7 +92,8 @@ public class BProgram implements Cloneable, Serializable {
             if (bt.getRequestedEvents() == null)
                 continue;
 
-            for (BEvent e : bt.getRequestedEvents().getEventList()) {
+            ArrayList<BEvent> reqList = bt.getRequestedEvents().getEventList();
+            for (BEvent e : reqList) {
                 if (!isBlocked(e)) {
                     enabled.add(e);
                 }
@@ -139,14 +143,14 @@ public class BProgram implements Cloneable, Serializable {
     public void printEventLog() {
 
         System.out.println("\n ***** Printing last " + eventLog.size()
-                + " choice points out of " + (eventCounter + 1) + ":");
+                + " choice points out of " + (_eventCounter + 1) + ":");
 
-        if (eventCounter < eventLogSize)
+        if (_eventCounter < eventLogSize)
             for (String eventString : eventLog)
                 System.out.println(eventString);
         else
             for (int i = 1; i <= eventLogSize; i++)
-                System.out.println(eventLog.get((eventCounter + i)
+                System.out.println(eventLog.get((_eventCounter + i)
                         % eventLogSize));
 
         System.out.println("***** end event log ******");
@@ -187,11 +191,12 @@ public class BProgram implements Cloneable, Serializable {
         // public void start() {
         bplog("********* Starting " + getBThreads().size()
                 + " scenarios  **************");
-        for (BThread sc : getBThreads()) {
-            sc.start();
+        for (BThread bt : getBThreads()) {
+            bt.start();
         }
         bplog("********* " + getBThreads().size()
                 + " scenarios started **************");
+        bpLoop();
     }
 
     /**
@@ -227,17 +232,35 @@ public class BProgram implements Cloneable, Serializable {
         return blocked;
     }
 
+    public void bpLoop() {
+        BEvent next = _arbiter.nextEvent();
+        if (next == null) {
+            bplog("no event chosen, waiting for an external event to be fired...");
+            next = dequeueExternalEvent();
+        }
+
+        for (BThread bt : _bthreads) {
+            boolean requested = bt.getRequestedEvents().contains(next);
+            boolean waited = bt.getWaitedEvents().contains(next);
+            if (requested || waited) {
+                bt.resume(next);
+            }
+        }
+
+        bpLoop();
+    }
+
     /**
      * Used by arbiters to notify programs of events triggered.
      *
      * @param ec
      */
-    public void triggerEvent(BEvent ec) {
+    private void triggerEvent(BEvent ec) {
         String st;
         if (ec != null) {
-            eventCounter++;
+            _eventCounter++;
             setLastEvent(ec.getEvent());
-            st = new String("Event #" + eventCounter + ": " + getLastEvent());
+            st = new String("Event #" + _eventCounter + ": " + getLastEvent());
             bplog(st);
             BEvent lastEvent = ec.getEvent();
             bplog(">> starting bthread wakeup");
@@ -256,11 +279,10 @@ public class BProgram implements Cloneable, Serializable {
             bplog(st);
         }
 
-        if (eventCounter < eventLogSize)
-            eventLog.add(st); // at position eventCounter
+        if (_eventCounter < eventLogSize)
+            eventLog.add(st); // at position _eventCounter
         else
-            eventLog.set(eventCounter % eventLogSize, st);
-
+            eventLog.set(_eventCounter % eventLogSize, st);
     }
 
     public BEvent getLastEvent() {
@@ -272,7 +294,7 @@ public class BProgram implements Cloneable, Serializable {
     }
 
     public Arbiter getArbiter() {
-        return arbiter;
+        return _arbiter;
     }
 
     public void add(Collection<BThread> bts) {
