@@ -1,29 +1,92 @@
 package bp;
 
-import java.util.ArrayList;
-import java.util.List;
+import bp.exceptions.BPJRequestableSetException;
+
+import java.util.Iterator;
 
 /**
- * Created by orelmosheweinstock on 3/26/15.
+ * Default arbiter - triggers events according to the RWB semantics but promises
+ * nothing as to the order of events triggered.
+ *
+ * @author moshewe
  */
 public class Arbiter {
 
-    BProgram _program;
+    /**
+     * A counter that counts how many of the be-thread in allBThreads are busy.
+     * B-Threads decrement this counter when they get into bSync just before
+     * they become dormant and wait to be awaken. When the counter gets to zero,
+     * the be-thread that decremented it from one to zero, awakes other
+     * be-threads and sets the counter to the number of be-threads that it
+     * awakes (the number of be-threads that are waiting to the next event)
+     */
+    transient volatile int busyBThreads = 0;
 
-    public Arbiter(){
+    private BProgram _program;
+
+    private final Object synchLock = new Object() {
+    };
+
+    public BProgram getProgram() {
+        return _program;
     }
 
-    public BEvent nextEvent() {
-        List requested = new ArrayList();
-        for (BThread bt : _program.getBThreads()) {
-            requested.add(bt._request);
+    public void setProgram(BProgram program) {
+        if (this._program != program) {
+            this._program = program;
+            for (BThread bt : program.getBThreads()) {
+                bthreadAdded(bt);
+            }
         }
-        System.out.println("requested: " + requested);
-        for (BThread bt : _program.getBThreads()) {
-            requested.remove(bt._block);
+    }
+
+    public void bthreadAdded(BThread... bts) {
+        busyBThreads += bts.length;
+    }
+
+    public static final BThread theUser = new BThread("The User") {
+    };
+
+    protected BEvent getExternalEvent() {
+        bplog("no event chosen, waiting for an external event to be fired...");
+        BEvent next = getProgram().dequeueExternalEvent();
+        return next;
+    }
+
+    protected void bplog(String s) {
+        System.out.println("[" + getProgram() + ":" + this + "]: " + s);
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+    /**
+     * Choose the next event to be fired. Notifies the _program which thread
+     * asked for it.
+     *
+     * @throws BPJRequestableSetException
+     */
+    protected BEvent nextEvent() {
+        BEvent ec = selectEventFromProgram();
+        bplog("Event chosen from program is " + ec);
+        // if no internal event was selected, wait for an external event
+        if (ec == null) {
+            ec = getExternalEvent();
+            bplog("External event given is " + ec);
         }
 
-        Object lastEvent = requested.get(0);
-        return (BEvent) lastEvent;
+        return ec;
+
+    }
+
+    protected BEvent selectEventFromProgram() {
+        Iterator<BEvent> it = _program.legalEvents().iterator();
+        if (it.hasNext()) {
+            return it.next();
+        } else {
+            return null;
+        }
     }
 }

@@ -1,5 +1,10 @@
 package bp;
 
+import bp.eventSets.EventSetInterface;
+import bp.eventSets.RequestableInterface;
+
+import static bp.eventSets.EventSetConstants.none;
+
 import org.mozilla.javascript.*;
 
 import java.io.Serializable;
@@ -9,15 +14,24 @@ import java.io.Serializable;
  */
 public abstract class BThread implements Serializable {
 
-    String _btname;
-    Scriptable _scope;
+    private String name = this.getClass().getSimpleName();
+    transient protected BProgram bp = null;
+    protected Scriptable _scope;
+    protected Script _script;
+
     ContinuationPending _cont;
-    Object _request;
-    Object _wait;
-    Object _block;
-    Script _script;
+    RequestableInterface _request;
+    EventSetInterface _wait;
+    EventSetInterface _block;
 
     public BThread() {
+        _request = none;
+        _wait = none;
+        _block = none;
+    }
+
+    public ContinuationPending getCont() {
+        return _cont;
     }
 
     public void set_scope(Scriptable _scope) {
@@ -28,47 +42,130 @@ public abstract class BThread implements Serializable {
         return "bp.BThread";
     }
 
-    public RWB bsync(Object request, Object wait, Object block) {
-        Context cx = ContextFactory.getGlobal().enterContext();
-        try {
-            ContinuationPending pending = cx.captureContinuation();
-            pending.setApplicationState(new RWB(request, wait, block));
-            throw pending;
-        } finally {
-            Context.exit();
-        }
-    }
-
     public void start() {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             cx.executeScriptWithContinuations(_script, _scope);
         } catch (ContinuationPending pending) {
-            RWB rwb = (RWB) pending.getApplicationState();
             _cont = pending;
-            _request = rwb.request;
-            _wait = rwb.wait;
-            _block = rwb.block;
         } finally {
             Context.exit();
         }
     }
 
-    public void resume(Object event) {
+    public ContinuationPending resume(BEvent event) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             cx.resumeContinuation(_cont.getContinuation(), _scope, event);
         } catch (ContinuationPending pending) {
-            RWB rwb = (RWB) pending.getApplicationState();
             _cont = pending;
-            _request = rwb.request;
-            _wait = rwb.wait;
-            _block = rwb.block;
+            return _cont;
         } finally {
             Context.exit();
         }
+        //unsuccessful resume of bthread
+        return null;
+    }
+
+
+    public RequestableInterface getRequestedEvents() {
+        return _request;
+    }
+
+    public void setRequestedEvents(RequestableInterface requestedEvents) {
+        _request = requestedEvents;
+    }
+
+    public EventSetInterface getWaitedEvents() {
+        return _wait;
+    }
+
+    public void setWaitedEvents(EventSetInterface watchedEvents) {
+        _wait = watchedEvents;
+    }
+
+    public EventSetInterface getBlockedEvents() {
+        return _block;
+    }
+
+    public void setBlockedEvents(EventSetInterface blockedEvents) {
+        _block = blockedEvents;
+    }
+
+    /**
+     * The set of events that will interrupt this scenario.
+     */
+    transient protected EventSetInterface interruptingEvents = none;
+
+    public BThread(String name) {
+        this.setName(name);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @see java.lang.Thread#start()
+     */
+
+    public boolean isRequested(BEvent event) {
+        return (_request.contains(event));
+    }
+
+    public String toString() {
+        return "[" + bp + ":" + name + "]";
+    }
+
+    public BProgram getBProgram() {
+        return bp;
+    }
+
+    public void setBProgram(BProgram bp) {
+        this.bp = bp;
+    }
+
+    protected void bplog(String string) {
+        System.out.println("[" + this + "]: " + string);
+    }
+
+    // The code below makes sure that we get the same hashCode and equals for
+    // copies that come from serialization and then deserialization of the same
+    // object.
+
+    static int numerator = 0;
+    int hash = numerator++;
+
+    @Override
+    public int hashCode() {
+        return hash;
+    }
+
+    public void bsync(RequestableInterface requestedEvents,
+                      EventSetInterface waitedEvents,
+                      EventSetInterface blockedEvents) {
+        setRequestedEvents(requestedEvents);
+        setWaitedEvents(waitedEvents);
+        setBlockedEvents(blockedEvents);
+        bplog("bsynching with " + requestedEvents + ", " + waitedEvents + ", "
+                + blockedEvents);
+        Context cx = ContextFactory.getGlobal().enterContext();
+        try {
+            ContinuationPending pending = cx.captureContinuation();
+            throw pending;
+        } finally {
+            Context.exit();
+        }
+    }
+
+    public void zombie() {
+        bplog("going zombie...");
+        bsync(none, none, none);
+        // requestedEvents = EventSetConstants.none;
+        // watchedEvents = EventSetConstants.none;
+        // blockedEvents = EventSetConstants.none;
     }
 }
 

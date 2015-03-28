@@ -11,7 +11,7 @@ import java.util.Iterator;
  * A base class for events
  */
 @SuppressWarnings("serial")
-public abstract class BEvent implements EventSetInterface, RequestableInterface, Comparable<BEvent>{
+public class BEvent implements EventSetInterface, RequestableInterface, Comparable<BEvent>{
 
 	static int numerator = 0;
 	int id = numerator++;

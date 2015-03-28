@@ -1,55 +1,54 @@
-package bp;
+package bp.examples;
 
-import org.mozilla.javascript.*;
+import bp.BEvent;
+import bp.BProgram;
+import bp.BThread;
+import static bp.eventSets.EventSetConstants.none;
+import org.junit.Test;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
+import org.mozilla.javascript.Scriptable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
 
 /**
  * Created by orelmosheweinstock on 3/24/15.
  */
-public class HotNCold {
+public class HotNCold{
 
     final Object HOT = new Object();
     final Object COLD = new Object();
-    Scriptable globalScope;
+    static Scriptable globalScope;
     private HotBt _hotbt;
     private ColdBt _coldbt;
     private AlternatorBt _alternator;
 
-    public static void main(String[] args) {
+    @Test
+    public void hotNColdTest() {
         System.out.println("starting BTs");
         HotNCold hnc = new HotNCold();
         hnc.setup();
-        Collection<BThread> bThreads = new ArrayList<BThread>();
-        bThreads.add(hnc._hotbt);
-        bThreads.add(hnc._coldbt);
-        bThreads.add(hnc._alternator);
-        for (BThread bt : bThreads) {
-            bt.start();
-        }
-        while (!bThreads.isEmpty()) {
-            System.out.println("last event is: " + lastEvent);
-            for (BThread bt : bThreads) {
-                if (bt._request.equals(lastEvent) ||
-                        bt._wait.equals(lastEvent)) {
-                    bt.resume(lastEvent);
-                }
-            }
-            System.out.println("pause for user");
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            try {
-                String name = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        BProgram prog = new BProgram();
+        prog.add(new HotBt());
+        prog.add(new ColdBt());
+        prog.add(new AlternatorBt());
+
+        prog.start();
+
+        System.out.println("pause for user");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            String name = br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     private void setup() {
         Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             globalScope = cx.initStandardObjects();
             cx.setOptimizationLevel(-1); // must use interpreter mode
@@ -62,22 +61,29 @@ public class HotNCold {
             _alternator = new AlternatorBt();
             globalScope.put("alternatorBt", globalScope,
                     Context.javaToJS(_alternator, globalScope));
+            globalScope.put("hotEvent", globalScope,
+                    Context.javaToJS(new BEvent("HOT!"), globalScope));
+            globalScope.put("coldEvent", globalScope,
+                    Context.javaToJS(new BEvent("COLD!"), globalScope));
+            globalScope.put("noneEvent", globalScope,
+                    Context.javaToJS(none, globalScope));
         } finally {
             Context.exit();
         }
     }
 
-    class HotBt extends BThread {
+    public class HotBt extends BThread {
 
         public HotBt() {
             Context cx = ContextFactory.getGlobal().enterContext();
+            cx.setOptimizationLevel(-1); // must use interpreter mode
             try {
                 String source = "java.lang.System.out.println(\"hotbt started!\")\n" +
-                        "hotBt.bsync(\"hot\",[],[])\n" +
+                        "hotBt.bsync(hotEvent,noneEvent,noneEvent)\n" +
                         "java.lang.System.out.println(\"HOT!1\")\n" +
-                        "hotBt.bsync(\"hot\",[],[])\n" +
+                        "hotBt.bsync(hotEvent,noneEvent,noneEvent)\n" +
                         "java.lang.System.out.println(\"HOT!2\")\n" +
-                        "hotBt.bsync(\"hot\",[],[])\n" +
+                        "hotBt.bsync(hotEvent,noneEvent,noneEvent)\n" +
                         "java.lang.System.out.println(\"HOT!3\")\n";
                 _script = cx.compileString(source, "hotscript", 1, null);
             } finally {
@@ -87,17 +93,18 @@ public class HotNCold {
         }
     }
 
-    class ColdBt extends BThread {
+    public class ColdBt extends BThread {
 
         public ColdBt() {
             Context cx = ContextFactory.getGlobal().enterContext();
+            cx.setOptimizationLevel(-1); // must use interpreter mode
             try {
                 String source = "java.lang.System.out.println(\"coldbt started!\")\n" +
-                        "coldBt.bsync(\"cold\",[],[])\n" +
+                        "coldBt.bsync(coldEvent,noneEvent,noneEvent)\n" +
                         "java.lang.System.out.println(\"COLD!1\")\n" +
-                        "coldBt.bsync(\"cold\",[],[])\n" +
+                        "coldBt.bsync(coldEvent,noneEvent,noneEvent)\n" +
                         "java.lang.System.out.println(\"COLD!2\")\n" +
-                        "coldBt.bsync(\"cold\",[],[])\n" +
+                        "coldBt.bsync(coldEvent,noneEvent,noneEvent)\n" +
                         "java.lang.System.out.println(\"COLD!3\")\n";
                 _script = cx.compileString(source, "coldscript", 1, null);
             } finally {
@@ -108,17 +115,18 @@ public class HotNCold {
 
     }
 
-    class AlternatorBt extends BThread {
+    public class AlternatorBt extends BThread {
 
         public AlternatorBt() {
             Context cx = ContextFactory.getGlobal().enterContext();
+            cx.setOptimizationLevel(-1); // must use interpreter mode
             try {
                 String source = "java.lang.System.out.println(\"alternator started!\")\n" +
                         "for(i=0;i<3;i++){\n" +
                         "java.lang.System.out.println(\"blocking hot \" + i)\n" +
-                        "alternatorBt.bsync([],\"cold\",\"hot\")\n" +
+                        "alternatorBt.bsync(noneEvent,coldEvent,hotEvent)\n" +
                         "java.lang.System.out.println(\"blocking cold \" + i)\n" +
-                        "alternatorBt.bsync([],\"hot\",\"cold\")\n" +
+                        "alternatorBt.bsync(noneEvent,hotEvent,coldEvent)\n" +
                         "}\n" +
                         "java.lang.System.out.println(\"alternator done!\")\n";
                 _script = cx.compileString(source, "alternatorscript", 1, null);
