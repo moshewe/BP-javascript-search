@@ -1,7 +1,7 @@
 package tictactoe.events;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import bp.BEvent;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * A base class for moves (X or O) in the tic-tac-toe game.

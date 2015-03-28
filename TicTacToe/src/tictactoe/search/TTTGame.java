@@ -1,10 +1,9 @@
 package tictactoe.search;
 
+import bp.BEvent;
 import bp.BProgram;
 import bp.BThread;
-import bp.BEvent;
 import bp.eventSets.EventSetInterface;
-import bp.exceptions.BPJRequestableSetException;
 import bp.search.BPAction;
 import bp.search.BPState;
 import bp.search.EnvironmentSimBThread;

@@ -1,17 +1,15 @@
 package tictactoe.search;
 
-import java.io.IOException;
-import java.util.Collection;
-
-import javax.swing.JButton;
-
+import bp.BProgram;
+import bp.eventSets.EventSetConstants;
+import bp.search.BPState;
 import tictactoe.bThreads.DeclareWinner;
 import tictactoe.bThreads.SquareTaken;
 import tictactoe.externalApp.TicTacToe;
 
-import bp.BProgram;
-import bp.eventSets.EventSetConstants;
-import bp.search.BPState;
+import javax.swing.*;
+import java.io.IOException;
+import java.util.Collection;
 
 public class TTTState extends BPState {
 

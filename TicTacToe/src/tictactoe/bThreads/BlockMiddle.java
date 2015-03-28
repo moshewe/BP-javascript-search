@@ -1,9 +1,10 @@
 package tictactoe.bThreads;
 
-import static bp.eventSets.EventSetConstants.none;
-import tictactoe.events.Move;
 import bp.BThread;
 import bp.exceptions.BPJRequestableSetException;
+import tictactoe.events.Move;
+
+import static bp.eventSets.EventSetConstants.none;
 
 public class BlockMiddle extends BThread {
 

@@ -1,14 +1,15 @@
 package tictactoe.bThreads;
 
-import static bp.eventSets.EventSetConstants.none;
-import static tictactoe.events.StaticEvents.gameOver;
-import tictactoe.events.Click;
-import tictactoe.events.X;
 import bp.BProgram;
 import bp.BThread;
 import bp.eventSets.EventSet;
 import bp.eventSets.EventsOfClass;
 import bp.exceptions.BPJException;
+import tictactoe.events.Click;
+import tictactoe.events.X;
+
+import static bp.eventSets.EventSetConstants.none;
+import static tictactoe.events.StaticEvents.gameOver;
 
 /**
  * BThread that fires X when a button is clicked (in response to a P event)

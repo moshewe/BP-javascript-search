@@ -1,6 +1,7 @@
 package tictactoe.externalApp;
 
 import bp.Arbiter;
+import bp.BPJavascriptApplication;
 import bp.BProgram;
 import bp.BThread;
 import bp.search.adversarial.BPMinimaxSearch;
@@ -16,7 +17,7 @@ import java.util.Set;
 /**
  * The main entry point to the TicTacToe program.
  */
-public class TicTacToe {
+public class TicTacToe extends BPJavascriptApplication {
     public static class Coordinates implements Comparable<Coordinates> {
         public final int row;
         public final int col;
@@ -49,77 +50,69 @@ public class TicTacToe {
     }
 
     public GUI gui;
-    private BProgram bp;
-    private EnforceTurns turns;
+    private EnforceTurns _turns;
     private Arbiter arbiter;
-    private Collection<SquareTaken> squaresTaken;
+    private Collection<SquareTaken> _squaresTaken;
     private DetectDraw draw;
-    private Set<BThread> xwins;
-    private Set<BThread> owins;
+    private Set<BThread> _xwins;
+    private Set<BThread> _owins;
     private DeclareWinner declareWinner;
-    // private List<BThread> recorders = new ArrayList<BThread>();
-    // private List<BThread> restorers = new ArrayList<BThread>();
-    private UpdateDisplay updateDisplay;
+    private UpdateDisplay _updateDisplay;
 
     public TicTacToe() {
-        bp = new BProgram();
-        bp.setName("TicTacToe");
-
-        // Register scenarios
-        addBThreads(bp);
-
-        TTTGame game = new TTTGame(bp, turns, squaresTaken, draw, xwins, owins,
+        _bp = new BProgram();
+        _bp.setName("TicTacToe");
+        TTTGame game = new TTTGame(_bp, _turns, _squaresTaken, draw, _xwins, _owins,
                 declareWinner, this);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
         arbiter = new MinimaxSearchArbiter(search, game);
-        bp.setArbiter(arbiter);
-
+        _bp.setArbiter(arbiter);
         // Start the graphical user interface
-        gui = new GUI(bp);
+        gui = new GUI(_bp);
 
     }
 
-    private void addBThreads(BProgram bp) {
-        updateDisplay = new UpdateDisplay(this);
-        xwins = DetectXWin.constructInstances();
-        owins = DetectOWin.constructInstances();
-        turns = new EnforceTurns();
-        squaresTaken = SquareTaken.constructInstances();
+    protected void addBThreads() {
+        _updateDisplay = new UpdateDisplay(this);
+        _xwins = DetectXWin.constructInstances();
+        _owins = DetectOWin.constructInstances();
+        _turns = new EnforceTurns();
+        _squaresTaken = SquareTaken.constructInstances();
         declareWinner = new DeclareWinner(this);
         ArrayList<BThread> stakenBThreadList = new ArrayList<BThread>(
-                squaresTaken);
+                _squaresTaken);
         // draw = new DetectDraw();
         draw = new DetectDrawShort();
 
-        bp.add(updateDisplay);
-        bp.add(xwins);
-        bp.add(owins);
-        bp.add(declareWinner);
-        bp.add(turns);
-        bp.add(stakenBThreadList);
-        bp.add(draw);
-//		bp.add(new BlockMiddle());
+        _bp.add(_updateDisplay);
+        _bp.add(_xwins);
+        _bp.add(_owins);
+        _bp.add(declareWinner);
+        _bp.add(_turns);
+        _bp.add(stakenBThreadList);
+        _bp.add(draw);
+        // _bp.add(new BlockMiddle());
 
-        // bp.add(ClickSimulator.constructInstances());
+        // _bp.add(ClickSimulator.constructInstances());
 
         // removed strategy bthreads
         // for (BThread sc : AddThirdO.constructInstances())
-        // bp.add(sc);
+        // _bp.add(sc);
         //
         // for (BThread sc : PreventThirdX.constructInstances())
-        // bp.add(sc);
+        // _bp.add(sc);
         //
-        // bp.add(new InterceptCornerCornerFork());
-        // bp.add(new InterceptCornerEdgeFork());
+        // _bp.add(new InterceptCornerCornerFork());
+        // _bp.add(new InterceptCornerEdgeFork());
         //
-        // bp.add(new DefaultMoves());
-
+        // _bp.add(new DefaultMoves());
     }
 
     public static void main(String[] args) throws MalformedURLException,
             InstantiationException, IllegalAccessException,
             ClassNotFoundException {
         TicTacToe ttt = new TicTacToe();
+        ttt.start();
     }
 
 }

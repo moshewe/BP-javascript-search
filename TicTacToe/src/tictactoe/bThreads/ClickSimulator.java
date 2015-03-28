@@ -1,13 +1,13 @@
 package tictactoe.bThreads;
 
-import static bp.eventSets.EventSetConstants.none;
+import bp.BThread;
+import bp.search.EnvironmentSimBThread;
+import tictactoe.events.Click;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import tictactoe.events.Click;
-import bp.BThread;
-import bp.search.EnvironmentSimBThread;
+import static bp.eventSets.EventSetConstants.none;
 
 /**
  * A scenario that handles click events
@@ -50,7 +50,7 @@ public class ClickSimulator extends EnvironmentSimBThread {
 				// Class<?> loadClass =
 				// cl1.loadClass(ClickSimulator.class.getName());
 				//
-				// m = (BApplication) classToLoad.newInstance();
+				// m = (BPJavascriptApplication) classToLoad.newInstance();
 				BThread sc = new ClickSimulator(i, j);
 				bts.add(sc);
 			}

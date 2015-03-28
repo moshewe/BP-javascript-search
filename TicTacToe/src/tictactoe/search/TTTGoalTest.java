@@ -1,14 +1,15 @@
 package tictactoe.search;
 
-import static tictactoe.events.StaticEvents.OEvents;
-import static tictactoe.events.StaticEvents.XEvents;
-import tictactoe.bThreads.EnforceTurns;
-import tictactoe.events.StaticEvents;
 import aima.core.search.framework.GoalTest;
-import bp.BProgram;
 import bp.BEvent;
+import bp.BProgram;
 import bp.search.BPState;
 import bp.search.BTState;
+import tictactoe.bThreads.EnforceTurns;
+import tictactoe.events.StaticEvents;
+
+import static tictactoe.events.StaticEvents.OEvents;
+import static tictactoe.events.StaticEvents.XEvents;
 
 public class TTTGoalTest implements GoalTest {
 

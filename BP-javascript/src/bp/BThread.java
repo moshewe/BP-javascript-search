@@ -2,12 +2,11 @@ package bp;
 
 import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
-
-import static bp.eventSets.EventSetConstants.none;
-
 import org.mozilla.javascript.*;
 
 import java.io.Serializable;
+
+import static bp.eventSets.EventSetConstants.none;
 
 /**
  * Created by orelmosheweinstock on 3/24/15.
@@ -173,12 +172,17 @@ public abstract class BThread implements Serializable {
     public void setScript(String source) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
-        source += _name + ".finished();\n";
+        source += JSIdentifier() + ".finished();\n";
         try {
             _script = cx.compileString(source, _name + "-script", 1, null);
         } finally {
             Context.exit();
         }
+    }
+
+    public String JSIdentifier() {
+        return BPJavascriptApplication.toJSIdentifier(_name +
+                hashCode());
     }
 
     public void finished() {

@@ -1,12 +1,11 @@
 package tictactoe.bThreads;
 
-import static bp.eventSets.EventSetConstants.none;
-import static tictactoe.events.StaticEvents.gameOver;
-import static tictactoe.events.StaticEvents.OEvents;
-import static tictactoe.events.StaticEvents.XEvents;
 import bp.BThread;
 import bp.eventSets.EventSet;
 import bp.exceptions.BPJException;
+
+import static bp.eventSets.EventSetConstants.none;
+import static tictactoe.events.StaticEvents.*;
 
 /**
  * BThread that blocks players from playing when its not their turn.

@@ -1,13 +1,14 @@
 package tictactoe.bThreads;
 
-import static bp.eventSets.EventSetConstants.none;
-import static tictactoe.events.StaticEvents.draw;
-import static tictactoe.events.StaticEvents.gameOver;
-import tictactoe.events.Move;
 import bp.BThread;
 import bp.eventSets.EventSet;
 import bp.eventSets.EventsOfClass;
 import bp.exceptions.BPJException;
+import tictactoe.events.Move;
+
+import static bp.eventSets.EventSetConstants.none;
+import static tictactoe.events.StaticEvents.draw;
+import static tictactoe.events.StaticEvents.gameOver;
 
 public class DetectDraw extends BThread {
 	public void runBThread() throws BPJException {

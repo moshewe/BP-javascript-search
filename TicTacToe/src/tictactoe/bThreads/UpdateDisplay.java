@@ -1,17 +1,17 @@
 package tictactoe.bThreads;
 
-import static bp.eventSets.EventSetConstants.none;
-import static tictactoe.events.StaticEvents.gameOver;
-
-import javax.swing.JButton;
-
-import tictactoe.events.Move;
-import tictactoe.externalApp.TicTacToe;
 import bp.BProgram;
 import bp.BThread;
 import bp.eventSets.EventSet;
 import bp.eventSets.EventsOfClass;
 import bp.exceptions.BPJException;
+import tictactoe.events.Move;
+import tictactoe.externalApp.TicTacToe;
+
+import javax.swing.*;
+
+import static bp.eventSets.EventSetConstants.none;
+import static tictactoe.events.StaticEvents.gameOver;
 
 /**
  * BThread for updating the labels of the buttons.

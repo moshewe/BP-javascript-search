@@ -1,15 +1,15 @@
 package tictactoe.bThreads;
 
-import static bp.eventSets.EventSetConstants.none;
-import static tictactoe.events.StaticEvents.gameOver;
+import bp.BThread;
+import bp.eventSets.EventSet;
+import bp.exceptions.BPJException;
+import tictactoe.events.Move;
 
 import java.util.Collection;
 import java.util.HashSet;
 
-import tictactoe.events.Move;
-import bp.BThread;
-import bp.eventSets.EventSet;
-import bp.exceptions.BPJException;
+import static bp.eventSets.EventSetConstants.none;
+import static tictactoe.events.StaticEvents.gameOver;
 
 /**
  * BThread for not allowing two symbols in the same square.

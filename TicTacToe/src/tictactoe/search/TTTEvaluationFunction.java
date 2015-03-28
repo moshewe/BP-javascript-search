@@ -1,13 +1,13 @@
 package tictactoe.search;
 
-import java.io.Serializable;
-
-import tictactoe.events.StaticEvents;
 import aima.core.search.framework.EvaluationFunction;
 import aima.core.search.framework.Node;
-import bp.BProgram;
 import bp.BEvent;
+import bp.BProgram;
 import bp.search.BPState;
+import tictactoe.events.StaticEvents;
+
+import java.io.Serializable;
 
 public class TTTEvaluationFunction implements EvaluationFunction, Serializable {
 
