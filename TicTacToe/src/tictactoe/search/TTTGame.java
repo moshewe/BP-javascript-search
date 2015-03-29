@@ -82,7 +82,8 @@ public class TTTGame extends BPGame {
 
     @Override
     public BPPlayer getPlayer(BPState state) {
-        if (turns.getWaitedEvents() == XEvents) {
+        EventSetInterface waitedEvents = turns.getWaitedEvents();
+        if (waitedEvents == XEvents) {
             return xPlayer;
         } else {
             return oPlayer;

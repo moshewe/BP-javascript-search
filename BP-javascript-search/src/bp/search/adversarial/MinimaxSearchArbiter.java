@@ -28,7 +28,8 @@ public class MinimaxSearchArbiter extends Arbiter {
             return makeDecision();
         } else {
             BPState bps = new BPState(getProgram());
-            if (game.getPlayer(bps) == BPSystemPlayer.instance) {
+            BPPlayer player = game.getPlayer(bps);
+            if (player instanceof BPSystemPlayer) {
                 return makeDecision();
             } else {
                 return super.nextEvent();
