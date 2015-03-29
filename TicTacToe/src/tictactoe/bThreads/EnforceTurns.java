@@ -1,23 +1,29 @@
 package tictactoe.bThreads;
 
 import bp.BThread;
-import bp.eventSets.EventSet;
-import bp.exceptions.BPJException;
-
-import static bp.eventSets.EventSetConstants.none;
-import static tictactoe.events.StaticEvents.*;
 
 /**
  * BThread that blocks players from playing when its not their turn.
  */
 public class EnforceTurns extends BThread {
 
-	public void runBThread() throws BPJException {
-		interruptingEvents = new EventSet(gameOver);
-		while (true) {
-			bsync(none, XEvents, OEvents);
-			bsync(none, OEvents, XEvents);
-		}
-	}
+    public EnforceTurns() {
+        String source = "while (true) {\n" +
+                jsIdentifier() + ".bsync(none, xevents, oevents);\n" +
+                jsIdentifier() + ".bsync(none, oevents, xevents);\n" +
+                "}\n";
+        setScript(source);
+    }
 
+//    public void runBThread() throws BPJException {
+//        while (true) {
+//            bsync(none, XEvents, OEvents);
+//            bsync(none, OEvents, XEvents);
+//        }
+//    }
+
+    @Override
+    public void setupScope() {
+
+    }
 }

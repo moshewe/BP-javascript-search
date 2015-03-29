@@ -32,4 +32,8 @@ public class UserMove extends BThread {
 		}
 	}
 
+	@Override
+	public void setupScope() {
+
+	}
 }

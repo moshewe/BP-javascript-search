@@ -23,9 +23,6 @@ public class Arbiter {
         this._program = program;
     }
 
-    public static final BThread theUser = new BThread("The User") {
-    };
-
     protected void bplog(String s) {
         System.out.println("[" + getProgram() + ":" + this + "]: " + s);
     }

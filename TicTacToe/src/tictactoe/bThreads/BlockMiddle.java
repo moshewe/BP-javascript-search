@@ -13,4 +13,8 @@ public class BlockMiddle extends BThread {
 		bsync(none, none, new Move(1, 1));
 	}
 
+	@Override
+	public void setupScope() {
+
+	}
 }

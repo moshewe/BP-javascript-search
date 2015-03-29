@@ -235,7 +235,11 @@ public class BProgram implements Cloneable, Serializable {
         }
 
         triggerEvent(next);
+        bthreadCleanup();
+        bpLoop();
+    }
 
+    private void bthreadCleanup() {
         for (Iterator<BThread> it = _bthreads.iterator();
              it.hasNext(); ) {
             BThread bt = it.next();
@@ -243,8 +247,6 @@ public class BProgram implements Cloneable, Serializable {
                 it.remove();
             }
         }
-
-        bpLoop();
     }
 
     /**

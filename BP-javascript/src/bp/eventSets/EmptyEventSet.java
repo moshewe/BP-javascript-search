@@ -49,6 +49,11 @@ public class EmptyEventSet implements EventSetInterface, RequestableInterface, S
 	public boolean isEvent() {
 		return false;
 	}
+
+	@Override
+	public String jsIdentifier() {
+		return "emptyEventSet";
+	}
 }
 
 /**

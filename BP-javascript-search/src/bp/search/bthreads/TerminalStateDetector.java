@@ -21,6 +21,11 @@ public class TerminalStateDetector extends BThread {
 		return terminal;
 	}
 
+	@Override
+	public void setupScope() {
+
+	}
+
 //	@Override
 //	public void body() throws InterruptedException,
 //			BPJRequestableSetException {

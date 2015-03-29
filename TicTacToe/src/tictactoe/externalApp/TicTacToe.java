@@ -16,8 +16,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
-import static tictactoe.events.StaticEvents.XEvents;
-import static tictactoe.events.StaticEvents.OEvents;
+import static tictactoe.events.StaticEvents.*;
+import static tictactoe.events.StaticEvents.draw;
+//import static tictactoe.events.StaticEvents.XEvents;
+//import static tictactoe.events.StaticEvents.OEvents;
 
 /**
  * The main entry point to the TicTacToe program.
@@ -65,9 +67,7 @@ public class TicTacToe extends BPJavascriptApplication {
     private UpdateDisplay _updateDisplay;
 
     public TicTacToe() {
-        _bp = new BProgram();
         _bp.setName("TicTacToe");
-        addBThreads();
         TTTGame game = new TTTGame(_bp, _turns, _squaresTaken, draw, _xwins, _owins,
                 declareWinner, this);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
@@ -100,13 +100,23 @@ public class TicTacToe extends BPJavascriptApplication {
     }
 
     @Override
-    protected void setupScope() {
-        super.setupScope();
+    protected void setupGlobalScope() {
+        super.setupGlobalScope();
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             _globalScope.put("ttt", _globalScope,
                     Context.javaToJS(this, _globalScope));
+            _globalScope.put("draw", _globalScope,
+                    Context.javaToJS(draw, _globalScope));
+            _globalScope.put("XWin", _globalScope,
+                    Context.javaToJS(XWin, _globalScope));
+            _globalScope.put("OWin", _globalScope,
+                    Context.javaToJS(OWin, _globalScope));
+            _globalScope.put("gameOver", _globalScope,
+                    Context.javaToJS(gameOver, _globalScope));
+            _globalScope.put("moves", _globalScope,
+                    Context.javaToJS(Moves, _globalScope));
             _globalScope.put("xevents", _globalScope,
                     Context.javaToJS(XEvents, _globalScope));
             _globalScope.put("oevents", _globalScope,

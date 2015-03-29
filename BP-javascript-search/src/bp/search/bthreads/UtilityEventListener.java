@@ -23,4 +23,8 @@ public class UtilityEventListener extends BThread {
 		return utility;
 	}
 
+	@Override
+	public void setupScope() {
+
+	}
 }

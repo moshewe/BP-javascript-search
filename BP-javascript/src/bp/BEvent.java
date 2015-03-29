@@ -11,88 +11,93 @@ import java.util.Iterator;
  * A base class for events
  */
 @SuppressWarnings("serial")
-public class BEvent implements EventSetInterface, RequestableInterface, Comparable<BEvent>{
+public class BEvent implements EventSetInterface, RequestableInterface, Comparable<BEvent>, JSIdentifiable {
 
-	private String _name = this.getClass().getSimpleName();
+    protected String _name = this.getClass().getSimpleName();
 
-	@Override
-	public boolean contains(Object o) {
-		return this.equals(o);
-	}
+    @Override
+    public boolean contains(Object o) {
+        return this.equals(o);
+    }
 
-	public Iterator<RequestableInterface> iterator() {
-		return new SingleEventIterator(this);
-	}
+    public Iterator<RequestableInterface> iterator() {
+        return new SingleEventIterator(this);
+    }
 
-	public BEvent() {
-	}
+    public BEvent() {
+    }
 
-	public BEvent(String _name) {
-		this._name = _name;
-	}
+    public BEvent(String _name) {
+        this._name = _name;
+    }
 
-	public String toString() {
-		return _name;
-	}
+    public String toString() {
+        return _name;
+    }
 
-	public String getName() {
-		return _name;
-	}
+    public String getName() {
+        return _name;
+    }
 
-	public void setName(String name) {
-		this._name = name;
-	}
+    public void setName(String name) {
+        this._name = name;
+    }
 
-	public BEvent get(int index) {
-		if (index == 0)
-			return (this);
-		throw (new ArrayIndexOutOfBoundsException());
-	}
+    public BEvent get(int index) {
+        if (index == 0)
+            return (this);
+        throw (new ArrayIndexOutOfBoundsException());
+    }
 
-	public boolean add(RequestableInterface r) throws BPJRequestableSetException {
-		throw new BPJRequestableSetException();
+    public boolean add(RequestableInterface r) throws BPJRequestableSetException {
+        throw new BPJRequestableSetException();
 
-	}
+    }
 
-	public boolean isEvent() {
-		return true;
-	}
+    public boolean isEvent() {
+        return true;
+    }
 
-	public int size() {
-		return 1;
-	}
+    public int size() {
+        return 1;
+    }
 
-	public BEvent getEvent() throws BPJRequestableSetException {
+    public BEvent getEvent() throws BPJRequestableSetException {
 
-		return this;
-	}
-	public ArrayList<BEvent> getEventList() {
-		ArrayList<BEvent> list = new ArrayList<BEvent>();
-		this.addEventsToList(list);
-		return list;
-	}
+        return this;
+    }
 
-	public void addEventsToList(ArrayList<BEvent> list) {
-		list.add(this); 
-	}
+    public ArrayList<BEvent> getEventList() {
+        ArrayList<BEvent> list = new ArrayList<BEvent>();
+        this.addEventsToList(list);
+        return list;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		BEvent other = (BEvent) obj;
-		return _name.equals(other.getName());
-	}
+    public void addEventsToList(ArrayList<BEvent> list) {
+        list.add(this);
+    }
 
-	@Override
-	public int compareTo(BEvent e) {
-		return _name.compareTo(e.getName());
-	}
-	
-	
-	
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BEvent other = (BEvent) obj;
+        return _name.equals(other.getName());
+    }
+
+    @Override
+    public int compareTo(BEvent e) {
+        return _name.compareTo(e.getName());
+    }
+
+
+    @Override
+    public String jsIdentifier() {
+        return BPJavascriptApplication.toJSIdentifier(_name +
+                hashCode());
+    }
 }
 
 /**
@@ -100,26 +105,26 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
  * (singleton) set.
  */
 class SingleEventIterator implements Iterator<RequestableInterface> {
-	BEvent e;
+    BEvent e;
 
-	public SingleEventIterator(BEvent e) {
-		this.e = e;
-	}
+    public SingleEventIterator(BEvent e) {
+        this.e = e;
+    }
 
-	@Override
-	public boolean hasNext() {
-		return e != null;
-	}
+    @Override
+    public boolean hasNext() {
+        return e != null;
+    }
 
-	@Override
-	public BEvent next() {
-		BEvent tmp = e;
-		e = null;
-		return tmp;
-	}
+    @Override
+    public BEvent next() {
+        BEvent tmp = e;
+        e = null;
+        return tmp;
+    }
 
-	@Override
-	public void remove() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }

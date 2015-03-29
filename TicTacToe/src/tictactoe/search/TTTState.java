@@ -43,7 +43,7 @@ public class TTTState extends BPState {
 		super.restore();
 		for (SquareTaken st : taken) {
 			if (st.getBlockedEvents() == EventSetConstants.none) {
-				JButton btt = ttt.gui.buttons[st.row][st.col];
+				JButton btt = ttt.gui.buttons[st._row][st._col];
 				btt.setEnabled(true);
 				btt.setText("");
 			}

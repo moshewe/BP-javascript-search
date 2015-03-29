@@ -5,6 +5,8 @@ import bp.eventSets.RequestableInterface;
 import org.mozilla.javascript.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import static bp.eventSets.EventSetConstants.none;
 
@@ -24,6 +26,8 @@ public abstract class BThread implements Serializable {
     EventSetInterface _wait;
     EventSetInterface _block;
 
+    protected List<JSIdentifiable> _btScopeObjects;
+
     public boolean isAlive() {
         return _alive;
     }
@@ -33,6 +37,7 @@ public abstract class BThread implements Serializable {
         _request = none;
         _wait = none;
         _block = none;
+        _btScopeObjects = new ArrayList<JSIdentifiable>();
     }
 
     public ContinuationPending getCont() {
@@ -106,6 +111,7 @@ public abstract class BThread implements Serializable {
 
     public BThread(String _name) {
         this.setName(_name);
+        _btScopeObjects = new ArrayList<>();
     }
 
     public void setName(String name) {
@@ -172,7 +178,7 @@ public abstract class BThread implements Serializable {
     public void setScript(String source) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
-        source += JSIdentifier() + ".finished();\n";
+        source += jsIdentifier() + ".finished();\n";
         try {
             _script = cx.compileString(source, _name + "-script", 1, null);
         } finally {
@@ -180,17 +186,33 @@ public abstract class BThread implements Serializable {
         }
     }
 
-    public String JSIdentifier() {
+    public String jsIdentifier() {
         return BPJavascriptApplication.toJSIdentifier(_name +
                 hashCode());
     }
 
+    /**
+     * Used by the JS script wrapper to declare bthread finished.
+     */
     public void finished() {
         _alive = false;
     }
 
     public void setCont(ContinuationPending cont) {
         this._cont = cont;
+    }
+
+    protected void setupScope() {
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            for (JSIdentifiable obj : _btScopeObjects) {
+                _scope.put(obj.jsIdentifier(), _scope,
+                        Context.javaToJS(obj, _scope));
+            }
+        } finally {
+            Context.exit();
+        }
     }
 }
 

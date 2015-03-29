@@ -26,28 +26,44 @@ public abstract class BPJavascriptApplication {
     protected Scriptable _globalScope;
     protected BProgram _bp;
 
+    public BPJavascriptApplication() {
+        _bp = new BProgram();
+        setupGlobalScope();
+        addBThreads();
+        setupBThreadScopes();
+    }
+
+    private void setupBThreadScopes() {
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            for (BThread bt : _bp.getBThreads()) {
+                bt.setScope(_globalScope);
+                bt.setupScope();
+                String btJsName = bt.jsIdentifier();
+                if (bt.getScript() == null)
+                    bt.setScript(btJsName + ".runBThread();\n");
+                _globalScope.put(btJsName,
+                        _globalScope, Context.javaToJS(bt, _globalScope));
+            }
+        } finally {
+            Context.exit();
+        }
+    }
+
     protected abstract void addBThreads();
 
     protected void start() {
-        setupScope();
         _bp.start();
     }
 
-    protected void setupScope() {
+    protected void setupGlobalScope() {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             _globalScope = cx.initStandardObjects();
             _globalScope.put("none", _globalScope,
                     Context.javaToJS(none, _globalScope));
-            for (BThread bt : _bp.getBThreads()) {
-                bt.setScope(_globalScope);
-                String btJsName = bt.JSIdentifier();
-                if (bt.getScript() == null)
-                    bt.setScript(btJsName + ".runBThread();\n");
-                _globalScope.put(btJsName,
-                        _globalScope, Context.javaToJS(bt, _globalScope));
-            }
         } finally {
             Context.exit();
         }

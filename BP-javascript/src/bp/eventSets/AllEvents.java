@@ -18,4 +18,9 @@ public class AllEvents implements EventSetInterface, Serializable {
 	public String toString() {
 		return ("All");
 	}
+
+	@Override
+	public String jsIdentifier() {
+		return "All";
+	}
 }

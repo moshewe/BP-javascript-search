@@ -101,18 +101,18 @@ public class TTTGame extends BPGame {
         } else if (getPlayer(state) == xPlayer) {
             for (SquareTaken st : taken) {
                 EventSetInterface watchedEvents = st.getWaitedEvents();
-                // if (watchedEvents != none && !(st.row == 1 && st.col == 1)) {
+                // if (watchedEvents != none && !(st._row == 1 && st._col == 1)) {
                 if (watchedEvents != none) {
-                    actions.add(new BPAction(new X(st.row, st.col)));
+                    actions.add(new BPAction(new X(st._row, st._col)));
                 }
             }
         } else {
             for (SquareTaken st : taken) {
                 EventSetInterface watchedEvents = st.getWaitedEvents();
-                // if (watchedEvents != none && !(st.row == 1 && st.col == 1)) {
+                // if (watchedEvents != none && !(st._row == 1 && st._col == 1)) {
                 if (watchedEvents != none) {
-                    actions.add(new BPAction(new O(st.row,
-                            st.col)));
+                    actions.add(new BPAction(new O(st._row,
+                            st._col)));
                 }
             }
         }

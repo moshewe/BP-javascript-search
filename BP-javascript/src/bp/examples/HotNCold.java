@@ -73,6 +73,11 @@ public class HotNCold {
             setScript(source);
             _scope = globalScope;
         }
+
+        @Override
+        public void setupScope() {
+
+        }
     }
 
     public class ColdBt extends BThread {
@@ -87,6 +92,11 @@ public class HotNCold {
                     "java.lang.System.out.println(\"COLD!3\")\n";
             setScript(source);
             _scope = globalScope;
+        }
+
+        @Override
+        public void setupScope() {
+
         }
 
     }
@@ -104,6 +114,11 @@ public class HotNCold {
                     "java.lang.System.out.println(\"alternator done!\")\n";
             setScript(source);
             _scope = globalScope;
+        }
+
+        @Override
+        public void setupScope() {
+
         }
 
     }

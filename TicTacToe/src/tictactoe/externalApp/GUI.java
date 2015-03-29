@@ -61,7 +61,7 @@ public class GUI implements ActionListener, Serializable {
 	 */
 	public void actionPerformed(ActionEvent a) {
 		final TTTButton btt = ((TTTButton) a.getSource());
-		// bp.fireExternalEvent(new Click(btt.row, btt.col));
+		// bp.fireExternalEvent(new Click(btt._row, btt._col));
 		bp.fireExternalEvent(new X(btt.row, btt.col));
 	}
 
@@ -77,7 +77,7 @@ public class GUI implements ActionListener, Serializable {
 		 * Constructor.
 		 * 
 		 * @param row
-		 *            The row of the button.
+		 *            The _row of the button.
 		 * @param col
 		 *            The column of the button.
 		 */
