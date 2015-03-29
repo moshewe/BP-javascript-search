@@ -18,24 +18,22 @@ public class BPState {
     /**
      * The states of the relevant be-threads
      */
-    private List<BTState> btstates;
+    private List<BTState> _btstates;
 
     public BPState(BPState other) {
         this.bp = other.bp;
-        btstates = new ArrayList<BTState>(other.getBTstates());
-    }
-
-    public BPState(BProgram bp) {
-        this.bp = bp;
-        btstates = new ArrayList<BTState>();
+        _btstates = new ArrayList<BTState>();
         for (BThread bt : bp.getBThreads()) {
             getBTstates().add(new BTState(bt));
         }
     }
 
-    public BPState(BProgram bp, List<BTState> btstates) {
+    public BPState(BProgram bp) {
         this.bp = bp;
-        setBTstates(btstates);
+        _btstates = new ArrayList<BTState>();
+        for (BThread bt : bp.getBThreads()) {
+            getBTstates().add(new BTState(bt));
+        }
     }
 
     /**
@@ -56,11 +54,11 @@ public class BPState {
     }
 
     public List<BTState> getBTstates() {
-        return btstates;
+        return _btstates;
     }
 
     private void setBTstates(List<BTState> btstates) {
-        this.btstates = btstates;
+        this._btstates = btstates;
     }
 
     public BProgram getBp() {
@@ -68,15 +66,22 @@ public class BPState {
     }
 
     public void restore() {
-        for (BTState bts : btstates) {
+        for (BTState bts : _btstates) {
             bts.restore();
         }
+
+        List<BThread> restoredBTs = new ArrayList<BThread>();
+        for (BTState bts : _btstates) {
+            restoredBTs.add(bts.bt);
+        }
+
+        bp.setBThreads(restoredBTs);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (BTState bts : btstates) {
+        for (BTState bts : _btstates) {
             sb.append(bts);
         }
         return sb.toString();
