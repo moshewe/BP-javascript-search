@@ -34,11 +34,6 @@ public class ClickSimulator extends EnvironmentSimBThread {
 		return "ClickSimulator(" + row + "," + col + ")";
 	}
 
-	@Override
-	public void setupScope() {
-
-	}
-
 	public static List<BThread> constructInstances() {
 		List<BThread> bts = new ArrayList<BThread>();
 		for (int i = 0; i < 3; i++) {

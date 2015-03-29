@@ -28,8 +28,6 @@ public class DeclareWinner extends BThread {
                 "msg = \"O Wins\";\n" +
                 "} else\n" +
                 "msg = \"A Draw\";\n" +
-                "\n" +
-//                "System.out.println(msg);\n" +
                 "ttt.gui.message.setText(msg);\n" +
                 jsIdentifier() + ".bsync(gameOver, none, none);\n";
         setScript(source);

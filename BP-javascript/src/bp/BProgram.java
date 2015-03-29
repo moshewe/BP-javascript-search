@@ -252,16 +252,15 @@ public class BProgram implements Cloneable, Serializable {
     /**
      * Used by arbiters to notify programs of events triggered.
      *
-     * @param ec
+     * @param lastEvent
      */
-    private void triggerEvent(BEvent ec) {
+    private void triggerEvent(BEvent lastEvent) {
         String st;
-        if (ec != null) {
+        if (lastEvent != null) {
             _eventCounter++;
-            setLastEvent(ec.getEvent());
+            setLastEvent(lastEvent.getEvent());
             st = new String("Event #" + _eventCounter + ": " + getLastEvent());
             log(st);
-            BEvent lastEvent = ec.getEvent();
             log(">> starting bthread wakeup");
             // Interrupt and notify the be-threads that need to be
             // awaken

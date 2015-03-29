@@ -14,7 +14,8 @@ public class UpdateDisplay extends BThread {
     public UpdateDisplay(TicTacToe ttt) {
 //        this.ttt = ttt;
         String source = "while(true){\n" +
-                "var move = " + jsIdentifier() + ".bsync(none,xevents,none);\n" +
+                "var move = " + jsIdentifier() +
+                ".bsync(none,xevents,none);\n" +
                 "var btt = ttt.gui.buttons[move.row][move.col];\n" +
                 "btt.setText(move.displayString());\n" +
                 "}\n";

@@ -68,7 +68,9 @@ public abstract class BThread implements Serializable {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
-            cx.resumeContinuation(_cont.getContinuation(), _scope, event);
+            Object eventInJS = Context.javaToJS(event, _scope);
+            cx.resumeContinuation(_cont.getContinuation(), _scope,
+                    eventInJS);
         } catch (ContinuationPending pending) {
             _cont = pending;
             return _cont;

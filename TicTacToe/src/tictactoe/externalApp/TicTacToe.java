@@ -2,7 +2,6 @@ package tictactoe.externalApp;
 
 import bp.Arbiter;
 import bp.BPJavascriptApplication;
-import bp.BProgram;
 import bp.BThread;
 import bp.search.adversarial.BPMinimaxSearch;
 import bp.search.adversarial.MinimaxSearchArbiter;
@@ -17,7 +16,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import static tictactoe.events.StaticEvents.*;
-import static tictactoe.events.StaticEvents.draw;
 //import static tictactoe.events.StaticEvents.XEvents;
 //import static tictactoe.events.StaticEvents.OEvents;
 
@@ -60,7 +58,7 @@ public class TicTacToe extends BPJavascriptApplication {
     private EnforceTurns _turns;
     private Arbiter arbiter;
     private Collection<SquareTaken> _squaresTaken;
-    private DetectDraw draw;
+    private DetectDraw _draw;
     private Set<BThread> _xwins;
     private Set<BThread> _owins;
     private DeclareWinner declareWinner;
@@ -68,7 +66,7 @@ public class TicTacToe extends BPJavascriptApplication {
 
     public TicTacToe() {
         _bp.setName("TicTacToe");
-        TTTGame game = new TTTGame(_bp, _turns, _squaresTaken, draw, _xwins, _owins,
+        TTTGame game = new TTTGame(_bp, _turns, _squaresTaken, _draw, _xwins, _owins,
                 declareWinner, this);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
         arbiter = new MinimaxSearchArbiter(search, game);
@@ -87,7 +85,7 @@ public class TicTacToe extends BPJavascriptApplication {
         declareWinner = new DeclareWinner(this);
         ArrayList<BThread> stakenBThreadList = new ArrayList<BThread>(
                 _squaresTaken);
-        draw = new DetectDraw();
+        _draw = new DetectDraw();
 
         _bp.add(_updateDisplay);
         _bp.add(_xwins);
@@ -95,7 +93,7 @@ public class TicTacToe extends BPJavascriptApplication {
         _bp.add(declareWinner);
         _bp.add(_turns);
         _bp.add(stakenBThreadList);
-        _bp.add(draw);
+        _bp.add(_draw);
         // _bp.add(new BlockMiddle());
     }
 
