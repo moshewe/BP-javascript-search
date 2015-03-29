@@ -16,8 +16,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import static tictactoe.events.StaticEvents.*;
-//import static tictactoe.events.StaticEvents.XEvents;
-//import static tictactoe.events.StaticEvents.OEvents;
 
 /**
  * The main entry point to the TicTacToe program.
@@ -77,7 +75,7 @@ public class TicTacToe extends BPJavascriptApplication {
     }
 
     protected void addBThreads() {
-        _updateDisplay = new UpdateDisplay(this);
+        _updateDisplay = new UpdateDisplay();
         _xwins = DetectXWin.constructInstances();
         _owins = DetectOWin.constructInstances();
         _turns = new EnforceTurns();

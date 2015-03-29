@@ -1,8 +1,6 @@
 package tictactoe.bThreads;
 
 import bp.BThread;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.ContextFactory;
 import tictactoe.events.Move;
 
 import java.util.Collection;
@@ -14,16 +12,16 @@ import java.util.HashSet;
 public class SquareTaken extends BThread {
     public final int _row;
     public final int _col;
-    public final String _moveEventName;
+    private final Move _move;
 
 //	public void runBThread() throws BPJException {
 //
 //		interruptingEvents = new EventSet(gameOver);
-//		Move move = new Move(_row, _col);
-//		move.setName("(" + _row + "," + _col + ")");
-//		// Wait for any move for a given square
-//		bsync(none, move, none);
-//		bsync(none, none, move);
+//		Move _move = new Move(_row, _col);
+//		_move.setName("(" + _row + "," + _col + ")");
+//		// Wait for any _move for a given square
+//		bsync(none, _move, none);
+//		bsync(none, none, _move);
 //
 //	}
 
@@ -31,12 +29,13 @@ public class SquareTaken extends BThread {
         super("SquareTaken(" + row + "," + col + ")");
         this._row = row;
         this._col = col;
-        _moveEventName = "move" + row + col + "Event";
-        // Wait for any move for a given square
+        _move = new Move(_row, _col);
+        _btScopeObjects.add(_move);
+        // Wait for any _move for a given square
         String source = jsIdentifier() + ".bsync(none, " +
-                _moveEventName + ", none);\n" +
+                _move.jsIdentifier() + ", none);\n" +
                 jsIdentifier() + ".bsync(none, none, " +
-                _moveEventName + ")\n;";
+                _move.jsIdentifier() + ")\n;";
 
         setScript(source);
     }
@@ -51,19 +50,5 @@ public class SquareTaken extends BThread {
             }
         }
         return set;
-    }
-
-    @Override
-    public void setupScope() {
-        Move move = new Move(_row, _col);
-        move.setName("(" + _row + "," + _col + ")");
-        Context cx = ContextFactory.getGlobal().enterContext();
-        cx.setOptimizationLevel(-1); // must use interpreter mode
-        try {
-            _scope.put(_moveEventName, _scope,
-                    Context.javaToJS(move, _scope));
-        } finally {
-            Context.exit();
-        }
     }
 }

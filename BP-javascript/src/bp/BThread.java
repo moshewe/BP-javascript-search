@@ -125,7 +125,11 @@ public abstract class BThread implements Serializable {
      */
 
     public boolean isRequested(BEvent event) {
-        return (_request.contains(event));
+        return _request.contains(event);
+    }
+
+    public boolean isWaited(BEvent event){
+        return _wait.contains(event);
     }
 
     public String getName() {

@@ -1,16 +1,10 @@
 package tictactoe.bThreads;
 
 import bp.BThread;
-import bp.eventSets.EventSet;
-import bp.exceptions.BPJException;
 import tictactoe.events.X;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static bp.eventSets.EventSetConstants.none;
-import static tictactoe.events.StaticEvents.XWin;
-import static tictactoe.events.StaticEvents.gameOver;
 
 /**
  * A scenario that identifies wins by player X

@@ -38,9 +38,10 @@ public class MinimaxSearchArbiter extends Arbiter {
     }
 
     public BEvent makeDecision() {
-        BPState state = game.getInitialState();
+        BPState initialState = game.getInitialState();
         gameOn = true;
-        BPAction decision = algorithm.makeDecision(state);
+        bplog("=== STARTING SEARCH ===");
+        BPAction decision = algorithm.makeDecision(initialState);
         BEvent choice;
         if (decision == null) {
             bplog("all decisions are value=-inf! chosen at random...");
@@ -48,8 +49,9 @@ public class MinimaxSearchArbiter extends Arbiter {
         } else {
             choice = decision.getEvent();
         }
+        bplog("=== SEARCH FINISHED ===");
 
-        state.restore();
+        initialState.restore();
         gameOn = false;
         return choice;
     }

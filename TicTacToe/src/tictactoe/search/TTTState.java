@@ -2,6 +2,7 @@ package tictactoe.search;
 
 import bp.BProgram;
 import bp.eventSets.EventSetConstants;
+import bp.eventSets.EventSetInterface;
 import bp.search.BPState;
 import tictactoe.bThreads.DeclareWinner;
 import tictactoe.bThreads.SquareTaken;
@@ -42,7 +43,8 @@ public class TTTState extends BPState {
 	public void restore() {
 		super.restore();
 		for (SquareTaken st : taken) {
-			if (st.getBlockedEvents() == EventSetConstants.none) {
+			EventSetInterface blocked = st.getBlockedEvents();
+			if (blocked == EventSetConstants.none) {
 				JButton btt = ttt.gui.buttons[st._row][st._col];
 				btt.setEnabled(true);
 				btt.setText("");

@@ -265,8 +265,9 @@ public class BProgram implements Cloneable, Serializable {
             // Interrupt and notify the be-threads that need to be
             // awaken
             for (BThread bt : _bthreads) {
-                if (bt.getWaitedEvents().contains(lastEvent)
-                        || bt.isRequested(lastEvent)) {
+                boolean waited = bt.isWaited(lastEvent);
+                boolean requested = bt.isRequested(lastEvent);
+                if (waited || requested) {
                     bt.resume(lastEvent);
                 }
             }
