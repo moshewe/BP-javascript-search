@@ -78,6 +78,7 @@ public abstract class BThread implements Serializable {
             Context.exit();
         }
         //unsuccessful resume of bthread
+        // maybe bthread is over?
         return null;
     }
 
@@ -205,7 +206,7 @@ public abstract class BThread implements Serializable {
     }
 
     public void setCont(ContinuationPending cont) {
-        this._cont = cont;
+        _cont = cont;
     }
 
     protected void setupScope() {

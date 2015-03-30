@@ -29,7 +29,16 @@ public class DeclareWinner extends BThread {
                 "} else\n" +
                 "msg = \"A Draw\";\n" +
                 "ttt.gui.message.setText(msg);\n" +
-                jsIdentifier() + ".bsync(gameOver, none, none);\n";
+                jsIdentifier() + ".bsync(gameOver, none, none);\n" +
+                "ttt.gui.buttons[0][0].setEnabled(false);\n" +
+                "ttt.gui.buttons[0][1].setEnabled(false);\n" +
+                "ttt.gui.buttons[0][2].setEnabled(false);\n" +
+                "ttt.gui.buttons[1][0].setEnabled(false);\n" +
+                "ttt.gui.buttons[1][1].setEnabled(false);\n" +
+                "ttt.gui.buttons[1][2].setEnabled(false);\n" +
+                "ttt.gui.buttons[2][0].setEnabled(false);\n" +
+                "ttt.gui.buttons[2][1].setEnabled(false);\n" +
+                "ttt.gui.buttons[2][2].setEnabled(false);\n";
         setScript(source);
     }
 

@@ -1,7 +1,9 @@
 package bp.search.adversarial;
 
+import aima.core.search.framework.Metrics;
 import bp.Arbiter;
 import bp.BEvent;
+import bp.eventSets.RequestableInterface;
 import bp.search.BPAction;
 import bp.search.BPState;
 import bp.search.adversarial.players.BPSystemPlayer;
@@ -50,6 +52,12 @@ public class MinimaxSearchArbiter extends Arbiter {
             choice = decision.getEvent();
         }
         bplog("=== SEARCH FINISHED ===");
+        bplog("== METRICS ==");
+        Metrics metrics = algorithm.getMetrics();
+        for (String k : metrics.keySet()) {
+            bplog(k + " = " + metrics.get(k));
+        }
+        bplog("== END OF METRICS ==");
 
         initialState.restore();
         gameOn = false;

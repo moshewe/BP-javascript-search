@@ -9,6 +9,7 @@ import static bp.eventSets.EventSetConstants.none;
 import org.junit.Test;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
+import org.mozilla.javascript.ContinuationPending;
 import org.mozilla.javascript.Scriptable;
 
 /**
@@ -27,11 +28,28 @@ public class HotNCold {
     public void hotNColdTest() {
         System.out.println("starting BTs");
         setup();
-        BProgram prog = new BProgram();
-        prog.add(_hotbt);
-        prog.add(_coldbt);
-        prog.add(_alternator);
-        prog.start();
+//        BProgram prog = new BProgram();
+//        prog.add(_hotbt);
+//        prog.add(_coldbt);
+//        prog.add(_alternator);
+//        prog.start();
+//        _hotbt.start();
+//        ContinuationPending cont = _hotbt.getCont();
+//        _hotbt.resume(null);
+//        _hotbt.setCont(cont);
+//        _hotbt.resume(null);
+//        _hotbt.resume(null);
+        _alternator.start();
+        ContinuationPending cont = _alternator.getCont();
+        _alternator.resume(null);
+        _alternator.setCont(cont);
+        _alternator.resume(null);
+        _alternator.setCont(cont);
+        _alternator.resume(null);
+        _alternator.setCont(cont);
+        _alternator.resume(null);
+        _alternator.setCont(cont);
+        _alternator.resume(null);
     }
 
     private void setup() {
@@ -73,11 +91,6 @@ public class HotNCold {
             setScript(source);
             _scope = globalScope;
         }
-
-        @Override
-        public void setupScope() {
-
-        }
     }
 
     public class ColdBt extends BThread {
@@ -93,12 +106,6 @@ public class HotNCold {
             setScript(source);
             _scope = globalScope;
         }
-
-        @Override
-        public void setupScope() {
-
-        }
-
     }
 
     public class AlternatorBt extends BThread {

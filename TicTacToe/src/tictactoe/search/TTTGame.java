@@ -6,7 +6,6 @@ import bp.BThread;
 import bp.eventSets.EventSetInterface;
 import bp.search.BPAction;
 import bp.search.BPState;
-import bp.search.EnvironmentSimBThread;
 import bp.search.adversarial.BPGame;
 import bp.search.adversarial.BPPlayer;
 import bp.search.adversarial.players.BPSystemPlayer;
@@ -34,9 +33,6 @@ public class TTTGame extends BPGame {
     public static final BPPlayer xPlayer = new XPlayer();
     public static final BPPlayer oPlayer = new YPlayer();
     public static final BPPlayer[] players = {xPlayer, oPlayer};
-
-    protected static BPAction simOn = new BPAction(EnvironmentSimBThread.simOn);
-    protected static BPAction simOff = new BPAction(EnvironmentSimBThread.simOff);
 
     private BProgram program;
     private EnforceTurns turns;

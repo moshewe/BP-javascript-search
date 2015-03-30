@@ -15,22 +15,6 @@ public class DetectXWin extends BThread {
     private X secondSquare;
     private X thirdSquare;
 
-//    public void runBThread() throws BPJException {
-//        interruptingEvents = new EventSet(gameOver);
-//        // Wait for the first X
-//        bsync(none, firstSquare, none);
-//
-//        // Wait for the second X
-//        bsync(none, secondSquare, none);
-//
-//        // Wait for the third X
-//        bsync(none, thirdSquare, none);
-//
-//        // Announce X win
-//        bsync(XWin, none, none);
-//
-//    }
-
     /**
      * @param x
      * @param x2
