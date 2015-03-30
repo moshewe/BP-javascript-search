@@ -17,40 +17,31 @@ public class BProgram implements Cloneable, Serializable {
      * removes itself explicitly
      */
     public transient Collection<BThread> _bthreads;
-
     /**
      * A variable counting the number of events fired since the beginning of the
      * execution
      */
     // the index of the last event (= number of events -1)
     transient public int _eventCounter = -1;
-
     static private Object error = null;
-
     /**
      * Stores the strings of the events that occurred in this run
      */
     transient ArrayList<String> eventLog = new ArrayList<String>();
-
     /**
      * The number of event Strings to be saved in the list
      */
     transient int eventLogSize = 100;
-
     /**
      * A variable containing the last fired event.
      */
     transient private BEvent lastEvent;
-
     /**
      * Program name is set to be the simple class name by default.
      */
     transient private String name = this.getClass().getSimpleName();
-
     private Arbiter _arbiter;
-
     private volatile BlockingQueue<BEvent> _externalEventsQueue;
-    private boolean debugMode;
 
     public void setArbiter(Arbiter arbiter) {
         this._arbiter = arbiter;
@@ -61,7 +52,7 @@ public class BProgram implements Cloneable, Serializable {
         setBThreads(new ArrayList<BThread>());
         _arbiter = new Arbiter();
         _arbiter.setProgram(this);
-        _externalEventsQueue = new ArrayBlockingQueue<BEvent>(100);
+        _externalEventsQueue = new ArrayBlockingQueue<>(100);
         System.out.println("BProgram instantiated");
     }
 
@@ -77,7 +68,7 @@ public class BProgram implements Cloneable, Serializable {
      * @return an ArrayList of all enabled events that are requestable
      */
     public Set<BEvent> legalEvents() {
-        Set<BEvent> enabled = new TreeSet<BEvent>();
+        Set<BEvent> enabled = new TreeSet<>();
         for (BThread bt : _bthreads) {
             if (bt.getRequestedEvents() == null)
                 continue;
@@ -90,10 +81,6 @@ public class BProgram implements Cloneable, Serializable {
             }
         }
         return enabled;
-    }
-
-    public Object getError() {
-        return error;
     }
 
     /**
@@ -151,7 +138,6 @@ public class BProgram implements Cloneable, Serializable {
     }
 
     public void setDebugMode(boolean mode) {
-        debugMode = mode;
     }
 
     /**

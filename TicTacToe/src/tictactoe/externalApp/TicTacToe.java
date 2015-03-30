@@ -64,7 +64,7 @@ public class TicTacToe extends BPJavascriptApplication {
 
     public TicTacToe() {
         _bp.setName("TicTacToe");
-        TTTGame game = new TTTGame(_bp, _turns, _squaresTaken, _draw, _xwins, _owins,
+        TTTGame game = new TTTGame(_bp, _turns, _squaresTaken,
                 declareWinner, this);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
         arbiter = new MinimaxSearchArbiter(search, game);
