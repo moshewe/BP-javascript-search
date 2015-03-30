@@ -48,7 +48,7 @@ public class DetectOWin extends BThread {
 				secondSquare.jsIdentifier() + ", none);\n" +
 				jsIdentifier() + ".bsync(none, " +
 				thirdSquare.jsIdentifier() + ", none);\n" +
-				jsIdentifier() + ".bsync(OWin, none, none);\n";
+				jsIdentifier() + ".bsync(OWin, none, moves);\n";
 		setScript(source);
 	}
 

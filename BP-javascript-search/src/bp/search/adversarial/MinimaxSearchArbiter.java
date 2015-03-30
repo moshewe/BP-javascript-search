@@ -3,12 +3,14 @@ package bp.search.adversarial;
 import aima.core.search.framework.Metrics;
 import bp.Arbiter;
 import bp.BEvent;
-import bp.eventSets.RequestableInterface;
+import bp.BThread;
 import bp.search.BPAction;
 import bp.search.BPState;
+import bp.search.BTState;
 import bp.search.adversarial.players.BPSystemPlayer;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author moshewe
@@ -17,12 +19,21 @@ public class MinimaxSearchArbiter extends Arbiter {
 
     protected BPMinimaxSearch algorithm;
     protected BPGame game;
+    protected List<BThread> _simBThreads;
     public boolean gameOn;
 
-    public MinimaxSearchArbiter(BPMinimaxSearch algorithm, BPGame game) {
+    public MinimaxSearchArbiter(BPMinimaxSearch algorithm, BPGame game,
+                                List<BThread> _simBThreads) {
         this.algorithm = algorithm;
         this.game = game;
+        this._simBThreads = _simBThreads;
     }
+
+//    public MinimaxSearchArbiter(BPMinimaxSearch algorithm, BPGame game) {
+//        this.algorithm = algorithm;
+//        this.game = game;
+//        _simBThreads = new ArrayList<>();
+//    }
 
     @Override
     protected BEvent nextEvent() {
@@ -41,6 +52,7 @@ public class MinimaxSearchArbiter extends Arbiter {
 
     public BEvent makeDecision() {
         BPState initialState = game.getInitialState();
+//        addSimBThreads(initialState);
         gameOn = true;
         bplog("=== STARTING SEARCH ===");
         BPAction decision = algorithm.makeDecision(initialState);
@@ -59,9 +71,24 @@ public class MinimaxSearchArbiter extends Arbiter {
         }
         bplog("== END OF METRICS ==");
 
+//        removeSimBThreads(initialState);
         initialState.restore();
         gameOn = false;
         return choice;
     }
+
+//    private void removeSimBThreads(BPState initialState) {
+//        initialState.bp.getBThreads().removeAll(_simBThreads);
+//        for (BThread sim : _simBThreads) {
+//            initialState.getBTstates().add(new BTState(sim));
+//        }
+//    }
+//
+//    private void addSimBThreads(BPState initialState) {
+//        initialState.bp.getBThreads().addAll(_simBThreads);
+//        for (BThread sim : _simBThreads) {
+//            initialState.getBTstates().add(new BTState(sim));
+//        }
+//    }
 
 }

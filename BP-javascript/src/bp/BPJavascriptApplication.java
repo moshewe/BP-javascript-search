@@ -33,7 +33,7 @@ public abstract class BPJavascriptApplication {
         setupBThreadScopes();
     }
 
-    private void setupBThreadScopes() {
+    protected void setupBThreadScopes() {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
@@ -46,6 +46,22 @@ public abstract class BPJavascriptApplication {
                 _globalScope.put(btJsName,
                         _globalScope, Context.javaToJS(bt, _globalScope));
             }
+        } finally {
+            Context.exit();
+        }
+    }
+
+    protected void setupBTPrivateScope(BThread bt) {
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            bt.setScope(_globalScope);
+            bt.setupScope();
+            String btJsName = bt.jsIdentifier();
+            if (bt.getScript() == null)
+                bt.setScript(btJsName + ".runBThread();\n");
+            _globalScope.put(btJsName,
+                    _globalScope, Context.javaToJS(bt, _globalScope));
         } finally {
             Context.exit();
         }

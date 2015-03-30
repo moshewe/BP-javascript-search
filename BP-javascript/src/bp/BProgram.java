@@ -49,7 +49,7 @@ public class BProgram implements Cloneable, Serializable {
     }
 
     public BProgram() {
-        setBThreads(new ArrayList<BThread>());
+        _bthreads = new ArrayList<BThread>();
         _arbiter = new Arbiter();
         _arbiter.setProgram(this);
         _externalEventsQueue = new ArrayBlockingQueue<>(100);

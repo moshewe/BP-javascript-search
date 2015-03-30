@@ -26,6 +26,7 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
 
     @Override
     public List<BPAction> getActions(BPState state) {
+        state.restore();
         List<BPAction> ans = new ArrayList<>();
         for (BTState bts : state.getBTstates()) {
             for (RequestableInterface req : bts.requestedEvents) {
@@ -37,6 +38,7 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
             }
         }
 
+        System.out.println("actions possible: " + ans);
         return ans;
     }
 

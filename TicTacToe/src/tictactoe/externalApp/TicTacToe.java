@@ -13,6 +13,7 @@ import tictactoe.search.TTTGame;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import static tictactoe.events.StaticEvents.*;
@@ -65,9 +66,14 @@ public class TicTacToe extends BPJavascriptApplication {
     public TicTacToe() {
         _bp.setName("TicTacToe");
         TTTGame game = new TTTGame(_bp, _turns, _squaresTaken,
+                _draw, _xwins, _owins,
                 declareWinner, this);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
-        arbiter = new MinimaxSearchArbiter(search, game);
+        List<BThread> simBThreads = new ArrayList<>();
+        ReqAllMoves reqAllMoves = new ReqAllMoves();
+        simBThreads.add(reqAllMoves);
+        setupBTPrivateScope(reqAllMoves);
+        arbiter = new MinimaxSearchArbiter(search, game,simBThreads);
         _bp.setArbiter(arbiter);
         // Start the graphical user interface
         gui = new GUI(_bp);

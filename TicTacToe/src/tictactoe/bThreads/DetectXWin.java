@@ -36,7 +36,7 @@ public class DetectXWin extends BThread {
                 secondSquare.jsIdentifier() + ", none);\n" +
                 jsIdentifier() + ".bsync(none, " +
                 thirdSquare.jsIdentifier() + ", none);\n" +
-                jsIdentifier() + ".bsync(XWin, none, none);\n";
+                jsIdentifier() + ".bsync(XWin, none, moves);\n";
         setScript(source);
     }
 

@@ -74,11 +74,13 @@ public abstract class BThread implements Serializable {
         } catch (ContinuationPending pending) {
             _cont = pending;
             return _cont;
+        } catch (Exception ex) {
+            bplog("WTF EXCEPTION" + ex);
         } finally {
             Context.exit();
         }
-        //unsuccessful resume of bthread
-        // maybe bthread is over?
+
+        bplog("Bthread " + _name + " is over!");
         return null;
     }
 
@@ -129,7 +131,7 @@ public abstract class BThread implements Serializable {
         return _request.contains(event);
     }
 
-    public boolean isWaited(BEvent event){
+    public boolean isWaited(BEvent event) {
         return _wait.contains(event);
     }
 
@@ -220,6 +222,10 @@ public abstract class BThread implements Serializable {
         } finally {
             Context.exit();
         }
+    }
+
+    public void revive() {
+        _alive = true;
     }
 }
 

@@ -66,6 +66,7 @@ public class BTState {
         bt.setWaitedEvents(watchedEvents);
         bt.setBlockedEvents(blockedEvents);
         bt.setCont(_cont);
+        bt.revive();
 //		System.out.println("restored " + bt);
     }
 

@@ -39,9 +39,9 @@ public class BPAction implements Action, Comparable<BPAction> {
         BEvent event = ev.getEvent();
         bp.setLastEvent(event);
         BPState newBps = bps.copy();
+        bps.restore();
         bplog("BEFORE: " + bps.toString());
         for (BTState bts : newBps.getBTstates()) {
-            bts.restore();
             if (bts.watchedEvents.contains(event)
                     || bts.requestedEvents.contains(event)) {
                 BThread bt = bts.bt;

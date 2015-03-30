@@ -57,10 +57,6 @@ public class BPState {
         return _btstates;
     }
 
-    private void setBTstates(List<BTState> btstates) {
-        this._btstates = btstates;
-    }
-
     public BProgram getBp() {
         return bp;
     }
@@ -69,13 +65,6 @@ public class BPState {
         for (BTState bts : _btstates) {
             bts.restore();
         }
-
-        List<BThread> restoredBTs = new ArrayList<BThread>();
-        for (BTState bts : _btstates) {
-            restoredBTs.add(bts.bt);
-        }
-
-        bp.setBThreads(restoredBTs);
     }
 
     @Override
