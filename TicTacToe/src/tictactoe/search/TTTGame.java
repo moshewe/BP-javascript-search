@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import static bp.BProgramControls.debugMode;
 import static bp.eventSets.EventSetConstants.none;
 import static tictactoe.events.StaticEvents.XEvents;
 
@@ -169,8 +170,9 @@ public class TTTGame extends BPGame {
     }
 
     public void bplog(String s) {
-        System.out.println("[" + this.getClass().getSimpleName() + "]: "
-                + s);
+        if (debugMode)
+            System.out.println("[" + this.getClass().getSimpleName() + "]: "
+                    + s);
     }
 
     private static class YPlayer extends BPSystemPlayer {

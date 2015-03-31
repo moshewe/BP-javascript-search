@@ -7,6 +7,8 @@ import bp.BThread;
 
 import java.io.IOException;
 
+import static bp.BProgramControls.debugMode;
+
 public class BPAction implements Action, Comparable<BPAction> {
 
     private final BEvent _ev;
@@ -72,7 +74,8 @@ public class BPAction implements Action, Comparable<BPAction> {
     }
 
     protected void bplog(String string) {
-        System.out.println("[" + this + "]: " + string);
+        if (debugMode)
+            System.out.println("[" + this + "]: " + string);
     }
 
     @Override

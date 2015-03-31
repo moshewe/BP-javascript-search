@@ -8,6 +8,8 @@ import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import static bp.BProgramControls.debugMode;
+
 public class BProgram implements Cloneable, Serializable {
 
     /**
@@ -53,11 +55,12 @@ public class BProgram implements Cloneable, Serializable {
         _arbiter = new Arbiter();
         _arbiter.setProgram(this);
         _externalEventsQueue = new ArrayBlockingQueue<>(100);
-        System.out.println("BProgram instantiated");
+        bplog("BProgram instantiated");
     }
 
-    public void log(String s) {
-        System.out.println("[" + name + "]: " + s);
+    private void bplog(String string) {
+        if (debugMode)
+            System.out.println("[" + this + "]: " + string);
     }
 
     public Collection<BThread> getBThreads() {
@@ -98,7 +101,7 @@ public class BProgram implements Cloneable, Serializable {
      */
     public boolean isBlocked(BEvent e) {
         for (BThread bt : getBThreads()) {
-            // log("_bt=" + _bt + " blockedEvents=" + _bt.blockedEvents);
+            // bplog("_bt=" + _bt + " blockedEvents=" + _bt.blockedEvents);
             if (bt.getBlockedEvents().contains(e)) {
                 return true;
             }
@@ -113,7 +116,7 @@ public class BProgram implements Cloneable, Serializable {
     public void printAllBThreads() {
         int c = 0;
         for (BThread bt : getBThreads()) {
-            log("\t" + (c++) + ":" + bt);
+            bplog("\t" + (c++) + ":" + bt);
         }
     }
 
@@ -130,7 +133,7 @@ public class BProgram implements Cloneable, Serializable {
                 System.out.println(eventLog.get((_eventCounter + i)
                         % eventLogSize));
 
-        System.out.println("***** end event log ******");
+        System.out.println("***** end event bplog ******");
     }
 
     public void setBThreads(Collection<BThread> _bthreads) {
@@ -165,14 +168,14 @@ public class BProgram implements Cloneable, Serializable {
      */
     public void start() {
         // public void start() {
-        log("********* Starting " + getBThreads().size()
+        bplog("********* Starting " + getBThreads().size()
                 + " scenarios  **************");
         for (BThread bt : getBThreads()) {
             bt.start();
         }
-        log("********* " + getBThreads().size()
+        bplog("********* " + getBThreads().size()
                 + " scenarios started **************");
-        bpLoop();
+        loop();
     }
 
     /**
@@ -208,21 +211,21 @@ public class BProgram implements Cloneable, Serializable {
         return blocked;
     }
 
-    public void bpLoop() {
+    public void loop() {
         if (_bthreads.isEmpty()) {
-            log("=== ALL DONE!!! ===");
+            bplog("=== ALL DONE!!! ===");
             return;
         }
 
         BEvent next = _arbiter.nextEvent();
         if (next == null) {
-            log("no event chosen, waiting for an external event to be fired...");
+            bplog("no event chosen, waiting for an external event to be fired...");
             next = dequeueExternalEvent();
         }
 
         triggerEvent(next);
         bthreadCleanup();
-        bpLoop();
+        loop();
     }
 
     private void bthreadCleanup() {
@@ -246,8 +249,8 @@ public class BProgram implements Cloneable, Serializable {
             _eventCounter++;
             setLastEvent(lastEvent.getEvent());
             st = new String("Event #" + _eventCounter + ": " + getLastEvent());
-            log(st);
-            log(">> starting bthread wakeup");
+            bplog(st);
+            bplog(">> starting bthread wakeup");
             // Interrupt and notify the be-threads that need to be
             // awaken
             for (BThread bt : _bthreads) {
@@ -257,11 +260,11 @@ public class BProgram implements Cloneable, Serializable {
                     bt.resume(lastEvent);
                 }
             }
-            log("<< finished bthread wakeup");
+            bplog("<< finished bthread wakeup");
         } else { // lastEvent == null -> deadlock?
             st = new String(
                     "No events chosen. Waiting for external event or stuck in bsync...?");
-            log(st);
+            bplog(st);
         }
 
         if (_eventCounter < eventLogSize)

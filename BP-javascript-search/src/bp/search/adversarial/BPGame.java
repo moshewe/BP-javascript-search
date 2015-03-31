@@ -14,6 +14,8 @@ import bp.search.bthreads.UtilityEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static bp.BProgramControls.debugMode;
+
 public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
 
     protected static BPPlayer[] players = {BPSystemPlayer.instance,
@@ -38,8 +40,13 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
             }
         }
 
-        System.out.println("actions possible: " + ans);
+        bplog("actions possible: " + ans);
         return ans;
+    }
+
+    protected void bplog(String s) {
+        if (debugMode)
+            System.out.println("[" + this + "]: " + s);
     }
 
 }

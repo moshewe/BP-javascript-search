@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static bp.BProgramControls.*;
 import static bp.eventSets.EventSetConstants.none;
 
 /**
@@ -152,7 +153,8 @@ public abstract class BThread implements Serializable {
     }
 
     protected void bplog(String string) {
-        System.out.println("[" + this + "]: " + string);
+        if (debugMode)
+            System.out.println("[" + this + "]: " + string);
     }
 
     public void bsync(RequestableInterface requestedEvents,

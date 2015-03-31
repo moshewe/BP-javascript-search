@@ -5,6 +5,8 @@ import bp.exceptions.BPJRequestableSetException;
 import java.util.Iterator;
 import java.util.Set;
 
+import static bp.BProgramControls.debugMode;
+
 /**
  * Default arbiter - triggers events according to the RWB semantics but promises
  * nothing as to the order of events triggered.
@@ -24,7 +26,8 @@ public class Arbiter {
     }
 
     protected void bplog(String s) {
-        System.out.println("[" + getProgram() + ":" + this + "]: " + s);
+        if (debugMode)
+            System.out.println("[" + getProgram() + ":" + this + "]: " + s);
     }
 
     @Override
