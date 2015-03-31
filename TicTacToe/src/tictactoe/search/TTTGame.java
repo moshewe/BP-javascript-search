@@ -79,8 +79,8 @@ public class TTTGame extends BPGame {
 
     @Override
     public List<BPAction> getActions(BPState state) {
-        state.restore();
-        List<BPAction> actions = new ArrayList<BPAction>();
+//        state.restore();
+        List<BPAction> actions = new ArrayList<>();
         if (xwinEventRequested()) {
             actions.add(new BPAction(StaticEvents.XWin));
         } else if (owinEventRequested()) {

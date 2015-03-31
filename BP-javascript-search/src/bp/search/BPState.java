@@ -1,5 +1,6 @@
 package bp.search;
 
+import bp.BEvent;
 import bp.BProgram;
 import bp.BThread;
 
@@ -19,9 +20,11 @@ public class BPState {
      * The states of the relevant be-threads
      */
     private List<BTState> _btstates;
+    public BEvent _lastEvent;
 
     public BPState(BPState other) {
         this.bp = other.bp;
+        _lastEvent = other._lastEvent;
         _btstates = new ArrayList<BTState>();
         for (BThread bt : bp.getBThreads()) {
             getBTstates().add(new BTState(bt));
@@ -30,6 +33,7 @@ public class BPState {
 
     public BPState(BProgram bp) {
         this.bp = bp;
+        _lastEvent = bp.getLastEvent();
         _btstates = new ArrayList<BTState>();
         for (BThread bt : bp.getBThreads()) {
             getBTstates().add(new BTState(bt));
@@ -62,6 +66,7 @@ public class BPState {
     }
 
     public void restore() {
+        bp.setLastEvent(_lastEvent);
         for (BTState bts : _btstates) {
             bts.restore();
         }

@@ -1,5 +1,6 @@
 package bp;
 
+import bp.eventSets.EventSetConstants;
 import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
 import org.mozilla.javascript.*;
@@ -16,21 +17,19 @@ import static bp.eventSets.EventSetConstants.none;
 public abstract class BThread implements Serializable {
 
     protected String _name = this.getClass().getSimpleName();
-    private boolean _alive = true;
     transient protected BProgram bp = null;
     protected Scriptable _scope;
     protected Script _script;
-
+    protected List<JSIdentifiable> _btScopeObjects;
+    /**
+     * The set of events that will interrupt this scenario.
+     */
+    transient protected EventSetInterface interruptcingEvents = none;
     ContinuationPending _cont;
     RequestableInterface _request;
     EventSetInterface _wait;
     EventSetInterface _block;
-
-    protected List<JSIdentifiable> _btScopeObjects;
-
-    public boolean isAlive() {
-        return _alive;
-    }
+    private boolean _alive = true;
 
 
     public BThread() {
@@ -40,8 +39,21 @@ public abstract class BThread implements Serializable {
         _btScopeObjects = new ArrayList<JSIdentifiable>();
     }
 
+    public BThread(String _name) {
+        this.setName(_name);
+        _btScopeObjects = new ArrayList<>();
+    }
+
+    public boolean isAlive() {
+        return _alive;
+    }
+
     public ContinuationPending getCont() {
         return _cont;
+    }
+
+    public void setCont(ContinuationPending cont) {
+        _cont = cont;
     }
 
     public void setScope(Scriptable _scope) {
@@ -74,16 +86,14 @@ public abstract class BThread implements Serializable {
         } catch (ContinuationPending pending) {
             _cont = pending;
             return _cont;
-        } catch (Exception ex) {
-            bplog("WTF EXCEPTION" + ex);
         } finally {
             Context.exit();
         }
 
-        bplog("Bthread " + _name + " is over!");
+        bplog(" I'm over!");
+        zombie();
         return null;
     }
-
 
     public RequestableInterface getRequestedEvents() {
         return _request;
@@ -110,20 +120,6 @@ public abstract class BThread implements Serializable {
     }
 
     /**
-     * The set of events that will interrupt this scenario.
-     */
-    transient protected EventSetInterface interruptingEvents = none;
-
-    public BThread(String _name) {
-        this.setName(_name);
-        _btScopeObjects = new ArrayList<>();
-    }
-
-    public void setName(String name) {
-        this._name = name;
-    }
-
-    /**
      * @see java.lang.Thread#start()
      */
 
@@ -137,6 +133,10 @@ public abstract class BThread implements Serializable {
 
     public String getName() {
         return _name;
+    }
+
+    public void setName(String name) {
+        this._name = name;
     }
 
     public String toString() {
@@ -161,8 +161,8 @@ public abstract class BThread implements Serializable {
         setRequestedEvents(requestedEvents);
         setWaitedEvents(waitedEvents);
         setBlockedEvents(blockedEvents);
-        bplog("bsyncing with " + requestedEvents + ", " + waitedEvents + ", "
-                + blockedEvents);
+        bplog("bsyncing with " + requestedEvents + ", " +
+                waitedEvents + ", " + blockedEvents);
         Context cx = ContextFactory.getGlobal().enterContext();
         try {
             ContinuationPending pending = cx.captureContinuation();
@@ -173,11 +173,10 @@ public abstract class BThread implements Serializable {
     }
 
     public void zombie() {
-        bplog("going zombie...");
-        bsync(none, none, none);
-        // requestedEvents = EventSetConstants.none;
-        // watchedEvents = EventSetConstants.none;
-        // blockedEvents = EventSetConstants.none;
+        _request = EventSetConstants.none;
+        _wait = EventSetConstants.none;
+        _block = EventSetConstants.none;
+        _cont = null;
     }
 
     public Script getScript() {
@@ -205,10 +204,6 @@ public abstract class BThread implements Serializable {
      */
     public void finished() {
         _alive = false;
-    }
-
-    public void setCont(ContinuationPending cont) {
-        _cont = cont;
     }
 
     protected void setupScope() {

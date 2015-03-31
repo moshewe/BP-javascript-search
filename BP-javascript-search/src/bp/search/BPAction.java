@@ -9,10 +9,10 @@ import java.io.IOException;
 
 public class BPAction implements Action, Comparable<BPAction> {
 
-    private final BEvent ev;
+    private final BEvent _ev;
 
     public BPAction(BEvent ev) {
-        this.ev = ev;
+        this._ev = ev;
     }
 
     public boolean isNoOp() {
@@ -20,7 +20,7 @@ public class BPAction implements Action, Comparable<BPAction> {
     }
 
     public BEvent getEvent() {
-        return ev;
+        return _ev;
     }
 
     /**
@@ -33,19 +33,17 @@ public class BPAction implements Action, Comparable<BPAction> {
      * @throws IOException
      */
     public BPState apply(BPState bps) {
-        bplog("APPLYING " + ev);
-        // List<BTState> btStates = new ArrayList<BTState>();
-        BProgram bp = bps.getBp();
-        BEvent event = ev.getEvent();
-        bp.setLastEvent(event);
-        BPState newBps = bps.copy();
         bps.restore();
+        bplog("APPLYING " + _ev);
+        BProgram bp = bps.getBp();
+        bp.setLastEvent(_ev);
+        BPState newBps = bps.copy();
         bplog("BEFORE: " + bps.toString());
         for (BTState bts : newBps.getBTstates()) {
-            if (bts.watchedEvents.contains(event)
-                    || bts.requestedEvents.contains(event)) {
+            if (bts.watchedEvents.contains(_ev)
+                    || bts.requestedEvents.contains(_ev)) {
                 BThread bt = bts.bt;
-                bt.resume(event);
+                bt.resume(_ev);
                 bts._cont = bt.getCont();
                 bts.requestedEvents = bt.getRequestedEvents();
                 bts.watchedEvents = bt.getWaitedEvents();
@@ -53,14 +51,14 @@ public class BPAction implements Action, Comparable<BPAction> {
             }
         }
 
-        bplog("DONE APPLYING " + ev + ", NEW STATE IS:");
+        bplog("DONE APPLYING " + _ev + ", NEW STATE IS:");
         bplog(newBps.toString());
         return newBps;
     }
 
     @Override
     public int compareTo(BPAction other) {
-        return ev.compareTo(other.getEvent());
+        return _ev.compareTo(other.getEvent());
     }
 
     @Override
@@ -70,7 +68,7 @@ public class BPAction implements Action, Comparable<BPAction> {
         }
 
         BPAction otherActions = (BPAction) obj;
-        return ev.equals(otherActions);
+        return _ev.equals(otherActions);
     }
 
     protected void bplog(String string) {
@@ -79,7 +77,7 @@ public class BPAction implements Action, Comparable<BPAction> {
 
     @Override
     public String toString() {
-        return ev.toString();
+        return _ev.toString();
     }
 
 }
