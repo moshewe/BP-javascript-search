@@ -64,6 +64,7 @@ public class TicTacToe extends BPJavascriptApplication {
     private UpdateDisplay _updateDisplay;
 
     public TicTacToe() {
+        super();
         _bp.setName("TicTacToe");
         TTTGame game = new TTTGame(_bp, _turns, _squaresTaken,
                 _draw, _xwins, _owins,
@@ -72,7 +73,7 @@ public class TicTacToe extends BPJavascriptApplication {
         List<BThread> simBThreads = new ArrayList<>();
         ReqAllMoves reqAllMoves = new ReqAllMoves();
         simBThreads.add(reqAllMoves);
-        setupBTPrivateScope(reqAllMoves);
+        setupBThreadScopes(simBThreads);
         arbiter = new MinimaxSearchArbiter(search, game,simBThreads);
         _bp.setArbiter(arbiter);
         // Start the graphical user interface

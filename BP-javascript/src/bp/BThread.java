@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static bp.BProgramControls.*;
+import static bp.BProgramControls.debugMode;
 import static bp.eventSets.EventSetConstants.none;
 
 /**
@@ -22,10 +22,6 @@ public abstract class BThread implements Serializable {
     protected Scriptable _scope;
     protected Script _script;
     protected List<JSIdentifiable> _btScopeObjects;
-    /**
-     * The set of events that will interrupt this scenario.
-     */
-    transient protected EventSetInterface interruptcingEvents = none;
     ContinuationPending _cont;
     RequestableInterface _request;
     EventSetInterface _wait;
@@ -38,11 +34,6 @@ public abstract class BThread implements Serializable {
         _wait = none;
         _block = none;
         _btScopeObjects = new ArrayList<JSIdentifiable>();
-    }
-
-    public BThread(String _name) {
-        this.setName(_name);
-        _btScopeObjects = new ArrayList<>();
     }
 
     public boolean isAlive() {

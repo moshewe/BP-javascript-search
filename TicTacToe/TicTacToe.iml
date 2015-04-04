@@ -10,5 +10,6 @@
     <orderEntry type="module" module-name="BP-javascript" />
     <orderEntry type="module" module-name="BP-javascript-search" />
     <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="module" module-name="rhino1_7R5" />
   </component>
 </module>

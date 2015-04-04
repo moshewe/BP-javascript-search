@@ -26,7 +26,8 @@ public class SquareTaken extends BThread {
 //	}
 
     public SquareTaken(int row, int col) {
-        super("SquareTaken(" + row + "," + col + ")");
+        super();
+        _name = "SquareTaken(" + row + "," + col + ")";
         this._row = row;
         this._col = col;
         _move = new Move(_row, _col);

@@ -6,6 +6,7 @@ import org.mozilla.javascript.Scriptable;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.Collection;
 
 import static bp.eventSets.EventSetConstants.none;
 
@@ -34,10 +35,14 @@ public abstract class BPJavascriptApplication {
     }
 
     protected void setupBThreadScopes() {
+        setupBThreadScopes(_bp.getBThreads());
+    }
+
+    protected void setupBThreadScopes(Collection<BThread> bthreads) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
-            for (BThread bt : _bp.getBThreads()) {
+            for (BThread bt : bthreads) {
                 bt.setScope(_globalScope);
                 bt.setupScope();
                 String btJsName = bt.jsIdentifier();
@@ -46,22 +51,6 @@ public abstract class BPJavascriptApplication {
                 _globalScope.put(btJsName,
                         _globalScope, Context.javaToJS(bt, _globalScope));
             }
-        } finally {
-            Context.exit();
-        }
-    }
-
-    protected void setupBTPrivateScope(BThread bt) {
-        Context cx = ContextFactory.getGlobal().enterContext();
-        cx.setOptimizationLevel(-1); // must use interpreter mode
-        try {
-            bt.setScope(_globalScope);
-            bt.setupScope();
-            String btJsName = bt.jsIdentifier();
-            if (bt.getScript() == null)
-                bt.setScript(btJsName + ".runBThread();\n");
-            _globalScope.put(btJsName,
-                    _globalScope, Context.javaToJS(bt, _globalScope));
         } finally {
             Context.exit();
         }

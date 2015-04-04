@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/BP-javascript.iml" filepath="$PROJECT_DIR$/BP-javascript.iml" />
       <module fileurl="file://$PROJECT_DIR$/BP-javascript-search/BP-javascript-search.iml" filepath="$PROJECT_DIR$/BP-javascript-search/BP-javascript-search.iml" />
       <module fileurl="file://$PROJECT_DIR$/TicTacToe/TicTacToe.iml" filepath="$PROJECT_DIR$/TicTacToe/TicTacToe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rhino1_7R5/rhino1_7R5.iml" filepath="$PROJECT_DIR$/rhino1_7R5/rhino1_7R5.iml" />
     </modules>
   </component>
 </project>
