@@ -4,16 +4,21 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Scriptable;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Collection;
 
 import static bp.eventSets.EventSetConstants.none;
+import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Paths.get;
 
 /**
  * Created by orelmosheweinstock on 3/28/15.
  */
 public abstract class BPJavascriptApplication {
+
+    protected Arbiter arbiter;
 
     public static String toJSIdentifier(String str) {
         try {
@@ -24,6 +29,23 @@ public abstract class BPJavascriptApplication {
         }
     }
 
+    public static String btFromSource(String path) {
+        try {
+            String source = new String(readAllBytes(get(path)));
+            BThread bt = new BThread(source);
+            bt.setName(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "zombieBsync();";
+    }
+
+    protected void bplog(String s) {
+        if (BProgramControls.debugMode)
+            System.out.println(getClass().getSimpleName() + s);
+    }
+
     protected Scriptable _globalScope;
     protected BProgram _bp;
 
@@ -32,6 +54,9 @@ public abstract class BPJavascriptApplication {
         setupGlobalScope();
         addBThreads();
         setupBThreadScopes();
+    }
+
+    protected void addBThreads() {
     }
 
     protected void setupBThreadScopes() {
@@ -55,8 +80,6 @@ public abstract class BPJavascriptApplication {
             Context.exit();
         }
     }
-
-    protected abstract void addBThreads();
 
     protected void start() {
         _bp.start();

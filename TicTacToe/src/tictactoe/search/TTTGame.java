@@ -19,7 +19,6 @@ import tictactoe.events.StaticEvents;
 import tictactoe.events.X;
 import tictactoe.externalApp.TicTacToe;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -47,7 +46,7 @@ public class TTTGame extends BPGame {
     public TTTGame(BProgram bp, EnforceTurns turns,
                    Collection<SquareTaken> squaresTaken, DetectDraw draw,
                    Collection<BThread> xwins, Set<BThread> owins,
-                   DeclareWinner declareWinner, TicTacToe ttt) {
+                   DeclareWinner declareWinner, TicTacToe ttt, Collection<BThread> simBThreads) {
         program = bp;
         this.turns = turns;
         this.taken = squaresTaken;
@@ -56,10 +55,11 @@ public class TTTGame extends BPGame {
         this.owins = owins;
         this.declareWinner = declareWinner;
         this.ttt = ttt;
+        _simBThreads = simBThreads;
     }
 
     @Override
-    public TTTState getInitialState() {
+    protected TTTState makeInitialState() {
         return new TTTState(program, ttt, taken, declareWinner);
     }
 

@@ -27,7 +27,7 @@ public class BProgramControls {
 	 * Indicates whether this program is executed in DEBUG mode E.g. issue debug
 	 * msgs.
 	 */
-	public static boolean debugMode = false;
+	public static boolean debugMode = true;
 	/**
 	 * Indicates whether this program is executed in LOG mode E.g. issue EVENT
 	 * occurrence messages .

@@ -2,28 +2,41 @@ package bp.search.adversarial;
 
 import aima.core.search.adversarial.Game;
 import bp.BEvent;
+import bp.BThread;
 import bp.eventSets.RequestableInterface;
 import bp.search.BPAction;
 import bp.search.BPState;
 import bp.search.BTState;
 import bp.search.adversarial.players.BPSystemPlayer;
 import bp.search.adversarial.players.EnvironmentPlayer;
-import bp.search.bthreads.TerminalStateDetector;
-import bp.search.bthreads.UtilityEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static bp.BProgramControls.debugMode;
 
 public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
 
-    protected static BPPlayer[] players = {BPSystemPlayer.instance,
+    protected static BPPlayer[] _players = {BPSystemPlayer.instance,
             EnvironmentPlayer.instance};
+    protected Collection<BThread> _simBThreads = new ArrayList<>();
+
+    @Override
+    public BPState getInitialState() {
+        BPState state = makeInitialState();
+        for (BThread sim : _simBThreads) {
+            BTState simBTState = new BTState(sim);
+            state.getBTstates().add(simBTState);
+        }
+        return state;
+    }
+
+    protected abstract BPState makeInitialState();
 
     @Override
     public BPPlayer[] getPlayers() {
-        return players;
+        return _players;
     }
 
     @Override

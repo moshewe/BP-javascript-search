@@ -1,8 +1,7 @@
 package tictactoe.externalApp;
 
-import bp.Arbiter;
-import bp.BPJavascriptApplication;
 import bp.BThread;
+import bp.search.BPSearchApplication;
 import bp.search.adversarial.BPMinimaxSearch;
 import bp.search.adversarial.MinimaxSearchArbiter;
 import org.mozilla.javascript.Context;
@@ -13,7 +12,6 @@ import tictactoe.search.TTTGame;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import static tictactoe.events.StaticEvents.*;
@@ -21,7 +19,8 @@ import static tictactoe.events.StaticEvents.*;
 /**
  * The main entry point to the TicTacToe program.
  */
-public class TicTacToe extends BPJavascriptApplication {
+public class TicTacToe extends BPSearchApplication {
+
     public static class Coordinates implements Comparable<Coordinates> {
         public final int row;
         public final int col;
@@ -55,7 +54,6 @@ public class TicTacToe extends BPJavascriptApplication {
 
     public GUI gui;
     private EnforceTurns _turns;
-    private Arbiter arbiter;
     private Collection<SquareTaken> _squaresTaken;
     private DetectDraw _draw;
     private Set<BThread> _xwins;
@@ -68,20 +66,25 @@ public class TicTacToe extends BPJavascriptApplication {
         _bp.setName("TicTacToe");
         TTTGame game = new TTTGame(_bp, _turns, _squaresTaken,
                 _draw, _xwins, _owins,
-                declareWinner, this);
+                declareWinner, this, _simBThreads);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
-        List<BThread> simBThreads = new ArrayList<>();
-        ReqAllMoves reqAllMoves = new ReqAllMoves();
-        simBThreads.add(reqAllMoves);
-        setupBThreadScopes(simBThreads);
-        arbiter = new MinimaxSearchArbiter(search, game,simBThreads);
+        arbiter = new MinimaxSearchArbiter(search, game);
         _bp.setArbiter(arbiter);
+        addBThreads();
         // Start the graphical user interface
         gui = new GUI(_bp);
+    }
 
+    @Override
+    protected void addSimBThreads() {
+        super.addSimBThreads();
+        BThread reqAllMoves = new
+                BThread(btFromSource("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/TicTacToe/tictactoe/bThreads/ReqAllMoves.js"));
+        _simBThreads.add(reqAllMoves);
     }
 
     protected void addBThreads() {
+        super.addBThreads();
         _updateDisplay = new UpdateDisplay();
         _xwins = DetectXWin.constructInstances();
         _owins = DetectOWin.constructInstances();

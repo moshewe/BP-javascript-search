@@ -3,7 +3,7 @@ package tictactoe.bThreads;
 import bp.BThread;
 
 /**
- * BThread that blocks players from playing when its not their turn.
+ * BThread that blocks _players from playing when its not their turn.
  */
 public class EnforceTurns extends BThread {
 

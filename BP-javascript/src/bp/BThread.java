@@ -15,7 +15,7 @@ import static bp.eventSets.EventSetConstants.none;
 /**
  * Created by orelmosheweinstock on 3/24/15.
  */
-public abstract class BThread implements Serializable {
+public class BThread implements Serializable {
 
     protected String _name = this.getClass().getSimpleName();
     transient protected BProgram bp = null;
@@ -34,6 +34,11 @@ public abstract class BThread implements Serializable {
         _wait = none;
         _block = none;
         _btScopeObjects = new ArrayList<JSIdentifiable>();
+    }
+
+    public BThread(String source){
+        this();
+        setScript(source);
     }
 
     public boolean isAlive() {
@@ -60,6 +65,7 @@ public abstract class BThread implements Serializable {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
+            bplog("started!");
             cx.executeScriptWithContinuations(_script, _scope);
         } catch (ContinuationPending pending) {
             _cont = pending;
@@ -172,6 +178,10 @@ public abstract class BThread implements Serializable {
         _cont = null;
     }
 
+    public void zombieBsync(){
+        bsync(none,none,none);
+    }
+
     public Script getScript() {
         return _script;
     }
@@ -203,6 +213,9 @@ public abstract class BThread implements Serializable {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
+            if(_btScopeObjects==null){
+                bplog("scoped objects is null!");
+            }
             for (JSIdentifiable obj : _btScopeObjects) {
                 _scope.put(obj.jsIdentifier(), _scope,
                         Context.javaToJS(obj, _scope));
