@@ -59,7 +59,6 @@ public class TicTacToe extends BPSearchApplication {
     private Set<BThread> _xwins;
     private Set<BThread> _owins;
     private DeclareWinner declareWinner;
-    private UpdateDisplay _updateDisplay;
 
     public TicTacToe() {
         super();
@@ -77,15 +76,15 @@ public class TicTacToe extends BPSearchApplication {
 
     @Override
     protected void addSimBThreads() {
-        super.addSimBThreads();
         BThread reqAllMoves = new
-                BThread(btFromSource("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/TicTacToe/tictactoe/bThreads/ReqAllMoves.js"));
+                BThread(btSource("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/TicTacToe/tictactoe/bThreads/ReqAllMoves.js"));
+        reqAllMoves.setName("ReqAllMoves");
         _simBThreads.add(reqAllMoves);
+        _bp.getBThreads().addAll(_simBThreads);
     }
 
     protected void addBThreads() {
-        super.addBThreads();
-        _updateDisplay = new UpdateDisplay();
+        UpdateDisplay _updateDisplay = new UpdateDisplay();
         _xwins = DetectXWin.constructInstances();
         _owins = DetectOWin.constructInstances();
         _turns = new EnforceTurns();

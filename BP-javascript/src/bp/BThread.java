@@ -53,17 +53,19 @@ public class BThread implements Serializable {
         _cont = cont;
     }
 
-    public void setScope(Scriptable _scope) {
-        this._scope = _scope;
-    }
-
-    public String getClassName() {
-        return "bp.BThread";
+    public void setupScope(Scriptable programScope) {
+        Context cx = ContextFactory.getGlobal().enterContext();
+        Scriptable btScope = cx.toObject(this,programScope);
+        btScope.setParentScope(programScope);
+        this._scope = btScope;
     }
 
     public void start() {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
+        if(_scope==null){
+            bplog("null scope?");
+        }
         try {
             bplog("started!");
             cx.executeScriptWithContinuations(_script, _scope);
@@ -138,7 +140,7 @@ public class BThread implements Serializable {
     }
 
     public String toString() {
-        return "[" + bp + ":" + _name + "]";
+        return "[" + _name + "]";
     }
 
     public BProgram getBProgram() {
@@ -151,7 +153,7 @@ public class BThread implements Serializable {
 
     protected void bplog(String string) {
         if (debugMode)
-            System.out.println("[" + this + "]: " + string);
+            System.out.println(this + ": " + string);
     }
 
     public void bsync(RequestableInterface requestedEvents,
@@ -189,7 +191,7 @@ public class BThread implements Serializable {
     public void setScript(String source) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
-        source += jsIdentifier() + ".finished();\n";
+        source += "finished();\n";
         try {
             _script = cx.compileString(source, _name + "-script", 1, null);
         } finally {
@@ -209,7 +211,7 @@ public class BThread implements Serializable {
         _alive = false;
     }
 
-    protected void setupScope() {
+    protected void registerBTInScope() {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {

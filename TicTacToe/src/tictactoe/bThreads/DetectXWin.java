@@ -31,7 +31,8 @@ public class DetectXWin extends BThread {
         _btScopeObjects.add(x2);
         _btScopeObjects.add(x3);
         String source = jsIdentifier() + ".bsync(none, " +
-                firstSquare.jsIdentifier() + ", none);\n" +
+                "firstSquare" + ", none);\n" +
+//                firstSquare.jsIdentifier() + ", none);\n" +
                 jsIdentifier() + ".bsync(none, " +
                 secondSquare.jsIdentifier() + ", none);\n" +
                 jsIdentifier() + ".bsync(none, " +

@@ -12,21 +12,18 @@ import java.util.List;
 public abstract class BPSearchApplication extends BPJavascriptApplication {
 
 
-    protected List<BThread> _simBThreads;
+    protected List<BThread> _simBThreads = new ArrayList<>();
 
-    @Override
-    protected void addBThreads() {
-        super.addBThreads();
+
+    public BPSearchApplication() {
+        super();
         addSimBThreads();
+        setupSimBThreadScopes();
     }
 
-    protected void addSimBThreads(){
-        _simBThreads = new ArrayList<>();
-    }
+    protected abstract void addSimBThreads();
 
-    @Override
-    protected void setupBThreadScopes() {
-        super.setupBThreadScopes();
+    protected void setupSimBThreadScopes() {
         setupBThreadScopes(_simBThreads);
     }
 }

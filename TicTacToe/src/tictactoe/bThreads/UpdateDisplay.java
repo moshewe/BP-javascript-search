@@ -1,12 +1,22 @@
 package tictactoe.bThreads;
 
 import bp.BThread;
-import tictactoe.externalApp.TicTacToe;
+import org.mozilla.javascript.Scriptable;
 
 /**
  * BThread for updating the labels of the buttons.
  */
 public class UpdateDisplay extends BThread {
+
+    @Override
+    public void start() {
+        super.start();
+    }
+
+    @Override
+    public void setupScope(Scriptable programScope) {
+        super.setupScope(programScope);
+    }
 
     public UpdateDisplay() {
         String source = "while(true){\n" +

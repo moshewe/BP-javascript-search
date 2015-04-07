@@ -20,5 +20,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="rhino1_7R5" />
+    <orderEntry type="library" name="com.google.code.gson:gson:2.3.1" level="project" />
   </component>
 </module>

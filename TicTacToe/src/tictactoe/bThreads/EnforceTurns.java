@@ -23,7 +23,7 @@ public class EnforceTurns extends BThread {
 //    }
 
     @Override
-    public void setupScope() {
+    public void registerBTInScope() {
 
     }
 }

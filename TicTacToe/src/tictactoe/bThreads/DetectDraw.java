@@ -41,9 +41,4 @@ public class DetectDraw extends BThread {
         setScript(source);
     }
 
-
-    public String toString() {
-        return "DetectDraw";
-    }
-
 }

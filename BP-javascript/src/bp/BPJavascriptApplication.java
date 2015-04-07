@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static bp.eventSets.EventSetConstants.all;
 import static bp.eventSets.EventSetConstants.none;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
@@ -19,6 +20,8 @@ import static java.nio.file.Paths.get;
 public abstract class BPJavascriptApplication {
 
     protected Arbiter arbiter;
+    protected Scriptable _globalScope;
+    protected BProgram _bp;
 
     public static String toJSIdentifier(String str) {
         try {
@@ -29,7 +32,7 @@ public abstract class BPJavascriptApplication {
         }
     }
 
-    public static String btFromSource(String path) {
+    public static String btSource(String path) {
         try {
             String source = new String(readAllBytes(get(path)));
             BThread bt = new BThread(source);
@@ -46,9 +49,6 @@ public abstract class BPJavascriptApplication {
             System.out.println(getClass().getSimpleName() + s);
     }
 
-    protected Scriptable _globalScope;
-    protected BProgram _bp;
-
     public BPJavascriptApplication() {
         _bp = new BProgram();
         setupGlobalScope();
@@ -56,8 +56,7 @@ public abstract class BPJavascriptApplication {
         setupBThreadScopes();
     }
 
-    protected void addBThreads() {
-    }
+    protected abstract void addBThreads();
 
     protected void setupBThreadScopes() {
         setupBThreadScopes(_bp.getBThreads());
@@ -68,8 +67,8 @@ public abstract class BPJavascriptApplication {
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             for (BThread bt : bthreads) {
-                bt.setScope(_globalScope);
-                bt.setupScope();
+                bt.setupScope(_globalScope);
+                bt.registerBTInScope();
                 String btJsName = bt.jsIdentifier();
                 if (bt.getScript() == null)
                     bt.setScript(btJsName + ".runBThread();\n");
@@ -92,6 +91,8 @@ public abstract class BPJavascriptApplication {
             _globalScope = cx.initStandardObjects();
             _globalScope.put("none", _globalScope,
                     Context.javaToJS(none, _globalScope));
+            _globalScope.put("all", _globalScope,
+                    Context.javaToJS(all, _globalScope));
         } finally {
             Context.exit();
         }

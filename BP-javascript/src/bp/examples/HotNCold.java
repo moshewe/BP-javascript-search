@@ -3,14 +3,12 @@ package bp.examples;
 import bp.BEvent;
 import bp.BProgram;
 import bp.BThread;
-
-import static bp.eventSets.EventSetConstants.none;
-
 import org.junit.Test;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
-import org.mozilla.javascript.ContinuationPending;
 import org.mozilla.javascript.Scriptable;
+
+import static bp.eventSets.EventSetConstants.none;
 
 /**
  * Created by orelmosheweinstock on 3/24/15.
@@ -28,28 +26,28 @@ public class HotNCold {
     public void hotNColdTest() {
         System.out.println("starting BTs");
         setup();
-//        BProgram prog = new BProgram();
-//        prog.add(_hotbt);
-//        prog.add(_coldbt);
-//        prog.add(_alternator);
-//        prog.start();
+        BProgram prog = new BProgram();
+        prog.add(_hotbt);
+        prog.add(_coldbt);
+        prog.add(_alternator);
+        prog.start();
 //        _hotbt.start();
 //        ContinuationPending cont = _hotbt.getCont();
 //        _hotbt.resume(null);
 //        _hotbt.setCont(cont);
 //        _hotbt.resume(null);
 //        _hotbt.resume(null);
-        _alternator.start();
-        ContinuationPending cont = _alternator.getCont();
-        _alternator.resume(null);
-        _alternator.setCont(cont);
-        _alternator.resume(null);
-        _alternator.setCont(cont);
-        _alternator.resume(null);
-        _alternator.setCont(cont);
-        _alternator.resume(null);
-        _alternator.setCont(cont);
-        _alternator.resume(null);
+//        _alternator.start();
+//        ContinuationPending cont = _alternator.getCont();
+//        _alternator.resume(null);
+//        _alternator.setCont(cont);
+//        _alternator.resume(null);
+//        _alternator.setCont(cont);
+//        _alternator.resume(null);
+//        _alternator.setCont(cont);
+//        _alternator.resume(null);
+//        _alternator.setCont(cont);
+//        _alternator.resume(null);
     }
 
     private void setup() {
@@ -82,14 +80,14 @@ public class HotNCold {
 
         public HotBt() {
             String source = "java.lang.System.out.println(\"hotbt started!\")\n" +
-                    _name + ".bsync(hotEvent,noneEvent,noneEvent)\n" +
+                    "bsync(hotEvent,noneEvent,noneEvent)\n" +
                     "java.lang.System.out.println(\"HOT!1\")\n" +
-                    _name + ".bsync(hotEvent,noneEvent,noneEvent)\n" +
+                    "bsync(hotEvent,noneEvent,noneEvent)\n" +
                     "java.lang.System.out.println(\"HOT!2\")\n" +
-                    _name + ".bsync(hotEvent,noneEvent,noneEvent)\n" +
+                    "bsync(hotEvent,noneEvent,noneEvent)\n" +
                     "java.lang.System.out.println(\"HOT!3\")\n";
             setScript(source);
-            _scope = globalScope;
+            setupScope(globalScope);
         }
     }
 
@@ -97,14 +95,17 @@ public class HotNCold {
 
         public ColdBt() {
             String source = "java.lang.System.out.println(\"coldbt started!\")\n" +
-                    _name + ".bsync(coldEvent,noneEvent,noneEvent)\n" +
+                    "bsync(coldEvent,noneEvent,noneEvent)\n" +
+//                    _name + ".bsync(coldEvent,noneEvent,noneEvent)\n" +
                     "java.lang.System.out.println(\"COLD!1\")\n" +
-                    _name + ".bsync(coldEvent,noneEvent,noneEvent)\n" +
+                    "bsync(coldEvent,noneEvent,noneEvent)\n" +
+//                    _name + ".bsync(coldEvent,noneEvent,noneEvent)\n" +
                     "java.lang.System.out.println(\"COLD!2\")\n" +
-                    _name + ".bsync(coldEvent,noneEvent,noneEvent)\n" +
+                    "bsync(coldEvent,noneEvent,noneEvent)\n" +
+//                    _name + ".bsync(coldEvent,noneEvent,noneEvent)\n" +
                     "java.lang.System.out.println(\"COLD!3\")\n";
             setScript(source);
-            _scope = globalScope;
+            setupScope(globalScope);
         }
     }
 
@@ -114,18 +115,13 @@ public class HotNCold {
             String source = "java.lang.System.out.println(\"alternator started!\")\n" +
                     "for(i=0;i<3;i++){\n" +
                     "java.lang.System.out.println(\"blocking hot \" + i)\n" +
-                    _name + ".bsync(noneEvent,coldEvent,hotEvent)\n" +
+                    "bsync(noneEvent,coldEvent,hotEvent)\n" +
                     "java.lang.System.out.println(\"blocking cold \" + i)\n" +
-                    _name + ".bsync(noneEvent,hotEvent,coldEvent)\n" +
+                    "bsync(noneEvent,hotEvent,coldEvent)\n" +
                     "}\n" +
                     "java.lang.System.out.println(\"alternator done!\")\n";
             setScript(source);
-            _scope = globalScope;
-        }
-
-        @Override
-        public void setupScope() {
-
+            setupScope(globalScope);
         }
 
     }

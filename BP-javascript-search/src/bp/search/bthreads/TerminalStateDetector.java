@@ -22,7 +22,7 @@ public class TerminalStateDetector extends BThread {
 	}
 
 	@Override
-	public void setupScope() {
+	public void registerBTInScope() {
 
 	}
 
