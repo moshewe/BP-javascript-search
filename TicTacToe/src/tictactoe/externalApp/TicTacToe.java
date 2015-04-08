@@ -69,7 +69,7 @@ public class TicTacToe extends BPSearchApplication {
         BPMinimaxSearch search = new BPMinimaxSearch(game);
         arbiter = new MinimaxSearchArbiter(search, game);
         _bp.setArbiter(arbiter);
-        addBThreads();
+//        addBThreads();
         // Start the graphical user interface
         gui = new GUI(_bp);
     }
