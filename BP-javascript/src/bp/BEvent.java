@@ -11,7 +11,7 @@ import java.util.Iterator;
  * A base class for events
  */
 @SuppressWarnings("serial")
-public class BEvent implements EventSetInterface, RequestableInterface, Comparable<BEvent>, JSIdentifiable {
+public class BEvent implements EventSetInterface, RequestableInterface, Comparable<BEvent> {
 
     protected String _name = this.getClass().getSimpleName();
 
@@ -93,11 +93,11 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
     }
 
 
-    @Override
-    public String jsIdentifier() {
-        return BPJavascriptApplication.toJSIdentifier(_name +
-                hashCode());
-    }
+//    @Override
+//    public String jsIdentifier() {
+//        return BPJavascriptApplication.toJSIdentifier(_name +
+//                hashCode());
+//    }
 }
 
 /**

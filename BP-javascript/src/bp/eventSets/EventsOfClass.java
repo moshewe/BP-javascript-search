@@ -73,13 +73,13 @@ public class EventsOfClass extends ArrayList<Class<?>> implements EventSetInterf
         return name;
     }
 
-    @Override
-    public String jsIdentifier() {
-        String id = "eventsOfClass_";
-        for (Iterator<Class<?>> it = this.iterator(); it.hasNext(); ) {
-            Class next = it.next();
-            id += next.getSimpleName() + "_";
-        }
-        return id;
-    }
+//    @Override
+//    public String jsIdentifier() {
+//        String id = "eventsOfClass_";
+//        for (Iterator<Class<?>> it = this.iterator(); it.hasNext(); ) {
+//            Class next = it.next();
+//            id += next.getSimpleName() + "_";
+//        }
+//        return id;
+//    }
 }

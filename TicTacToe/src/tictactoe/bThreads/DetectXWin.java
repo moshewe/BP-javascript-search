@@ -11,9 +11,9 @@ import java.util.Set;
  */
 public class DetectXWin extends BThread {
 
-    private X firstSquare;
-    private X secondSquare;
-    private X thirdSquare;
+    public X _firstSquare;
+    public X _secondSquare;
+    public X _thirdSquare;
 
     /**
      * @param x
@@ -22,22 +22,15 @@ public class DetectXWin extends BThread {
      */
     public DetectXWin(X x, X x2, X x3) {
         super();
-        this.firstSquare = x;
-        this.secondSquare = x2;
-        this.thirdSquare = x3;
-        this.setName("DetectXWin(" + firstSquare + "," + secondSquare + ","
-                + thirdSquare + ")");
-        _btScopeObjects.add(x);
-        _btScopeObjects.add(x2);
-        _btScopeObjects.add(x3);
-        String source = jsIdentifier() + ".bsync(none, " +
-                "firstSquare" + ", none);\n" +
-//                firstSquare.jsIdentifier() + ", none);\n" +
-                jsIdentifier() + ".bsync(none, " +
-                secondSquare.jsIdentifier() + ", none);\n" +
-                jsIdentifier() + ".bsync(none, " +
-                thirdSquare.jsIdentifier() + ", none);\n" +
-                jsIdentifier() + ".bsync(XWin, none, moves);\n";
+        _firstSquare = x;
+        _secondSquare = x2;
+        _thirdSquare = x3;
+        this.setName("DetectXWin(" + _firstSquare + "," + _secondSquare + ","
+                + _thirdSquare + ")");
+        String source = "bsync(none, _firstSquare, none);\n" +
+                "bsync(none, _secondSquare, none);\n" +
+                "bsync(none, _thirdSquare, none);\n" +
+                "bsync(XWin, none, moves);\n";
         setScript(source);
     }
 

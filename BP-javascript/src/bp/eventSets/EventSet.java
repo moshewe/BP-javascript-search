@@ -10,7 +10,7 @@ import java.util.Iterator;
 // Main class
 @SuppressWarnings("serial")
 public class EventSet extends HashSet<EventSetInterface> implements
-        EventSetInterface, Serializable, JSIdentifiable {
+        EventSetInterface, Serializable {
 
     private String name = null;
 
@@ -52,13 +52,13 @@ public class EventSet extends HashSet<EventSetInterface> implements
         }
     }
 
-    @Override
-    public String jsIdentifier() {
-        String id = BPJavascriptApplication.toJSIdentifier(name) + "_";
-        for (Iterator<EventSetInterface> it = iterator(); it.hasNext(); ) {
-            EventSetInterface next = it.next();
-            id+= next.jsIdentifier() + "_";
-        }
-        return id;
-    }
+//    @Override
+//    public String jsIdentifier() {
+//        String id = BPJavascriptApplication.toJSIdentifier(name) + "_";
+//        for (Iterator<EventSetInterface> it = iterator(); it.hasNext(); ) {
+//            EventSetInterface next = it.next();
+//            id+= next.jsIdentifier() + "_";
+//        }
+//        return id;
+//    }
 }

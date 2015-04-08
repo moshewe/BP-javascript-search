@@ -5,8 +5,6 @@ import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Scriptable;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Collection;
 
 import static bp.eventSets.EventSetConstants.all;
@@ -23,14 +21,14 @@ public abstract class BPJavascriptApplication {
     protected Scriptable _globalScope;
     protected BProgram _bp;
 
-    public static String toJSIdentifier(String str) {
-        try {
-            return Arrays.toString(str.getBytes("UTF-8")).replaceAll("[^A-Za-z0-9]", "_");
-        } catch (UnsupportedEncodingException e) {
-            // UTF-8 is always supported, but this catch is required by compiler
-            return null;
-        }
-    }
+//    public static String toJSIdentifier(String str) {
+//        try {
+//            return Arrays.toString(str.getBytes("UTF-8")).replaceAll("[^A-Za-z0-9]", "_");
+//        } catch (UnsupportedEncodingException e) {
+//            // UTF-8 is always supported, but this catch is required by compiler
+//            return null;
+//        }
+//    }
 
     public static String btSource(String path) {
         try {
@@ -68,11 +66,12 @@ public abstract class BPJavascriptApplication {
         try {
             for (BThread bt : bthreads) {
                 bt.setupScope(_globalScope);
-                bt.registerBTInScope();
-                String btJsName = bt.jsIdentifier();
+//                bt.registerBTInScope();
+//                String btJsName = bt.jsIdentifier();
                 if (bt.getScript() == null)
-                    bt.setScript(btJsName + ".runBThread();\n");
-                _globalScope.put(btJsName,
+                    bt.setScript("runBThread();\n");
+//                bt.setScript(btJsName + ".runBThread();\n");
+                _globalScope.put(bt.getName(),
                         _globalScope, Context.javaToJS(bt, _globalScope));
             }
         } finally {

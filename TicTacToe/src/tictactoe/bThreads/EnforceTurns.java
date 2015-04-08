@@ -9,21 +9,12 @@ public class EnforceTurns extends BThread {
 
     public EnforceTurns() {
         String source = "while (true) {\n" +
-                jsIdentifier() + ".bsync(none, xevents, oevents);\n" +
-                jsIdentifier() + ".bsync(none, oevents, xevents);\n" +
+                "bsync(none, xevents, oevents);\n" +
+                "bsync(none, oevents, xevents);\n" +
+//                jsIdentifier() + ".bsync(none, xevents, oevents);\n" +
+//                jsIdentifier() + ".bsync(none, oevents, xevents);\n" +
                 "}\n";
         setScript(source);
     }
 
-//    public void runBThread() throws BPJException {
-//        while (true) {
-//            bsync(none, XEvents, OEvents);
-//            bsync(none, OEvents, XEvents);
-//        }
-//    }
-
-    @Override
-    public void registerBTInScope() {
-
-    }
 }

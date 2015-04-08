@@ -59,13 +59,13 @@ public class RequestableEventSet extends ArrayList<RequestableInterface> impleme
         }
     }
 
-    @Override
-    public String jsIdentifier() {
-        String id = BPJavascriptApplication.toJSIdentifier(name) + "_";
-        for (Iterator<RequestableInterface> it = iterator(); it.hasNext(); ) {
-            RequestableInterface next = it.next();
-            id += next.jsIdentifier() + "_";
-        }
-        return id;
-    }
+//    @Override
+//    public String jsIdentifier() {
+//        String id = BPJavascriptApplication.toJSIdentifier(name) + "_";
+//        for (Iterator<RequestableInterface> it = iterator(); it.hasNext(); ) {
+//            RequestableInterface next = it.next();
+//            id += next.jsIdentifier() + "_";
+//        }
+//        return id;
+//    }
 }

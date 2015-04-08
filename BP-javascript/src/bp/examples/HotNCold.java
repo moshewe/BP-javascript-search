@@ -15,8 +15,6 @@ import static bp.eventSets.EventSetConstants.none;
  */
 public class HotNCold {
 
-    final Object HOT = new Object();
-    final Object COLD = new Object();
     static Scriptable globalScope;
     private HotBt _hotbt;
     private ColdBt _coldbt;
@@ -57,14 +55,14 @@ public class HotNCold {
             globalScope = cx.initStandardObjects();
             cx.setOptimizationLevel(-1); // must use interpreter mode
             _hotbt = new HotBt();
-            globalScope.put(_hotbt.getName(), globalScope,
-                    Context.javaToJS(_hotbt, globalScope));
+//            globalScope.put(_hotbt.getName(), globalScope,
+//                    Context.javaToJS(_hotbt, globalScope));
             _coldbt = new ColdBt();
-            globalScope.put(_coldbt.getName(), globalScope,
-                    Context.javaToJS(_coldbt, globalScope));
+//            globalScope.put(_coldbt.getName(), globalScope,
+//                    Context.javaToJS(_coldbt, globalScope));
             _alternator = new AlternatorBt();
-            globalScope.put(_alternator.getName(), globalScope,
-                    Context.javaToJS(_alternator, globalScope));
+//            globalScope.put(_alternator.getName(), globalScope,
+//                    Context.javaToJS(_alternator, globalScope));
             globalScope.put("hotEvent", globalScope,
                     Context.javaToJS(new BEvent("HOT!"), globalScope));
             globalScope.put("coldEvent", globalScope,
@@ -78,10 +76,12 @@ public class HotNCold {
 
     public class HotBt extends BThread {
 
+        public String hotStr = "\"HOT!1\"";
+
         public HotBt() {
             String source = "java.lang.System.out.println(\"hotbt started!\")\n" +
                     "bsync(hotEvent,noneEvent,noneEvent)\n" +
-                    "java.lang.System.out.println(\"HOT!1\")\n" +
+                    "java.lang.System.out.println(hotStr)\n" +
                     "bsync(hotEvent,noneEvent,noneEvent)\n" +
                     "java.lang.System.out.println(\"HOT!2\")\n" +
                     "bsync(hotEvent,noneEvent,noneEvent)\n" +

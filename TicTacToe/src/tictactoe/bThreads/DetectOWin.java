@@ -11,18 +11,18 @@ import java.util.Set;
  */
 public class DetectOWin extends BThread {
 
-	private O firstSquare;
-	private O secondSquare;
-	private O thirdSquare;
+	public O _firstSquare;
+	public O _secondSquare;
+	public O _thirdSquare;
 
 //	public void runBThread() throws BPJException {
 //		interruptingEvents = new EventSet(gameOver);
 //		// Wait for the first O
-//		bsync(none, firstSquare, none);
+//		bsync(none, _firstSquare, none);
 //		// Wait for the second O
-//		bsync(none, secondSquare, none);
+//		bsync(none, _secondSquare, none);
 //		// Wait for the third O
-//		bsync(none, thirdSquare, none);
+//		bsync(none, _thirdSquare, none);
 //		// Announce O win
 //		bsync(OWin, none, none);
 //	}
@@ -34,21 +34,15 @@ public class DetectOWin extends BThread {
 	 */
 	public DetectOWin(O o, O o2, O o3) {
 		super();
-		this.firstSquare = o;
-		this.secondSquare = o2;
-		this.thirdSquare = o3;
+		this._firstSquare = o;
+		this._secondSquare = o2;
+		this._thirdSquare = o3;
 		this.setName("DetectOWin(" + o + "," + o2 + ","
 				+ o3 + ")");
-		_btScopeObjects.add(o);
-		_btScopeObjects.add(o2);
-		_btScopeObjects.add(o3);
-		String source = jsIdentifier() + ".bsync(none, " +
-				firstSquare.jsIdentifier() + ", none);\n" +
-				jsIdentifier() + ".bsync(none, " +
-				secondSquare.jsIdentifier() + ", none);\n" +
-				jsIdentifier() + ".bsync(none, " +
-				thirdSquare.jsIdentifier() + ", none);\n" +
-				jsIdentifier() + ".bsync(OWin, none, moves);\n";
+		String source = "bsync(none, _firstSquare, none);\n" +
+				"bsync(none, _secondSquare, none);\n" +
+				"bsync(none, _thirdSquare, none);\n" +
+				"bsync(OWin, none, moves);\n";
 		setScript(source);
 	}
 

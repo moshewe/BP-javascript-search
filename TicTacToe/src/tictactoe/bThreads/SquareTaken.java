@@ -12,7 +12,7 @@ import java.util.HashSet;
 public class SquareTaken extends BThread {
     public final int _row;
     public final int _col;
-    private final Move _move;
+    public final Move _move;
 
 //	public void runBThread() throws BPJException {
 //
@@ -31,13 +31,10 @@ public class SquareTaken extends BThread {
         this._row = row;
         this._col = col;
         _move = new Move(_row, _col);
-        _btScopeObjects.add(_move);
+//        _btScopeObjects.add(_move);
         // Wait for any _move for a given square
-        String source = jsIdentifier() + ".bsync(none, " +
-                _move.jsIdentifier() + ", none);\n" +
-                jsIdentifier() + ".bsync(none, none, " +
-                _move.jsIdentifier() + ")\n;";
-
+        String source = "bsync(none, _move, none);\n" +
+                "bsync(none, none, _move)\n;";
         setScript(source);
     }
 

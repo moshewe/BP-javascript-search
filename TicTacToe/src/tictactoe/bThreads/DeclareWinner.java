@@ -2,10 +2,8 @@ package tictactoe.bThreads;
 
 import bp.BThread;
 import bp.eventSets.EventSet;
-import bp.exceptions.BPJException;
 import tictactoe.externalApp.TicTacToe;
 
-import static bp.eventSets.EventSetConstants.none;
 import static tictactoe.events.StaticEvents.*;
 
 /**
@@ -13,14 +11,15 @@ import static tictactoe.events.StaticEvents.*;
  */
 public class DeclareWinner extends BThread {
 
-    private TicTacToe ttt;
+    public final EventSet eset;
 
     public DeclareWinner(TicTacToe ttt) {
 //		this.ttt = ttt;
-        EventSet eset = new EventSet("WinnerDecided", XWin, OWin, draw);
-        _btScopeObjects.add(eset);
-        String source = "var lastEvent = " + jsIdentifier() +
-                ".bsync(none, " + eset.jsIdentifier() + ", none);\n" +
+        eset = new EventSet("WinnerDecided", XWin, OWin, draw);
+//        _btScopeObjects.add(eset);
+//        String source = "var lastEvent = " + jsIdentifier() +
+//                ".bsync(none, " + eset.jsIdentifier() + ", none);\n" +
+        String source = "var lastEvent = bsync(none, eset, none);\n" +
                 "var msg;\n" +
                 "if (lastEvent == XWin) {\n" +
                 "msg = \"X Wins\";\n" +
@@ -29,7 +28,8 @@ public class DeclareWinner extends BThread {
                 "} else\n" +
                 "msg = \"A Draw\";\n" +
                 "ttt.gui.message.setText(msg);\n" +
-                jsIdentifier() + ".bsync(gameOver, none, none);\n" +
+//                jsIdentifier() + ".bsync(gameOver, none, none);\n" +
+                "bsync(gameOver, none, none);\n" +
                 "ttt.gui.buttons[0][0].setEnabled(false);\n" +
                 "ttt.gui.buttons[0][1].setEnabled(false);\n" +
                 "ttt.gui.buttons[0][2].setEnabled(false);\n" +
