@@ -1,4 +1,3 @@
-
 while(true){
-    bsynch(xevents + oevents, none, none);
+    bsync(new EventSet(xevents,oevents), none, none);
 }

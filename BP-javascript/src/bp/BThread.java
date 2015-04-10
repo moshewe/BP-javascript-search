@@ -118,10 +118,6 @@ public class BThread implements Serializable {
         _block = blockedEvents;
     }
 
-    /**
-     * @see java.lang.Thread#start()
-     */
-
     public boolean isRequested(BEvent event) {
         return _request.contains(event);
     }
@@ -155,7 +151,7 @@ public class BThread implements Serializable {
             System.out.println(this + ": " + string);
     }
 
-    public void bsync(RequestableInterface requestedEvents,
+    public BEvent bsync(RequestableInterface requestedEvents,
                       EventSetInterface waitedEvents,
                       EventSetInterface blockedEvents) {
         setRequestedEvents(requestedEvents);
@@ -198,33 +194,12 @@ public class BThread implements Serializable {
         }
     }
 
-//    public String jsIdentifier() {
-//        return BPJavascriptApplication.toJSIdentifier(_name +
-//                hashCode());
-//    }
-
     /**
      * Used by the JS script wrapper to declare bthread finished.
      */
     public void finished() {
         _alive = false;
     }
-
-//    protected void registerBTInScope() {
-//        Context cx = ContextFactory.getGlobal().enterContext();
-//        cx.setOptimizationLevel(-1); // must use interpreter mode
-//        try {
-//            if(_btScopeObjects==null){
-//                bplog("scoped objects is null!");
-//            }
-//            for (JSIdentifiable obj : _btScopeObjects) {
-//                _scope.put(obj.jsIdentifier(), _scope,
-//                        Context.javaToJS(obj, _scope));
-//            }
-//        } finally {
-//            Context.exit();
-//        }
-//    }
 
     public void revive() {
         _alive = true;

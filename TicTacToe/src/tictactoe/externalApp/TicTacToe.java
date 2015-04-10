@@ -4,6 +4,7 @@ import bp.BThread;
 import bp.search.BPSearchApplication;
 import bp.search.adversarial.BPMinimaxSearch;
 import bp.search.adversarial.MinimaxSearchArbiter;
+import bp.search.bthreads.SimulatorBThread;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import tictactoe.bThreads.*;
@@ -76,8 +77,8 @@ public class TicTacToe extends BPSearchApplication {
 
     @Override
     protected void addSimBThreads() {
-        BThread reqAllMoves = new
-                BThread(btSource("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/TicTacToe/tictactoe/bThreads/ReqAllMoves.js"));
+        SimulatorBThread reqAllMoves = new
+                SimulatorBThread(btSource("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/TicTacToe/tictactoe/bThreads/ReqAllMoves.js"));
         reqAllMoves.setName("ReqAllMoves");
         _simBThreads.add(reqAllMoves);
         _bp.getBThreads().addAll(_simBThreads);

@@ -32,9 +32,7 @@ public abstract class BPJavascriptApplication {
 
     public static String btSource(String path) {
         try {
-            String source = new String(readAllBytes(get(path)));
-            BThread bt = new BThread(source);
-            bt.setName(path);
+            return new String(readAllBytes(get(path)));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -82,8 +82,8 @@ public class HotNCold {
             String source = "java.lang.System.out.println(\"hotbt started!\")\n" +
                     "bsync(hotEvent,noneEvent,noneEvent)\n" +
                     "java.lang.System.out.println(hotStr)\n" +
-                    "bsync(hotEvent,noneEvent,noneEvent)\n" +
-                    "java.lang.System.out.println(\"HOT!2\")\n" +
+                    "var ans = bsync(hotEvent,noneEvent,noneEvent)\n" +
+                    "java.lang.System.out.println(ans)\n" +
                     "bsync(hotEvent,noneEvent,noneEvent)\n" +
                     "java.lang.System.out.println(\"HOT!3\")\n";
             setScript(source);
