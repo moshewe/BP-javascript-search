@@ -37,6 +37,11 @@ public class BThread implements Serializable {
         setScript(source);
     }
 
+    public BThread(String name, String source){
+        this(source);
+        _name = name;
+    }
+
     public boolean isAlive() {
         return _alive;
     }

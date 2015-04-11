@@ -2,9 +2,11 @@ package bp;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
+import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.Scriptable;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
 
 import static bp.eventSets.EventSetConstants.all;
@@ -38,6 +40,23 @@ public abstract class BPJavascriptApplication {
         }
 
         return "zombieBsync();";
+    }
+
+    public void evaluateInGlobalScope(String path){
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            Path pathObject = get(path);
+            cx.evaluateString(_globalScope,
+                    new String(readAllBytes(pathObject)),
+                    pathObject.getFileName().toString(),
+                    1,
+                    null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            Context.exit();
+        }
     }
 
     protected void bplog(String s) {
@@ -85,7 +104,11 @@ public abstract class BPJavascriptApplication {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
-            _globalScope = cx.initStandardObjects();
+            ImporterTopLevel importer = new ImporterTopLevel(cx);
+//            importer.initStandardObjects(cx,false);
+//            _globalScope = cx.initStandardObjects();
+//            _globalScope = importer;
+            _globalScope = cx.initStandardObjects(importer);
             _globalScope.put("none", _globalScope,
                     Context.javaToJS(none, _globalScope));
             _globalScope.put("all", _globalScope,
@@ -93,6 +116,8 @@ public abstract class BPJavascriptApplication {
         } finally {
             Context.exit();
         }
+        String initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/BP-javascript/src/bp/globalScopeInit.js";
+        evaluateInGlobalScope(initScript);
     }
 
 }

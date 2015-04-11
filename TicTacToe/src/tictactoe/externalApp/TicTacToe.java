@@ -4,7 +4,6 @@ import bp.BThread;
 import bp.search.BPSearchApplication;
 import bp.search.adversarial.BPMinimaxSearch;
 import bp.search.adversarial.MinimaxSearchArbiter;
-import bp.search.bthreads.SimulatorBThread;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import tictactoe.bThreads.*;
@@ -77,10 +76,21 @@ public class TicTacToe extends BPSearchApplication {
 
     @Override
     protected void addSimBThreads() {
-        SimulatorBThread reqAllMoves = new
-                SimulatorBThread(btSource("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/TicTacToe/tictactoe/bThreads/ReqAllMoves.js"));
-        reqAllMoves.setName("ReqAllMoves");
-        _simBThreads.add(reqAllMoves);
+        String pref = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/TicTacToe/tictactoe/bThreads/";
+//        List<String> players = new ArrayList<>();
+//        players.add("ReqX");
+//        players.add("ReqO");
+//        for (String player : players) {
+//            for (int i = 0; i < 3; i++) {
+//                for (int j = 0; j < 3; j++) {
+//                    SimulatorBThread reqMove = new
+//                            SimulatorBThread(btSource(pref + player +
+//                            "/ReqMove" + i + j +".js"));
+//                    reqMove.setName(player + i + j);
+//                    _simBThreads.add(reqMove);
+//                }
+//            }
+//        }
         _bp.getBThreads().addAll(_simBThreads);
     }
 
