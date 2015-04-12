@@ -6,8 +6,6 @@ import bp.eventSets.RequestableInterface;
 import org.mozilla.javascript.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import static bp.BProgramControls.debugMode;
 import static bp.eventSets.EventSetConstants.none;
@@ -21,7 +19,6 @@ public class BThread implements Serializable {
     transient protected BProgram bp = null;
     protected Scriptable _scope;
     protected Script _script;
-    protected List<JSIdentifiable> _btScopeObjects;
     ContinuationPending _cont;
     RequestableInterface _request;
     EventSetInterface _wait;
@@ -33,12 +30,16 @@ public class BThread implements Serializable {
         _request = none;
         _wait = none;
         _block = none;
-        _btScopeObjects = new ArrayList<JSIdentifiable>();
     }
 
-    public BThread(String source){
+    public BThread(String source) {
         this();
         setScript(source);
+    }
+
+    public BThread(String name, String source){
+        this(source);
+        _name = name;
     }
 
     public boolean isAlive() {
@@ -55,15 +56,18 @@ public class BThread implements Serializable {
 
     public void setupScope(Scriptable programScope) {
         Context cx = ContextFactory.getGlobal().enterContext();
-        Scriptable btScope = cx.toObject(this,programScope);
-        btScope.setParentScope(programScope);
+//        Object btInJS = cx.javaToJS(this, programScope);
+//        Scriptable btScope = cx.toObject(btInJS, programScope);
+        Scriptable btScope = cx.toObject(this, programScope);
+        btScope.setPrototype(programScope);
+//        btScope.setParentScope(null);
         this._scope = btScope;
     }
 
     public void start() {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
-        if(_scope==null){
+        if (_scope == null) {
             bplog("null scope?");
         }
         try {
@@ -119,10 +123,6 @@ public class BThread implements Serializable {
         _block = blockedEvents;
     }
 
-    /**
-     * @see java.lang.Thread#start()
-     */
-
     public boolean isRequested(BEvent event) {
         return _request.contains(event);
     }
@@ -156,7 +156,7 @@ public class BThread implements Serializable {
             System.out.println(this + ": " + string);
     }
 
-    public void bsync(RequestableInterface requestedEvents,
+    public BEvent bsync(RequestableInterface requestedEvents,
                       EventSetInterface waitedEvents,
                       EventSetInterface blockedEvents) {
         setRequestedEvents(requestedEvents);
@@ -180,8 +180,8 @@ public class BThread implements Serializable {
         _cont = null;
     }
 
-    public void zombieBsync(){
-        bsync(none,none,none);
+    public void zombieBsync() {
+        bsync(none, none, none);
     }
 
     public Script getScript() {
@@ -199,32 +199,11 @@ public class BThread implements Serializable {
         }
     }
 
-    public String jsIdentifier() {
-        return BPJavascriptApplication.toJSIdentifier(_name +
-                hashCode());
-    }
-
     /**
      * Used by the JS script wrapper to declare bthread finished.
      */
     public void finished() {
         _alive = false;
-    }
-
-    protected void registerBTInScope() {
-        Context cx = ContextFactory.getGlobal().enterContext();
-        cx.setOptimizationLevel(-1); // must use interpreter mode
-        try {
-            if(_btScopeObjects==null){
-                bplog("scoped objects is null!");
-            }
-            for (JSIdentifiable obj : _btScopeObjects) {
-                _scope.put(obj.jsIdentifier(), _scope,
-                        Context.javaToJS(obj, _scope));
-            }
-        } finally {
-            Context.exit();
-        }
     }
 
     public void revive() {

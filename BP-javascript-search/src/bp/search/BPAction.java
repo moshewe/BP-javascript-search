@@ -75,7 +75,7 @@ public class BPAction implements Action, Comparable<BPAction> {
 
     protected void bplog(String string) {
         if (debugMode)
-            System.out.println("[" + this + "]: " + string);
+            System.out.println("Action[" + this + "]: " + string);
     }
 
     @Override

@@ -1,12 +1,11 @@
 package bp.eventSets;
 
+import bp.BEvent;
+import bp.exceptions.BPJRequestableSetException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import bp.BEvent;
-
-import bp.exceptions.BPJRequestableSetException;
 
 /**
  * A filter that doesn't match any object.
@@ -50,10 +49,10 @@ public class EmptyEventSet implements EventSetInterface, RequestableInterface, S
 		return false;
 	}
 
-	@Override
-	public String jsIdentifier() {
-		return "emptyEventSet";
-	}
+//	@Override
+//	public String jsIdentifier() {
+//		return "emptyEventSet";
+//	}
 }
 
 /**

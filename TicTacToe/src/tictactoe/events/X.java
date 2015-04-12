@@ -1,11 +1,9 @@
 package tictactoe.events;
 
-import bp.JSIdentifiable;
-
 /**
  * An event that is fired when player X makes a move.
  */
-public class X extends Move implements JSIdentifiable {
+public class X extends Move {
 
     /**
      * Constructor.

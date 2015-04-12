@@ -21,6 +21,13 @@ public abstract class BPSearchApplication extends BPJavascriptApplication {
         setupSimBThreadScopes();
     }
 
+    @Override
+    protected void setupGlobalScope() {
+        super.setupGlobalScope();
+        String path = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/BP-javascript-search/bp/search/bthreads/SimulatorBThread.js";
+        evaluateInGlobalScope(path);
+    }
+
     protected abstract void addSimBThreads();
 
     protected void setupSimBThreadScopes() {
