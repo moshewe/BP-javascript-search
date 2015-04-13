@@ -40,11 +40,18 @@ public class Talker extends AbstractNodeMain {
         // This CancellableLoop will be canceled automatically when the node shuts
         // down.
         connectedNode.executeCancellableLoop(new CancellableLoop() {
-            private int sequenceNumber;
+
+            // Initialize an execution scope
+            Context  cx;
+            Scriptable scope;
+
 
             @Override
             protected void setup() {
-                sequenceNumber = 0;
+                cx = Context.enter();
+                scope = cx.initStandardObjects();
+
+                scope.put("sequenceNumber", scope, 0);
             }
 
             @Override
@@ -52,31 +59,22 @@ public class Talker extends AbstractNodeMain {
 
                 // Creates and enters a Context. The Context stores information
                 // about the execution environment of a script.
-                Context cx = Context.enter();
-                try {
-                    // Initialize an execution scope
-                    Scriptable scope = cx.initStandardObjects();
 
-                    // Put some Java object to be accessible by the JS script
-                    scope.put("publisher", scope, publisher);
-                    scope.put("sequenceNumber", scope, sequenceNumber);
+                // Put some Java object to be accessible by the JS script
+                scope.put("publisher", scope, publisher);
 
-                    // The JS code that we are going to execute
-                    String s = "str = publisher.newMessage();" +
-                               "str.setData('Hello JS ' + sequenceNumber);"+
-                               "publisher.publish(str);"+
-                               "sequenceNumber;";
+                // The JS code that we are going to execute
+                String s = "str = publisher.newMessage();" +
+                           "str.setData('Hello JS ' + sequenceNumber);"+
+                           "publisher.publish(str);"+
+                           "sequenceNumber++;";
 
-                    // Execute the code we constructed.
-                    Object result = cx.evaluateString(scope, s, "internal code", 1, null);
+                // Execute the code we constructed.
+                Object result = cx.evaluateString(scope, s, "internal code", 1, null);
 
-                    // Convert the result to a string and print it.
-                    System.err.println(Context.toString(result));
+                // Convert the result to a string and print it.
+                System.err.println(Context.toString(result));
 
-                } finally {
-                    // Exit from the context.
-                    Context.exit();
-                }
 
                 //*** The code below is now in JS :-) *********
                 //std_msgs.String str = publisher.newMessage();
@@ -84,7 +82,6 @@ public class Talker extends AbstractNodeMain {
                 //publisher.publish(str);
                 //**********************************************
 
-                sequenceNumber++;
                 Thread.sleep(1000);
             }
         });
