@@ -1,16 +1,14 @@
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-
 import org.ros.exception.RosRuntimeException;
 import org.ros.internal.loader.CommandLineLoader;
 import org.ros.node.DefaultNodeMainExecutor;
 import org.ros.node.NodeConfiguration;
-import org.ros.node.NodeMain;
 import org.ros.node.NodeMainExecutor;
 
 // This class will run a publisher and subscriber, and relay data between them.
 
-public class Run_PubSub {
+public class Main {
 
     static private Talker pubNodeMain;
     static private Listener subNodeMain;
@@ -20,14 +18,14 @@ public class Run_PubSub {
         NodeMainExecutor nodeMainExecutor = DefaultNodeMainExecutor.newDefault();
 
         // Load the publisher
-        String[] pubArgv = { "Talker" };
+        String[] pubArgv = {"Talker"};
         CommandLineLoader pubLoader = new CommandLineLoader(Lists.newArrayList(pubArgv));
         String nodeClassName = pubLoader.getNodeClassName();
         System.out.println("Loading node class: " + pubLoader.getNodeClassName());
         NodeConfiguration pubNodeConfiguration = pubLoader.build();
 
         try {
-            pubNodeMain = (Talker)pubLoader.loadClass(nodeClassName);
+            pubNodeMain = (Talker) pubLoader.loadClass(nodeClassName);
         } catch (ClassNotFoundException e) {
             throw new RosRuntimeException("Unable to locate node: " + nodeClassName, e);
         } catch (InstantiationException e) {
@@ -40,14 +38,14 @@ public class Run_PubSub {
         nodeMainExecutor.execute(pubNodeMain, pubNodeConfiguration);
 
         // Load the subscriber
-        String[] subArgv = { "Listener" };
+        String[] subArgv = {"Listener"};
         CommandLineLoader subLoader = new CommandLineLoader(Lists.newArrayList(subArgv));
         nodeClassName = subLoader.getNodeClassName();
         System.out.println("Loading node class: " + subLoader.getNodeClassName());
         NodeConfiguration subNodeConfiguration = subLoader.build();
 
         try {
-            subNodeMain = (Listener)subLoader.loadClass(nodeClassName);
+            subNodeMain = (Listener) subLoader.loadClass(nodeClassName);
         } catch (ClassNotFoundException e) {
             throw new RosRuntimeException("Unable to locate node: " + nodeClassName, e);
         } catch (InstantiationException e) {
