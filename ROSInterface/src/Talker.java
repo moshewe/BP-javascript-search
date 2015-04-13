@@ -41,7 +41,7 @@ public class Talker extends AbstractNodeMain {
         // down.
         connectedNode.executeCancellableLoop(new CancellableLoop() {
 
-            // Initialize an execution scope
+            // Execution context and scope
             Context  cx;
             Scriptable scope;
 
