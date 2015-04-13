@@ -54,21 +54,21 @@ public class Talker extends AbstractNodeMain {
                 // about the execution environment of a script.
                 Context cx = Context.enter();
                 try {
-                    // Initialize the standard objects (Object, Function, etc.)
-                    // This must be done before scripts can be executed. Returns
-                    // a scope object that we use in later calls.
+                    // Initialize an execution scope
                     Scriptable scope = cx.initStandardObjects();
+
+                    // Put some Java object to be accessible by the JS script
                     scope.put("publisher", scope, publisher);
                     scope.put("sequenceNumber", scope, sequenceNumber);
 
-                    // Collect the arguments into a single string.
+                    // The JS code that we are going to execute
                     String s = "str = publisher.newMessage();" +
                                "str.setData('Hello JS ' + sequenceNumber);"+
                                "publisher.publish(str);"+
                                "sequenceNumber;";
 
-                    // Now evaluate the string we've colected.
-                    Object result = cx.evaluateString(scope, s, "str.js", 1, null);
+                    // Execute the code we constructed.
+                    Object result = cx.evaluateString(scope, s, "internal code", 1, null);
 
                     // Convert the result to a string and print it.
                     System.err.println(Context.toString(result));
@@ -78,10 +78,12 @@ public class Talker extends AbstractNodeMain {
                     Context.exit();
                 }
 
-
+                //*** The code below is now in JS :-) *********
                 //std_msgs.String str = publisher.newMessage();
                 //str.setData("Hello World " + sequenceNumber);
                 //publisher.publish(str);
+                //**********************************************
+
                 sequenceNumber++;
                 Thread.sleep(1000);
             }
