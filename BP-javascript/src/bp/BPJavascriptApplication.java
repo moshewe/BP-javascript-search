@@ -1,9 +1,6 @@
 package bp;
 
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.ContextFactory;
-import org.mozilla.javascript.ImporterTopLevel;
-import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -22,15 +19,7 @@ public abstract class BPJavascriptApplication {
     protected Arbiter arbiter;
     protected Scriptable _globalScope;
     protected BProgram _bp;
-
-//    public static String toJSIdentifier(String str) {
-//        try {
-//            return Arrays.toString(str.getBytes("UTF-8")).replaceAll("[^A-Za-z0-9]", "_");
-//        } catch (UnsupportedEncodingException e) {
-//            // UTF-8 is always supported, but this catch is required by compiler
-//            return null;
-//        }
-//    }
+    private String initScript;
 
     public static String btSource(String path) {
         try {
@@ -59,9 +48,12 @@ public abstract class BPJavascriptApplication {
         }
     }
 
+    public void registerBT(Callable func){
+    }
+
     protected void bplog(String s) {
         if (BProgramControls.debugMode)
-            System.out.println(getClass().getSimpleName() + s);
+            System.out.println(getClass().getSimpleName() + ": " +s);
     }
 
     public BPJavascriptApplication() {
@@ -109,6 +101,8 @@ public abstract class BPJavascriptApplication {
 //            _globalScope = cx.initStandardObjects();
 //            _globalScope = importer;
             _globalScope = cx.initStandardObjects(importer);
+            _globalScope.put("bpjs", _globalScope,
+                    Context.javaToJS(this, _globalScope));
             _globalScope.put("none", _globalScope,
                     Context.javaToJS(none, _globalScope));
             _globalScope.put("all", _globalScope,
@@ -116,9 +110,10 @@ public abstract class BPJavascriptApplication {
         } finally {
             Context.exit();
         }
-        String initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/BP-javascript/src/bp/globalScopeInit.js";
+        initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/BP-javascript/src/bp/globalScopeInit.js";
         evaluateInGlobalScope(initScript);
     }
 
 }
+
 

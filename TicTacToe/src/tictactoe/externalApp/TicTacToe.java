@@ -21,6 +21,8 @@ import static tictactoe.events.StaticEvents.*;
  */
 public class TicTacToe extends BPSearchApplication {
 
+    private String initScript;
+
     public static class Coordinates implements Comparable<Coordinates> {
         public final int row;
         public final int col;
@@ -74,26 +76,6 @@ public class TicTacToe extends BPSearchApplication {
         gui = new GUI(_bp);
     }
 
-    @Override
-    protected void addSimBThreads() {
-        String pref = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/TicTacToe/tictactoe/bThreads/";
-//        List<String> players = new ArrayList<>();
-//        players.add("ReqX");
-//        players.add("ReqO");
-//        for (String player : players) {
-//            for (int i = 0; i < 3; i++) {
-//                for (int j = 0; j < 3; j++) {
-//                    SimulatorBThread reqMove = new
-//                            SimulatorBThread(btSource(pref + player +
-//                            "/ReqMove" + i + j +".js"));
-//                    reqMove.setName(player + i + j);
-//                    _simBThreads.add(reqMove);
-//                }
-//            }
-//        }
-        _bp.getBThreads().addAll(_simBThreads);
-    }
-
     protected void addBThreads() {
         UpdateDisplay _updateDisplay = new UpdateDisplay();
         _xwins = DetectXWin.constructInstances();
@@ -112,7 +94,7 @@ public class TicTacToe extends BPSearchApplication {
         _bp.add(_turns);
         _bp.add(stakenBThreadList);
         _bp.add(_draw);
-        // _bp.add(new BlockMiddle());
+        evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/ReqAllMoves.js");
     }
 
     @Override
@@ -137,6 +119,8 @@ public class TicTacToe extends BPSearchApplication {
                     Context.javaToJS(XEvents, _globalScope));
             _globalScope.put("oevents", _globalScope,
                     Context.javaToJS(OEvents, _globalScope));
+            initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/globalScopeInit.js";
+            evaluateInGlobalScope(initScript);
         } finally {
             Context.exit();
         }
