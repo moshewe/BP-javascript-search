@@ -1,8 +1,8 @@
 function SimulatorBThread(bodyFunc) {
-    var wrapper = {
-        simulationMode: false,
-        oldBsync: this.bsync,
-        bsync: function (requestedEvents, waitedEvents, blockedEvents) {
+    return function () {
+        simulationMode = false;
+        oldBsync = this.bsync;
+        bsync = function (requestedEvents, waitedEvents, blockedEvents) {
             java.lang.System.out.println("in SimulatorBThread bsync");
             var simWaitedEvents = new EventSet(waitedEvents, new SimStartEvent());
             if (simulationMode) {
@@ -19,12 +19,13 @@ function SimulatorBThread(bodyFunc) {
                 }
                 return bsync(requestedEvents, simWaitedEvents, blockedEvents);
             }
-        }
-    }
-
-    return function () {
-        with(wrapper) {
-            bodyFunc.call();
-        }
+        };
+        java.lang.System.out.println("started simulation bthread!");
+        java.lang.System.out.println("simulationMode = " + simulationMode);
+        java.lang.System.out.println("oldBsync = " + oldBsync);
+        java.lang.System.out.println("bsync = " + bsync);
+        boundedBodyFunc = bodyFunc.bind(this);
+        java.lang.System.out.println("body function is bound!");
+        boundedBodyFunc.call();
     }
 };

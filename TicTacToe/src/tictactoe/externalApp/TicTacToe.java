@@ -65,6 +65,8 @@ public class TicTacToe extends BPSearchApplication {
     public TicTacToe() {
         super();
         _bp.setName("TicTacToe");
+        addBThreads();
+        setupBThreadScopes();
         TTTGame game = new TTTGame(_bp, _turns, _squaresTaken,
                 _draw, _xwins, _owins,
                 declareWinner, this, _simBThreads);

@@ -15,10 +15,11 @@ import static bp.eventSets.EventSetConstants.none;
  */
 public class BThread implements Serializable {
 
+    public Function _func = null;
     protected String _name = this.getClass().getSimpleName();
     transient protected BProgram bp = null;
     protected Scriptable _scope;
-    protected Script _script;
+    protected Script _script = null;
     ContinuationPending _cont;
     RequestableInterface _request;
     EventSetInterface _wait;
@@ -37,9 +38,20 @@ public class BThread implements Serializable {
         setScript(source);
     }
 
-    public BThread(String name, String source){
+//    public BThread(Script script){
+//        this();
+//        setScript(script);
+//    }
+
+    public BThread(String name, String source) {
         this(source);
         _name = name;
+    }
+
+    public BThread(Function func) {
+        this();
+        _func = func;
+        setScript("_func();");
     }
 
     public boolean isAlive() {
@@ -67,9 +79,9 @@ public class BThread implements Serializable {
     public void start() {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
-        if (_scope == null) {
-            bplog("null scope?");
-        }
+//        if (_scope == null) {
+//            bplog("null scope?");
+//        }
         try {
             bplog("started!");
             cx.executeScriptWithContinuations(_script, _scope);
@@ -95,6 +107,7 @@ public class BThread implements Serializable {
         }
 
         bplog(" I'm over!");
+        _alive = false;
         zombie();
         return null;
     }
@@ -157,8 +170,8 @@ public class BThread implements Serializable {
     }
 
     public BEvent bsync(RequestableInterface requestedEvents,
-                      EventSetInterface waitedEvents,
-                      EventSetInterface blockedEvents) {
+                        EventSetInterface waitedEvents,
+                        EventSetInterface blockedEvents) {
         setRequestedEvents(requestedEvents);
         setWaitedEvents(waitedEvents);
         setBlockedEvents(blockedEvents);
@@ -180,10 +193,6 @@ public class BThread implements Serializable {
         _cont = null;
     }
 
-    public void zombieBsync() {
-        bsync(none, none, none);
-    }
-
     public Script getScript() {
         return _script;
     }
@@ -191,19 +200,11 @@ public class BThread implements Serializable {
     public void setScript(String source) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
-        source += "finished();\n";
         try {
             _script = cx.compileString(source, _name + "-script", 1, null);
         } finally {
             Context.exit();
         }
-    }
-
-    /**
-     * Used by the JS script wrapper to declare bthread finished.
-     */
-    public void finished() {
-        _alive = false;
     }
 
     public void revive() {

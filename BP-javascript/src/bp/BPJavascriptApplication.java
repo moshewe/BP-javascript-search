@@ -21,17 +21,7 @@ public abstract class BPJavascriptApplication {
     protected BProgram _bp;
     private String initScript;
 
-    public static String btSource(String path) {
-        try {
-            return new String(readAllBytes(get(path)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return "zombieBsync();";
-    }
-
-    public void evaluateInGlobalScope(String path){
+    public void evaluateInGlobalScope(String path) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
@@ -48,22 +38,18 @@ public abstract class BPJavascriptApplication {
         }
     }
 
-    public void registerBT(Callable func){
+    public void registerBT(Callable func) {
     }
 
     protected void bplog(String s) {
         if (BProgramControls.debugMode)
-            System.out.println(getClass().getSimpleName() + ": " +s);
+            System.out.println(getClass().getSimpleName() + ": " + s);
     }
 
     public BPJavascriptApplication() {
         _bp = new BProgram();
         setupGlobalScope();
-        addBThreads();
-        setupBThreadScopes();
     }
-
-    protected abstract void addBThreads();
 
     protected void setupBThreadScopes() {
         setupBThreadScopes(_bp.getBThreads());
