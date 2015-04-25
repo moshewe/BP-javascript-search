@@ -70,13 +70,18 @@ public class BThread implements Serializable {
         Context cx = ContextFactory.getGlobal().enterContext();
 //        Object btInJS = cx.javaToJS(this, programScope);
 //        Scriptable btScope = cx.toObject(btInJS, programScope);
-        Scriptable btScope = cx.toObject(this, programScope);
+//        Scriptable btScope = cx.toObject(this, programScope);
+        Scriptable btScope = (Scriptable) Context.javaToJS(this, programScope);
         btScope.setPrototype(programScope);
 //        btScope.setParentScope(null);
-        this._scope = btScope;
+        _scope = btScope;
     }
 
     public void start() {
+//        if (_func != null) {
+//            _func.setParentScope(_scope);
+//
+//        }
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
 //        if (_scope == null) {
