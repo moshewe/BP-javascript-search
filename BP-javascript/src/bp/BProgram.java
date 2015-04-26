@@ -103,6 +103,7 @@ public class BProgram implements Cloneable, Serializable {
         for (BThread bt : getBThreads()) {
             // bplog("_bt=" + _bt + " blockedEvents=" + _bt.blockedEvents);
             if (bt.getBlockedEvents().contains(e)) {
+//                bplog(e + " is blocked by " + bt);
                 return true;
             }
         }

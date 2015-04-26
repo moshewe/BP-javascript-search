@@ -4,7 +4,7 @@ for (var i = 2; i >= 0; i--) {
         players.forEach(function (player) {
             var move = new player(i, j);
             var func = function () {
-                java.lang.System.out.println("in reqmove " + move);
+//                java.lang.System.out.println("in reqmove " + move);
                 while (true) {
                     bsync(move, none, none);
                 }

@@ -111,7 +111,7 @@ public class BThread implements Serializable {
         this.bp = bp;
     }
 
-    protected void bplog(String string) {
+    public void bplog(String string) {
         if (debugMode)
             System.out.println(this + ": " + string);
     }

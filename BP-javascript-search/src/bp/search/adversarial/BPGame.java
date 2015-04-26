@@ -28,9 +28,9 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
         BPState state = makeInitialState();
         BPAction simStartAction = new BPAction(SimStartEvent.getInstance());
         bplog("creating simulation initial state...");
-        simStartAction.apply(state);
+        BPState retState = simStartAction.apply(state);
         bplog("FINISHED creating simulation initial state...");
-        return state;
+        return retState;
     }
 
     protected abstract BPState makeInitialState();
@@ -42,13 +42,18 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
 
     @Override
     public List<BPAction> getActions(BPState state) {
+//        bplog("generating action list");
         state.restore();
         List<BPAction> ans = new ArrayList<>();
         for (BTState bts : state.getBTstates()) {
+//            bplog("inspecting " + bts.bt);
             for (RequestableInterface req : bts.requestedEvents) {
+//                bplog("req=" + req);
                 for (BEvent e : req.getEventList()) {
                     if (!state.getBp().isBlocked(e)) {
-                        ans.add(new BPAction(e));
+                        BPAction act = new BPAction(e);
+                        ans.add(act);
+//                        bplog("added " + act);
                     }
                 }
             }

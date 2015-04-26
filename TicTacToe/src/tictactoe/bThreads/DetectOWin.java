@@ -42,7 +42,8 @@ public class DetectOWin extends BThread {
 		String source = "bsync(none, _firstSquare, none);\n" +
 				"bsync(none, _secondSquare, none);\n" +
 				"bsync(none, _thirdSquare, none);\n" +
-				"bsync(OWin, none, moves);\n";
+				"var eset = new EventSet([moves, draw]);\n" +
+				"bsync(OWin, none, eset);\n";
 		setScript(source);
 	}
 
