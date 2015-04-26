@@ -26,7 +26,7 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
     @Override
     public BPState getInitialState() {
         BPState state = makeInitialState();
-        BPAction simStartAction = new BPAction(new SimStartEvent());
+        BPAction simStartAction = new BPAction(SimStartEvent.getInstance());
         bplog("creating simulation initial state...");
         simStartAction.apply(state);
         bplog("FINISHED creating simulation initial state...");

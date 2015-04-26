@@ -7,11 +7,21 @@ import bp.BEvent;
  */
 public class SimStartEvent extends BEvent {
 
-    public SimStartEvent() {
+    private static SimStartEvent _instance;
+
+    static {
+        _instance = new SimStartEvent();
+    }
+
+    private SimStartEvent() {
         _name = "SimStart";
     }
 
-    public SimStartEvent(String _name) {
-        this();
+    public static SimStartEvent getInstance() {
+        return _instance;
     }
+
+//    public SimStartEvent(String _name) {
+//        this();
+//    }
 }

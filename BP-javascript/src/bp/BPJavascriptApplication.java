@@ -38,7 +38,16 @@ public abstract class BPJavascriptApplication {
         }
     }
 
-    public void registerBT(Callable func) {
+    public BThread registerBThread(String name, Function func) {
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            BThread simBT = new BThread(name, func);
+            _bp.add(simBT);
+            return simBT;
+        } finally {
+            Context.exit();
+        }
     }
 
     protected void bplog(String s) {
@@ -60,12 +69,10 @@ public abstract class BPJavascriptApplication {
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             for (BThread bt : bthreads) {
+//                bplog("settping up " + bt + " scope");
                 bt.setupScope(_globalScope);
-//                bt.registerBTInScope();
-//                String btJsName = bt.jsIdentifier();
-                if (bt.getScript() == null)
-                    bt.setScript("runBThread();\n");
-//                bt.setScript(btJsName + ".runBThread();\n");
+//                if (bt.getScript() == null)
+//                    bt.setScript("runBThread();\n");
                 _globalScope.put(bt.getName(),
                         _globalScope, Context.javaToJS(bt, _globalScope));
             }

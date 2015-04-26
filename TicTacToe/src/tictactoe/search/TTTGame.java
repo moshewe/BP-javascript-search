@@ -14,18 +14,13 @@ import tictactoe.bThreads.DeclareWinner;
 import tictactoe.bThreads.DetectDraw;
 import tictactoe.bThreads.EnforceTurns;
 import tictactoe.bThreads.SquareTaken;
-import tictactoe.events.O;
 import tictactoe.events.StaticEvents;
-import tictactoe.events.X;
 import tictactoe.externalApp.TicTacToe;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import static bp.BProgramControls.debugMode;
-import static bp.eventSets.EventSetConstants.none;
 import static tictactoe.events.StaticEvents.XEvents;
 
 public class TTTGame extends BPGame {
@@ -78,37 +73,37 @@ public class TTTGame extends BPGame {
         }
     }
 
-    @Override
-    public List<BPAction> getActions(BPState state) {
-//        state.restore();
-        List<BPAction> actions = new ArrayList<>();
-        if (xwinEventRequested()) {
-            actions.add(new BPAction(StaticEvents.XWin));
-        } else if (owinEventRequested()) {
-            actions.add(new BPAction(StaticEvents.OWin));
-        } else if (detectDraw.getRequestedEvents().contains(StaticEvents.draw)) {
-            actions.add(new BPAction(StaticEvents.draw));
-        } else if (getPlayer(state) == xPlayer) {
-            for (SquareTaken st : taken) {
-                EventSetInterface watchedEvents = st.getWaitedEvents();
-                if (watchedEvents != none) {
-                    actions.add(new BPAction(new X(st._row, st._col)));
-                }
-            }
-        } else {
-            for (SquareTaken st : taken) {
-                EventSetInterface watchedEvents = st.getWaitedEvents();
-                if (watchedEvents != none) {
-                    actions.add(new BPAction(new O(st._row,
-                            st._col)));
-                }
-            }
-        }
-
-        // bplog("#actions possible: " + actions.size());
-        bplog("actions possible: " + actions);
-        return actions;
-    }
+//    @Override
+//    public List<BPAction> getActions(BPState state) {
+////        state.restore();
+//        List<BPAction> actions = new ArrayList<>();
+//        if (xwinEventRequested()) {
+//            actions.add(new BPAction(StaticEvents.XWin));
+//        } else if (owinEventRequested()) {
+//            actions.add(new BPAction(StaticEvents.OWin));
+//        } else if (detectDraw.getRequestedEvents().contains(StaticEvents.draw)) {
+//            actions.add(new BPAction(StaticEvents.draw));
+//        } else if (getPlayer(state) == xPlayer) {
+//            for (SquareTaken st : taken) {
+//                EventSetInterface watchedEvents = st.getWaitedEvents();
+//                if (watchedEvents != none) {
+//                    actions.add(new BPAction(new X(st._row, st._col)));
+//                }
+//            }
+//        } else {
+//            for (SquareTaken st : taken) {
+//                EventSetInterface watchedEvents = st.getWaitedEvents();
+//                if (watchedEvents != none) {
+//                    actions.add(new BPAction(new O(st._row,
+//                            st._col)));
+//                }
+//            }
+//        }
+//
+//        // bplog("#actions possible: " + actions.size());
+//        bplog("actions possible: " + actions);
+//        return actions;
+//    }
 
     private boolean xwinEventRequested() {
         for (BThread winbt : xwins) {

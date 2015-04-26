@@ -66,7 +66,9 @@ public class TicTacToe extends BPSearchApplication {
         super();
         _bp.setName("TicTacToe");
         addBThreads();
+//        bplog("bthreads added");
         setupBThreadScopes();
+//        bplog("setup bthread scopes");
         TTTGame game = new TTTGame(_bp, _turns, _squaresTaken,
                 _draw, _xwins, _owins,
                 declareWinner, this, _simBThreads);
@@ -95,7 +97,8 @@ public class TicTacToe extends BPSearchApplication {
         _bp.add(declareWinner);
         _bp.add(_turns);
         _bp.add(stakenBThreadList);
-        _bp.add(_draw);
+//        _bp.add(_draw);
+        evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/DetectDraw.js");
         evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/ReqAllMoves.js");
     }
 

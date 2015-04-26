@@ -18,7 +18,7 @@ public class BThread implements Serializable {
     public Function _func = null;
     protected String _name = this.getClass().getSimpleName();
     transient protected BProgram bp = null;
-    protected Scriptable _scope;
+    public Scriptable _scope;
     protected Script _script = null;
     ContinuationPending _cont;
     RequestableInterface _request;
@@ -48,73 +48,11 @@ public class BThread implements Serializable {
         _name = name;
     }
 
-    public BThread(Function func) {
+    public BThread(String name, Function func) {
         this();
+        _name = name;
         _func = func;
         setScript("_func();");
-    }
-
-    public boolean isAlive() {
-        return _alive;
-    }
-
-    public ContinuationPending getCont() {
-        return _cont;
-    }
-
-    public void setCont(ContinuationPending cont) {
-        _cont = cont;
-    }
-
-    public void setupScope(Scriptable programScope) {
-        Context cx = ContextFactory.getGlobal().enterContext();
-//        Object btInJS = cx.javaToJS(this, programScope);
-//        Scriptable btScope = cx.toObject(btInJS, programScope);
-//        Scriptable btScope = cx.toObject(this, programScope);
-        Scriptable btScope = (Scriptable) Context.javaToJS(this, programScope);
-        btScope.setPrototype(programScope);
-//        btScope.setParentScope(null);
-        _scope = btScope;
-    }
-
-    public void start() {
-//        if (_func != null) {
-//            _func.setParentScope(_scope);
-//
-//        }
-        Context cx = ContextFactory.getGlobal().enterContext();
-        cx.setOptimizationLevel(-1); // must use interpreter mode
-//        if (_scope == null) {
-//            bplog("null scope?");
-//        }
-        try {
-            bplog("started!");
-            cx.executeScriptWithContinuations(_script, _scope);
-        } catch (ContinuationPending pending) {
-            _cont = pending;
-        } finally {
-            Context.exit();
-        }
-    }
-
-    public ContinuationPending resume(BEvent event) {
-        Context cx = ContextFactory.getGlobal().enterContext();
-        cx.setOptimizationLevel(-1); // must use interpreter mode
-        try {
-            Object eventInJS = Context.javaToJS(event, _scope);
-            cx.resumeContinuation(_cont.getContinuation(), _scope,
-                    eventInJS);
-        } catch (ContinuationPending pending) {
-            _cont = pending;
-            return _cont;
-        } finally {
-            Context.exit();
-        }
-
-        bplog(" I'm over!");
-        _alive = false;
-        zombie();
-        return null;
     }
 
     public RequestableInterface getRequestedEvents() {
@@ -172,6 +110,81 @@ public class BThread implements Serializable {
     protected void bplog(String string) {
         if (debugMode)
             System.out.println(this + ": " + string);
+    }
+
+    public boolean isAlive() {
+        return _alive;
+    }
+
+    public ContinuationPending getCont() {
+        return _cont;
+    }
+
+    public void setCont(ContinuationPending cont) {
+        _cont = cont;
+    }
+
+    public void setupScope(Scriptable programScope) {
+        Context cx = ContextFactory.getGlobal().enterContext();
+//        Object btInJS = cx.javaToJS(this, programScope);
+//        Scriptable btScope = cx.toObject(btInJS, programScope);
+//        Scriptable btScope = cx.toObject(this, programScope);
+        Scriptable btScope = (Scriptable) Context.javaToJS(this, programScope);
+        btScope.setPrototype(programScope);
+//        btScope.setParentScope(null);
+        _scope = btScope;
+        if (_func != null) {
+            Scriptable funcScope = _func.getParentScope();
+            if (funcScope != programScope) {
+//                bplog("nested/complex func");
+                while (funcScope.getParentScope() != programScope) {
+                    funcScope = funcScope.getParentScope();
+                }
+                funcScope.setParentScope(_scope);
+            } else {
+                _func.setParentScope(_scope);
+            }
+        }
+    }
+
+    public void start() {
+//        if (_func != null) {
+//            _func.setParentScope(_scope);
+//
+//        }
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+//        if (_scope == null) {
+//            bplog("null scope?");
+//        }
+        try {
+            bplog("started!");
+            cx.executeScriptWithContinuations(_script, _scope);
+        } catch (ContinuationPending pending) {
+            _cont = pending;
+        } finally {
+            Context.exit();
+        }
+    }
+
+    public ContinuationPending resume(BEvent event) {
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            Object eventInJS = Context.javaToJS(event, _scope);
+            cx.resumeContinuation(_cont.getContinuation(), _scope,
+                    eventInJS);
+        } catch (ContinuationPending pending) {
+            _cont = pending;
+            return _cont;
+        } finally {
+            Context.exit();
+        }
+
+        bplog(" I'm over!");
+        _alive = false;
+        zombie();
+        return null;
     }
 
     public BEvent bsync(RequestableInterface requestedEvents,
