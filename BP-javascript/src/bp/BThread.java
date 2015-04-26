@@ -5,10 +5,14 @@ import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
 import org.mozilla.javascript.*;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Path;
 
 import static bp.BProgramControls.debugMode;
 import static bp.eventSets.EventSetConstants.none;
+import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Paths.get;
 
 /**
  * Created by orelmosheweinstock on 3/24/15.
@@ -125,14 +129,7 @@ public class BThread implements Serializable {
     }
 
     public void setupScope(Scriptable programScope) {
-        Context cx = ContextFactory.getGlobal().enterContext();
-//        Object btInJS = cx.javaToJS(this, programScope);
-//        Scriptable btScope = cx.toObject(btInJS, programScope);
-//        Scriptable btScope = cx.toObject(this, programScope);
-        Scriptable btScope = (Scriptable) Context.javaToJS(this, programScope);
-        btScope.setPrototype(programScope);
-//        btScope.setParentScope(null);
-        _scope = btScope;
+        generateBThreadScope(programScope);
         if (_func != null) {
             Scriptable funcScope = _func.getParentScope();
             if (funcScope != programScope) {
@@ -145,6 +142,31 @@ public class BThread implements Serializable {
                 _func.setParentScope(_scope);
             }
         }
+    }
+
+    protected void generateBThreadScope(Scriptable programScope) {
+        Context cx = ContextFactory.getGlobal().enterContext();
+        Scriptable btScope = (Scriptable) Context.javaToJS(this, programScope);
+        btScope.setPrototype(programScope);
+        _scope = btScope;
+    }
+
+    public Object evaluateInBThreadScope(String path) {
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            Path pathObject = get(path);
+            return cx.evaluateString(_scope,
+                    new String(readAllBytes(pathObject)),
+                    pathObject.getFileName().toString(),
+                    1,
+                    null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            Context.exit();
+        }
+        return null;
     }
 
     public void start() {

@@ -3,6 +3,7 @@ package bp.search;
 import bp.BPJavascriptApplication;
 import bp.BThread;
 import bp.search.bthreads.SimulatorBThread;
+import bp.search.events.SimStartEvent;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Function;
@@ -15,18 +16,26 @@ import java.util.List;
  */
 public abstract class BPSearchApplication extends BPJavascriptApplication {
 
-    private String initScript;
+    private String _initScript;
 
     protected List<BThread> _simBThreads = new ArrayList<>();
+    private Object _simScope;
 
 
     @Override
     protected void setupGlobalScope() {
         super.setupGlobalScope();
-        initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/BP-javascript-search/src/bp/search/globalScopeInit.js";
-        evaluateInGlobalScope(initScript);
-//        String path = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/BP-javascript-search/bp/search/bthreads/SimulatorBThread.js";
-//        evaluateInGlobalScope(path);
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            _globalScope.put("simStart", _globalScope,
+                    Context.javaToJS(SimStartEvent.getInstance(),
+                            _globalScope));
+        } finally {
+            Context.exit();
+        }
+        _initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/BP-javascript-search/src/bp/search/globalScopeInit.js";
+        evaluateInGlobalScope(_initScript);
     }
 
     public SimulatorBThread registerSimBThread(String name, Function func) {

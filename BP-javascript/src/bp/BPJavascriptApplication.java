@@ -21,12 +21,12 @@ public abstract class BPJavascriptApplication {
     protected BProgram _bp;
     private String initScript;
 
-    public void evaluateInGlobalScope(String path) {
+    public Object evaluateInGlobalScope(String path) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             Path pathObject = get(path);
-            cx.evaluateString(_globalScope,
+            return cx.evaluateString(_globalScope,
                     new String(readAllBytes(pathObject)),
                     pathObject.getFileName().toString(),
                     1,
@@ -36,6 +36,7 @@ public abstract class BPJavascriptApplication {
         } finally {
             Context.exit();
         }
+        return null;
     }
 
     public BThread registerBThread(String name, Function func) {

@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BP-javascript-search:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BP_javascript_search_jar</output-path>
+    <root id="archive" name="BP-javascript-search.jar">
+      <element id="module-output" name="BP-javascript" />
+      <element id="module-output" name="rhino1_7R5" />
+      <element id="module-output" name="BP-javascript-search" />
+      <element id="module-output" name="TicTacToe" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/aima-core.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/junit-4.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/hamcrest-core-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/hamcrest-library-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.3.1/gson-2.3.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
