@@ -8,7 +8,7 @@ import java.util.Set;
 import static bp.BProgramControls.debugMode;
 
 /**
- * Default arbiter - triggers events according to the RWB semantics but promises
+ * Default _arbiter - triggers events according to the RWB semantics but promises
  * nothing as to the order of events triggered.
  *
  * @author moshewe

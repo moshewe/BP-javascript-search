@@ -3,6 +3,7 @@ package bp.search;
 import bp.BThread;
 import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
+import bp.search.bthreads.SimulatorBThread;
 import org.mozilla.javascript.ContinuationPending;
 
 /**
@@ -14,6 +15,7 @@ public class BTState {
      * The be-thread whose state is captured
      */
     public final BThread bt;
+    public boolean simMode;
 
     /**
      * Continuation object.
@@ -33,14 +35,13 @@ public class BTState {
         this.watchedEvents = bt.getWaitedEvents();
         this.blockedEvents = bt.getBlockedEvents();
         this._cont = bt.getCont();
+        simMode = false;
     }
 
-    public BTState(BTState other) {
-        this.bt = other.bt;
-        this.requestedEvents = other.requestedEvents;
-        this.watchedEvents = other.watchedEvents;
-        this.blockedEvents = other.blockedEvents;
-        this._cont = other._cont;
+    // need to implement visitor someday
+    public BTState(SimulatorBThread bt){
+        this((BThread) bt);
+        this.simMode = bt._simMode;
     }
 
     @Override
@@ -67,15 +68,20 @@ public class BTState {
         bt.setBlockedEvents(blockedEvents);
         bt.setCont(_cont);
         bt.revive();
+        //need to implement visitor someday
+        if(simMode){
+            ((SimulatorBThread) bt)._simMode = simMode;
+            bplog("restoring " + bt + " simMode to " + simMode);
+        }
 //		System.out.println("restored " + bt);
+    }
+
+    private void bplog(String s) {
+        System.out.println("[BTState]: ");
     }
 
     public ContinuationPending getCont() {
         return _cont;
-    }
-
-    public BTState copy() {
-        return new BTState(this);
     }
 
 }

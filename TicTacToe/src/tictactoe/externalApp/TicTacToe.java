@@ -73,8 +73,8 @@ public class TicTacToe extends BPSearchApplication {
                 _draw, _xwins, _owins,
                 declareWinner, this, _simBThreads);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
-        arbiter = new MinimaxSearchArbiter(search, game);
-        _bp.setArbiter(arbiter);
+        _arbiter = new MinimaxSearchArbiter(search, game);
+        _bp.setArbiter(_arbiter);
 //        addBThreads();
         // Start the graphical user interface
         gui = new GUI(_bp);
@@ -95,7 +95,8 @@ public class TicTacToe extends BPSearchApplication {
         _bp.add(_xwins);
         _bp.add(_owins);
         _bp.add(declareWinner);
-        _bp.add(_turns);
+//        _bp.add(_turns);
+        evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/EnforceTurns.js");
         _bp.add(stakenBThreadList);
 //        _bp.add(_draw);
         evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/DetectDraw.js");

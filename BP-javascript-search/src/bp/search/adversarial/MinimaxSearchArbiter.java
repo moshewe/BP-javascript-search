@@ -14,7 +14,7 @@ public class MinimaxSearchArbiter extends Arbiter {
 
     protected BPMinimaxSearch algorithm;
     protected BPGame game;
-    public boolean gameOn;
+//    public boolean gameOn;
 
     public MinimaxSearchArbiter(BPMinimaxSearch algorithm, BPGame game) {
         this.algorithm = algorithm;
@@ -29,23 +29,23 @@ public class MinimaxSearchArbiter extends Arbiter {
 
     @Override
     protected BEvent nextEvent() {
-        if (gameOn) {
+//        if (gameOn) {
+//            return makeDecision();
+//        } else {
+////            BPState bps = new BPState(getProgram());
+        BPPlayer player = game.getPlayer(null);
+        if (player instanceof BPSystemPlayer) {
             return makeDecision();
         } else {
-//            BPState bps = new BPState(getProgram());
-            BPPlayer player = game.getPlayer(null);
-            if (player instanceof BPSystemPlayer) {
-                return makeDecision();
-            } else {
-                return super.nextEvent();
-            }
+            return super.nextEvent();
         }
+//        }
     }
 
     public BEvent makeDecision() {
         BPState initialState = game.getInitialState();
 //        addSimBThreads(initialState);
-        gameOn = true;
+//        gameOn = true;
         bplog("=== STARTING SEARCH ===");
         BPAction decision = algorithm.makeDecision(initialState);
         BEvent choice;
@@ -65,7 +65,7 @@ public class MinimaxSearchArbiter extends Arbiter {
 
 //        removeSimBThreads(initialState);
         initialState.restore();
-        gameOn = false;
+//        gameOn = false;
         return choice;
     }
 

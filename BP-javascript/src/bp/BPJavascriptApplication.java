@@ -16,10 +16,10 @@ import static java.nio.file.Paths.get;
  */
 public abstract class BPJavascriptApplication {
 
-    protected Arbiter arbiter;
+    protected Arbiter _arbiter;
     protected Scriptable _globalScope;
     protected BProgram _bp;
-    private String initScript;
+    private String _initScript;
 
     public Object evaluateInGlobalScope(String path) {
         Context cx = ContextFactory.getGlobal().enterContext();
@@ -104,8 +104,8 @@ public abstract class BPJavascriptApplication {
         } finally {
             Context.exit();
         }
-        initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/BP-javascript/src/bp/globalScopeInit.js";
-        evaluateInGlobalScope(initScript);
+        _initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/BP-javascript/src/bp/globalScopeInit.js";
+        evaluateInGlobalScope(_initScript);
     }
 
 }
