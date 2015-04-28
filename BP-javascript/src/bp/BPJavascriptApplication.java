@@ -104,7 +104,7 @@ public abstract class BPJavascriptApplication {
         } finally {
             Context.exit();
         }
-        _initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/BP-javascript/src/bp/globalScopeInit.js";
+        _initScript = "out/production/BP-javascript/bp/globalScopeInit.js";
         evaluateInGlobalScope(_initScript);
     }
 
