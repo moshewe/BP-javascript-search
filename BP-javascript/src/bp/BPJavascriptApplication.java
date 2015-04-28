@@ -116,7 +116,7 @@ public abstract class BPJavascriptApplication {
         } finally {
             Context.exit();
         }
-        String initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/BP-javascript/src/bp/globalScopeInit.js";
+        String initScript = "out/production/BP-javascript/bp/globalScopeInit.js";
         evaluateInGlobalScope(initScript);
     }
 

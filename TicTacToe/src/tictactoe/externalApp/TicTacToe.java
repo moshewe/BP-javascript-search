@@ -76,7 +76,8 @@ public class TicTacToe extends BPSearchApplication {
 
     @Override
     protected void addSimBThreads() {
-        String pref = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/TicTacToe/tictactoe/bThreads/";
+//       String pref = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/TicTacToe/tictactoe/bThreads/";
+//
 //        List<String> players = new ArrayList<>();
 //        players.add("ReqX");
 //        players.add("ReqO");
