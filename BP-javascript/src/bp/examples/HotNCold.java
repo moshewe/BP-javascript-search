@@ -26,7 +26,7 @@ public class HotNCold extends BPJavascriptApplication{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        evaluateInGlobalScope("./BP-javascript/src/bp/examples/HotNCold.js");
+        evaluateInGlobalScope("out/production/BP-javascript/bp/examples/HotNCold.js");
         setupBThreadScopes();
     }
 
