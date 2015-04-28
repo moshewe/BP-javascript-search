@@ -34,7 +34,7 @@ public abstract class BPSearchApplication extends BPJavascriptApplication {
         } finally {
             Context.exit();
         }
-        _initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/BP-javascript-search/src/bp/search/globalScopeInit.js";
+        _initScript = "out/production/BP-javascript-search/bp/search/globalScopeInit.js";
         evaluateInGlobalScope(_initScript);
     }
 

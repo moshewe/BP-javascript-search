@@ -95,13 +95,12 @@ public class TicTacToe extends BPSearchApplication {
         _bp.add(_xwins);
         _bp.add(_owins);
         _bp.add(declareWinner);
-//        _bp.add(_turns);
-        evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/EnforceTurns.js");
-//        _bp.add(stakenBThreadList);
-        evaluateInGlobalScope("./TicTacToe/src/tictactoe/bthreads/SquareTaken.js");
-//        _bp.add(_draw);
-        evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/DetectDraw.js");
-        evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/ReqAllMoves.js");
+
+
+        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/EnforceTurns.js");
+        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/SquareTaken.js");
+        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/DetectDraw.js");
+        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/ReqAllMoves.js");
     }
 
     @Override
@@ -126,7 +125,7 @@ public class TicTacToe extends BPSearchApplication {
                     Context.javaToJS(XEvents, _globalScope));
             _globalScope.put("oevents", _globalScope,
                     Context.javaToJS(OEvents, _globalScope));
-            initScript = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/globalScopeInit.js";
+            initScript = "out/production/TicTacToe/tictactoe/globalScopeInit.js";
             evaluateInGlobalScope(initScript);
         } finally {
             Context.exit();

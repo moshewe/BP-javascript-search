@@ -37,9 +37,9 @@ public class SimulatorBThread extends BThread {
     @Override
     protected void generateBThreadScope(Scriptable programScope) {
         super.generateBThreadScope(programScope);
-        String path = "/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/out/production/BP-javascript-search/bp/search/bthreads/simscope.js";
+        String path = "out/production/BP-javascript-search/bp/search/bthreads/simscope.js";
         Scriptable simScope = (Scriptable) evaluateInBThreadScope(path);
-//        bplog("simulation scope is " + simScope);
+
         simScope.setPrototype(_scope);
         _scope = simScope;
     }
