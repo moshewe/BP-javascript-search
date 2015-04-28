@@ -26,4 +26,8 @@ public class O extends Move {
 		return new X(row, col);
 	}
 
+	@Override
+	public String toString() {
+		return _name;
+	}
 }

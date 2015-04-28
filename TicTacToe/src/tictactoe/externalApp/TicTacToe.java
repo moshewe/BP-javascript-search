@@ -97,7 +97,8 @@ public class TicTacToe extends BPSearchApplication {
         _bp.add(declareWinner);
 //        _bp.add(_turns);
         evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/EnforceTurns.js");
-        _bp.add(stakenBThreadList);
+//        _bp.add(stakenBThreadList);
+        evaluateInGlobalScope("./TicTacToe/src/tictactoe/bthreads/SquareTaken.js");
 //        _bp.add(_draw);
         evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/DetectDraw.js");
         evaluateInGlobalScope("/Users/orelmosheweinstock/IdeaProjects/BP-javascript-search/TicTacToe/src/tictactoe/bThreads/ReqAllMoves.js");
