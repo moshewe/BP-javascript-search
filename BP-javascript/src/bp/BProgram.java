@@ -29,7 +29,7 @@ public class BProgram implements Cloneable, Serializable {
     /**
      * Stores the strings of the events that occurred in this run
      */
-    transient ArrayList<String> eventLog = new ArrayList<String>();
+    public transient ArrayList<String> eventLog = new ArrayList<String>();
     /**
      * The number of event Strings to be saved in the list
      */
@@ -43,7 +43,8 @@ public class BProgram implements Cloneable, Serializable {
      */
     transient private String name = this.getClass().getSimpleName();
     private Arbiter _arbiter;
-    private volatile BlockingQueue<BEvent> _externalEventsQueue;
+    private volatile BlockingQueue<BEvent> _inputEventQueue;
+    private volatile BlockingQueue<BEvent> _outputEventQueue;
 
     public void setArbiter(Arbiter arbiter) {
         this._arbiter = arbiter;
@@ -54,7 +55,8 @@ public class BProgram implements Cloneable, Serializable {
         _bthreads = new ArrayList<BThread>();
         _arbiter = new Arbiter();
         _arbiter.setProgram(this);
-        _externalEventsQueue = new ArrayBlockingQueue<>(100);
+        _inputEventQueue = new ArrayBlockingQueue<>(100);
+        _outputEventQueue = new ArrayBlockingQueue<>(100);
         bplog("BProgram instantiated");
     }
 
@@ -221,7 +223,12 @@ public class BProgram implements Cloneable, Serializable {
         BEvent next = _arbiter.nextEvent();
         if (next == null) {
             bplog("no event chosen, waiting for an external event to be fired...");
-            next = dequeueExternalEvent();
+            next = dequeueInputEvent();
+        }
+
+        if (next.isOutputEvent()) {
+            bplog("selected event is an output event.");
+            _outputEventQueue.add(next);
         }
 
         triggerEvent(next);
@@ -297,13 +304,29 @@ public class BProgram implements Cloneable, Serializable {
     }
 
     public void fireExternalEvent(BEvent e) {
-        _externalEventsQueue.add(e);
+        _inputEventQueue.add(e);
     }
 
-    public BEvent dequeueExternalEvent() {
+    private BEvent dequeueInputEvent() {
         BEvent e = null;
         try {
-            e = _externalEventsQueue.take();
+            e = _inputEventQueue.take();
+        } catch (InterruptedException ie) {
+            // TODO Auto-generated catch block
+            ie.printStackTrace();
+        }
+
+        return e;
+    }
+
+    private void publishEvent(BEvent e) {
+        _outputEventQueue.add(e);
+    }
+
+    public BEvent dequeueOutputEvent() {
+        BEvent e = null;
+        try {
+            e = _outputEventQueue.take();
         } catch (InterruptedException ie) {
             // TODO Auto-generated catch block
             ie.printStackTrace();

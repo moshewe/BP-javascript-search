@@ -15,6 +15,17 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
 
     protected String _name = this.getClass().getSimpleName();
 
+    public BEvent(String name, boolean outputEvent) {
+        _name = name;
+        _outputEvent = outputEvent;
+    }
+
+    public boolean isOutputEvent() {
+        return _outputEvent;
+    }
+
+    protected boolean _outputEvent = false;
+
     @Override
     public boolean contains(Object o) {
         return this.equals(o);

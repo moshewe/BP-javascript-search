@@ -43,9 +43,9 @@ public abstract class BPJavascriptApplication {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
-            BThread simBT = new BThread(name, func);
-            _bp.add(simBT);
-            return simBT;
+            BThread bt = new BThread(name, func);
+            _bp.add(bt);
+            return bt;
         } finally {
             Context.exit();
         }

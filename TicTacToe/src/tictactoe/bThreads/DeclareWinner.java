@@ -45,9 +45,9 @@ public class DeclareWinner extends BThread {
 //	public void runBThread() throws BPJException {
 //		bsync(none, new EventSet("WinnerDecided", XWin, OWin, draw), none);
 //		String msg;
-//		if (bp.getLastEvent() == XWin) {
+//		if (_program.getLastEvent() == XWin) {
 //			msg = "X Wins";
-//		} else if (bp.getLastEvent() == OWin) {
+//		} else if (_program.getLastEvent() == OWin) {
 //			msg = "O Wins";
 //		} else
 //			msg = "A Draw";

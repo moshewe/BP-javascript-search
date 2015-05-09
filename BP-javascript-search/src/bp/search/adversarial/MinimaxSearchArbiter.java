@@ -14,24 +14,14 @@ public class MinimaxSearchArbiter extends Arbiter {
 
     protected BPMinimaxSearch algorithm;
     protected BPGame game;
-//    public boolean gameOn;
 
     public MinimaxSearchArbiter(BPMinimaxSearch algorithm, BPGame game) {
         this.algorithm = algorithm;
         this.game = game;
     }
 
-//    public MinimaxSearchArbiter(BPMinimaxSearch algorithm, BPGame game) {
-//        this.algorithm = algorithm;
-//        this.game = game;
-//        _simBThreads = new ArrayList<>();
-//    }
-
     @Override
     protected BEvent nextEvent() {
-//        if (gameOn) {
-//            return makeDecision();
-//        } else {
         BPState bps = new BPState(getProgram());
         BPPlayer player = game.getPlayer(bps);
         if (player instanceof BPSystemPlayer) {
@@ -39,13 +29,10 @@ public class MinimaxSearchArbiter extends Arbiter {
         } else {
             return super.nextEvent();
         }
-//        }
     }
 
     public BEvent makeDecision() {
         BPState initialState = game.getInitialState();
-//        addSimBThreads(initialState);
-//        gameOn = true;
         bplog("=== STARTING SEARCH ===");
         BPAction decision = algorithm.makeDecision(initialState);
         BEvent choice;
@@ -70,14 +57,14 @@ public class MinimaxSearchArbiter extends Arbiter {
     }
 
 //    private void removeSimBThreads(BPState initialState) {
-//        initialState.bp.getBThreads().removeAll(_simBThreads);
+//        initialState._program.getBThreads().removeAll(_simBThreads);
 //        for (BThread sim : _simBThreads) {
 //            initialState.getBTstates().add(new BTState(sim));
 //        }
 //    }
 //
 //    private void addSimBThreads(BPState initialState) {
-//        initialState.bp.getBThreads().addAll(_simBThreads);
+//        initialState._program.getBThreads().addAll(_simBThreads);
 //        for (BThread sim : _simBThreads) {
 //            initialState.getBTstates().add(new BTState(sim));
 //        }

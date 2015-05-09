@@ -1,14 +1,19 @@
 package tictactoe.externalApp;
 
+import bp.BEvent;
 import bp.BThread;
 import bp.search.BPSearchApplication;
 import bp.search.adversarial.BPMinimaxSearch;
 import bp.search.adversarial.MinimaxSearchArbiter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
-import tictactoe.bThreads.*;
+import tictactoe.bThreads.DetectOWin;
+import tictactoe.bThreads.DetectXWin;
+import tictactoe.events.Move;
+import tictactoe.events.StaticEvents;
 import tictactoe.search.TTTGame;
 
+import javax.swing.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +22,7 @@ import java.util.Set;
 import static tictactoe.events.StaticEvents.*;
 
 /**
- * The main entry point to the TicTacToe program.
+ * The main entry point to the TicTacToe _program.
  */
 public class TicTacToe extends BPSearchApplication {
 
@@ -55,12 +60,13 @@ public class TicTacToe extends BPSearchApplication {
     }
 
     public GUI gui;
-    private EnforceTurns _turns;
-    private Collection<SquareTaken> _squaresTaken;
-    private DetectDraw _draw;
+    //set from js
+    public BThread _turns;
+    public Collection<BThread> _squaresTaken;
+    public BThread _draw;
     private Set<BThread> _xwins;
     private Set<BThread> _owins;
-    private DeclareWinner declareWinner;
+//    private DeclareWinner declareWinner;
 
     public TicTacToe() {
         super();
@@ -69,9 +75,7 @@ public class TicTacToe extends BPSearchApplication {
 //        bplog("bthreads added");
         setupBThreadScopes();
 //        bplog("setup bthread scopes");
-        TTTGame game = new TTTGame(_bp, _turns, _squaresTaken,
-                _draw, _xwins, _owins,
-                declareWinner, this, _simBThreads);
+        TTTGame game = new TTTGame(_bp);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
         _arbiter = new MinimaxSearchArbiter(search, game);
         _bp.setArbiter(_arbiter);
@@ -81,24 +85,20 @@ public class TicTacToe extends BPSearchApplication {
     }
 
     protected void addBThreads() {
-        UpdateDisplay _updateDisplay = new UpdateDisplay();
         _xwins = DetectXWin.constructInstances();
         _owins = DetectOWin.constructInstances();
-        _turns = new EnforceTurns();
-        _squaresTaken = SquareTaken.constructInstances();
-        declareWinner = new DeclareWinner(this);
+        _squaresTaken = new ArrayList<>();
+        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/SquareTaken.js");
+//        declareWinner = new DeclareWinner(this);
         ArrayList<BThread> stakenBThreadList = new ArrayList<BThread>(
                 _squaresTaken);
-        _draw = new DetectDraw();
 
-        _bp.add(_updateDisplay);
         _bp.add(_xwins);
         _bp.add(_owins);
-        _bp.add(declareWinner);
+//        _bp.add(declareWinner);
 
 
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/EnforceTurns.js");
-        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/SquareTaken.js");
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/DetectDraw.js");
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/ReqAllMoves.js");
     }
@@ -137,6 +137,41 @@ public class TicTacToe extends BPSearchApplication {
             ClassNotFoundException {
         TicTacToe ttt = new TicTacToe();
         ttt.start();
+        BEvent outputEvent = ttt._bp.dequeueOutputEvent();
+        String msg;
+        while (outputEvent != StaticEvents.gameOver) {
+            switch (outputEvent.getName()) {
+                case "O":
+                case "X":
+                    Move move = (Move) outputEvent;
+                    JButton btt = ttt.gui.buttons[move.row][move.col];
+                    btt.setText(move.displayString());
+                    break;
+                case "Draw":
+                    msg = "Draw";
+                    break;
+                case "OWin":
+                    msg = "O Wins";
+                case "XWin":
+                    msg = "X Wins";
+                    ttt.gui.message.setText(msg);
+                    ttt.gui.buttons[0][0].setEnabled(false);
+                    ttt.gui.buttons[0][1].setEnabled(false);
+                    ttt.gui.buttons[0][2].setEnabled(false);
+                    ttt.gui.buttons[1][0].setEnabled(false);
+                    ttt.gui.buttons[1][1].setEnabled(false);
+                    ttt.gui.buttons[1][2].setEnabled(false);
+                    ttt.gui.buttons[2][0].setEnabled(false);
+                    ttt.gui.buttons[2][1].setEnabled(false);
+                    ttt.gui.buttons[2][2].setEnabled(false);
+                    break;
+            }
+
+            outputEvent = ttt._bp.dequeueOutputEvent();
+
+        }
+
+        //announce game over?
     }
 
 }

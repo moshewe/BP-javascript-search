@@ -8,14 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class for capturing a state of a be-program.
+ * A class for capturing a state of a be-_program.
  */
 public class BPState {
 
+    public BProgram getProgram() {
+        return _program;
+    }
+
     /**
-     * The be-program whose state is captured
+     * The be-_program whose state is captured
      */
-    public final BProgram bp;
+    public final BProgram _program;
     /**
      * The states of the relevant be-threads
      */
@@ -23,16 +27,16 @@ public class BPState {
     public BEvent _lastEvent;
 
     public BPState(BPState other) {
-        this.bp = other.bp;
+        this._program = other._program;
         _lastEvent = other._lastEvent;
         _btstates = new ArrayList<BTState>();
-        for (BThread bt : bp.getBThreads()) {
+        for (BThread bt : _program.getBThreads()) {
             getBTstates().add(new BTState(bt));
         }
     }
 
     public BPState(BProgram bp) {
-        this.bp = bp;
+        this._program = bp;
         _lastEvent = bp.getLastEvent();
         _btstates = new ArrayList<BTState>();
         for (BThread bt : bp.getBThreads()) {
@@ -61,12 +65,8 @@ public class BPState {
         return _btstates;
     }
 
-    public BProgram getBp() {
-        return bp;
-    }
-
     public void restore() {
-        bp.setLastEvent(_lastEvent);
+        _program.setLastEvent(_lastEvent);
         for (BTState bts : _btstates) {
             bts.restore();
         }

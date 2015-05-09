@@ -37,7 +37,7 @@ public class BPAction implements Action, Comparable<BPAction> {
     public BPState apply(BPState bps) {
         bps.restore();
         bplog("APPLYING " + _ev);
-        BProgram bp = bps.getBp();
+        BProgram bp = bps.getProgram();
         bp.setLastEvent(_ev);
         BPState newBps = bps.copy();
         bplog("BEFORE: " + bps.toString());

@@ -11,6 +11,7 @@ public class X extends Move {
     public X(int row, int col) {
         super(row, col);
         this.setName("X(" + row + "," + col + ")");
+        _outputEvent = true;
     }
 
     /**

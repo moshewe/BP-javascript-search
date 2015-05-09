@@ -66,11 +66,11 @@ public class EventsOfClass extends ArrayList<Class<?>> implements EventSetInterf
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name + "s";
     }
 
     public String toString() {
-        return name;
+        return name + "s";
     }
 
 }

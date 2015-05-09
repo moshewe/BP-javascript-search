@@ -1,4 +1,4 @@
-bpjs.registerBThread("DetectDraw", function () {
+var bt = bpjs.registerBThread("DetectDraw", function () {
 //    java.lang.System.out.println("this = " + this);
 //    java.lang.System.out.println("this.bsync = " + this.bsync);
     bsync(none, moves, none);
@@ -21,3 +21,5 @@ bpjs.registerBThread("DetectDraw", function () {
 //    java.lang.System.out.println("DetectDraw move 9");
     bsync(draw, none, none);
 });
+
+ttt._draw = bt

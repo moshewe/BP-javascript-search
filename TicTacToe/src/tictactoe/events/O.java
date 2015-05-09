@@ -10,6 +10,7 @@ public class O extends Move {
 	public O(int row, int col) {
 		super(row, col);
 		setName("O(" + row + "," + col + ")");
+		_outputEvent = true;
 	}
 
 	/**

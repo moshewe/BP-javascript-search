@@ -2,6 +2,7 @@ package bp.search.adversarial;
 
 import aima.core.search.adversarial.Game;
 import bp.BEvent;
+import bp.BProgram;
 import bp.BThread;
 import bp.eventSets.RequestableInterface;
 import bp.search.BPAction;
@@ -22,10 +23,16 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
     protected static BPPlayer[] _players = {BPSystemPlayer.instance,
             EnvironmentPlayer.instance};
     protected Collection<BThread> _simBThreads = new ArrayList<>();
+    protected BProgram _program;
+    private BPPlayer _lastPlayer;
+
+    public BPGame(BProgram bp) {
+        _program = bp;
+    }
 
     @Override
     public BPState getInitialState() {
-        BPState state = makeInitialState();
+        BPState state = new BPState(_program);
         BPAction simStartAction = new BPAction(SimStartEvent.getInstance());
         bplog("creating simulation initial state...");
         BPState retState = simStartAction.apply(state);
@@ -33,11 +40,20 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
         return retState;
     }
 
-    protected abstract BPState makeInitialState();
-
     @Override
     public BPPlayer[] getPlayers() {
         return _players;
+    }
+
+    @Override
+    public BPPlayer getPlayer(BPState bpState) {
+        if (_lastPlayer == EnvironmentPlayer.instance) {
+            _lastPlayer = BPSystemPlayer.instance;
+            return BPSystemPlayer.instance;
+        } else {
+            _lastPlayer = EnvironmentPlayer.instance;
+            return EnvironmentPlayer.instance;
+        }
     }
 
     @Override
@@ -50,7 +66,7 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
             for (RequestableInterface req : bts.requestedEvents) {
 //                bplog("req=" + req);
                 for (BEvent e : req.getEventList()) {
-                    if (!state.getBp().isBlocked(e)) {
+                    if (!state.getProgram().isBlocked(e)) {
                         BPAction act = new BPAction(e);
                         ans.add(act);
 //                        bplog("added " + act);
@@ -61,6 +77,11 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
 
         bplog("actions possible: " + ans);
         return ans;
+    }
+
+    @Override
+    public BPState getResult(BPState state, BPAction action) {
+        return action.apply(state);
     }
 
     protected void bplog(String s) {
