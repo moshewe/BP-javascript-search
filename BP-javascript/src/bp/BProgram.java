@@ -19,25 +19,11 @@ public class BProgram implements Cloneable, Serializable {
      * removes itself explicitly
      */
     public transient Collection<BThread> _bthreads;
-    /**
-     * A variable counting the number of events fired since the beginning of the
-     * execution
-     */
-    // the index of the last event (= number of events -1)
-    transient public int _eventCounter = -1;
     static private Object error = null;
     /**
      * Stores the strings of the events that occurred in this run
      */
-    public transient ArrayList<String> eventLog = new ArrayList<String>();
-    /**
-     * The number of event Strings to be saved in the list
-     */
-    transient int eventLogSize = 100;
-    /**
-     * A variable containing the last fired event.
-     */
-    transient private BEvent lastEvent;
+    public transient Deque<BEvent> _eventLog = new LinkedList<>();
     /**
      * Program name is set to be the simple class name by default.
      */
@@ -60,7 +46,7 @@ public class BProgram implements Cloneable, Serializable {
         bplog("BProgram instantiated");
     }
 
-    private void bplog(String string) {
+    protected void bplog(String string) {
         if (debugMode)
             System.out.println("[" + this + "]: " + string);
     }
@@ -125,16 +111,11 @@ public class BProgram implements Cloneable, Serializable {
 
     public void printEventLog() {
 
-        System.out.println("\n ***** Printing last " + eventLog.size()
-                + " choice points out of " + (_eventCounter + 1) + ":");
+        System.out.println("\n ***** Printing last " + _eventLog.size()
+                + " choice points out of " + _eventLog.size() + ":");
 
-        if (_eventCounter < eventLogSize)
-            for (String eventString : eventLog)
-                System.out.println(eventString);
-        else
-            for (int i = 1; i <= eventLogSize; i++)
-                System.out.println(eventLog.get((_eventCounter + i)
-                        % eventLogSize));
+        for (BEvent ev : _eventLog)
+            System.out.println(ev);
 
         System.out.println("***** end event bplog ******");
     }
@@ -176,6 +157,7 @@ public class BProgram implements Cloneable, Serializable {
         for (BThread bt : getBThreads()) {
             bt.start();
         }
+
         bplog("********* " + getBThreads().size()
                 + " scenarios started **************");
         loop();
@@ -224,9 +206,7 @@ public class BProgram implements Cloneable, Serializable {
         if (next == null) {
             bplog("no event chosen, waiting for an external event to be fired...");
             next = dequeueInputEvent();
-        }
-
-        if (next.isOutputEvent()) {
+        } else if (next.isOutputEvent()) {
             bplog("selected event is an output event.");
             _outputEventQueue.add(next);
         }
@@ -254,14 +234,15 @@ public class BProgram implements Cloneable, Serializable {
     private void triggerEvent(BEvent lastEvent) {
         String st;
         if (lastEvent != null) {
-            _eventCounter++;
-            setLastEvent(lastEvent.getEvent());
-            st = new String("Event #" + _eventCounter + ": " + getLastEvent());
+            _eventLog.add(lastEvent);
+            st = new String("Event #" + _eventLog.size() + ": " + getLastEvent());
             bplog(st);
             bplog(">> starting bthread wakeup");
             // Interrupt and notify the be-threads that need to be
             // awaken
             for (BThread bt : _bthreads) {
+                if (bt.getName().startsWith("SquareTaken"))
+                    bplog(bt + " waitlist:" + bt.getWaitedEvents().toString());
                 boolean waited = bt.isWaited(lastEvent);
                 boolean requested = bt.isRequested(lastEvent);
                 if (waited || requested) {
@@ -274,19 +255,10 @@ public class BProgram implements Cloneable, Serializable {
                     "No events chosen. Waiting for external event or stuck in bsync...?");
             bplog(st);
         }
-
-        if (_eventCounter < eventLogSize)
-            eventLog.add(st); // at position _eventCounter
-        else
-            eventLog.set(_eventCounter % eventLogSize, st);
     }
 
     public BEvent getLastEvent() {
-        return lastEvent;
-    }
-
-    public void setLastEvent(BEvent lastEvent) {
-        this.lastEvent = lastEvent;
+        return _eventLog.getLast();
     }
 
     public Arbiter getArbiter() {

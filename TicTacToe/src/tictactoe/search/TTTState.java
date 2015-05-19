@@ -2,23 +2,25 @@ package tictactoe.search;
 
 import bp.BProgram;
 import bp.BThread;
+import bp.eventSets.EventSetInterface;
 import bp.search.BPState;
-import tictactoe.bThreads.DeclareWinner;
+import tictactoe.events.O;
 import tictactoe.events.X;
-import tictactoe.externalApp.TicTacToe;
 
-import java.util.Collection;
+import java.util.List;
 
 public class TTTState extends BPState {
 
-    public TTTState(BProgram bp, TicTacToe ttt,
-                    Collection<BThread> taken,
-                    DeclareWinner declareWinner) {
+    protected List<BThread> _taken;
+
+    public TTTState(BProgram bp, List<BThread> taken) {
         super(bp);
+        _taken = taken;
     }
 
     public TTTState(TTTState other) {
         super(other);
+        _taken = other._taken;
     }
 
     @Override
@@ -35,14 +37,26 @@ public class TTTState extends BPState {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         String[][] board = new String[3][3];
+        boolean found = false;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if(_program.eventLog.contains(new X(i,j))){
-                    board[i][j] = "X";
+                for (BThread t : _taken) {
+                    EventSetInterface blocked = t.getBlockedEvents();
+                    if (blocked.contains(new X(i, j))) {
+                        board[i][j] = "X";
+                        found = true;
+                    }
+
+                    if (blocked.contains(new O(i, j))) {
+                        board[i][j] = "O";
+                        found = true;
+                    }
                 }
-                else{
-                    board[i][j] = "O";
-                }
+
+                if (!found)
+                    board[i][j] = " ";
+
+                found = false;
             }
         }
         sb.append('\n');

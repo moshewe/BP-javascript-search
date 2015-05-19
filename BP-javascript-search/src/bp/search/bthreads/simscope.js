@@ -10,7 +10,7 @@ new Object {
         } else {
             var eset = new EventSet([requested, waited, simStart]);
 //            java.lang.System.out.println("eset = " + eset);
-            var ev = oldBsync(none, eset, none);
+            var ev = oldBsync(none, eset, blocked);
             if (ev == simStart) {
 //                bplog("setting simMode = true");
                 _simMode = true;

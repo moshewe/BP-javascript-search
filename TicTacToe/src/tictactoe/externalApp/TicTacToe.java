@@ -16,7 +16,7 @@ import tictactoe.search.TTTGame;
 import javax.swing.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import static tictactoe.events.StaticEvents.*;
@@ -62,7 +62,7 @@ public class TicTacToe extends BPSearchApplication {
     public GUI gui;
     //set from js
     public BThread _turns;
-    public Collection<BThread> _squaresTaken;
+    public List<BThread> _squaresTaken;
     public BThread _draw;
     private Set<BThread> _xwins;
     private Set<BThread> _owins;
@@ -75,7 +75,7 @@ public class TicTacToe extends BPSearchApplication {
 //        bplog("bthreads added");
         setupBThreadScopes();
 //        bplog("setup bthread scopes");
-        TTTGame game = new TTTGame(_bp);
+        TTTGame game = new TTTGame(_bp, _squaresTaken);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
         _arbiter = new MinimaxSearchArbiter(search, game);
         _bp.setArbiter(_arbiter);
@@ -89,14 +89,9 @@ public class TicTacToe extends BPSearchApplication {
         _owins = DetectOWin.constructInstances();
         _squaresTaken = new ArrayList<>();
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/SquareTaken.js");
-//        declareWinner = new DeclareWinner(this);
-        ArrayList<BThread> stakenBThreadList = new ArrayList<BThread>(
-                _squaresTaken);
 
         _bp.add(_xwins);
         _bp.add(_owins);
-//        _bp.add(declareWinner);
-
 
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/EnforceTurns.js");
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/DetectDraw.js");

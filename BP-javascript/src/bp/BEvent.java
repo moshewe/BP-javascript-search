@@ -7,6 +7,8 @@ import bp.exceptions.BPJRequestableSetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static bp.BProgramControls.debugMode;
+
 /**
  * A base class for events
  */
@@ -104,11 +106,11 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
     }
 
 
-//    @Override
-//    public String jsIdentifier() {
-//        return BPJavascriptApplication.toJSIdentifier(_name +
-//                hashCode());
-//    }
+    protected void bplog(String string) {
+        if (debugMode)
+            System.out.println(this + ": " + string);
+    }
+
 }
 
 /**

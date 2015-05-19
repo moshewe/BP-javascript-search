@@ -4,8 +4,7 @@ import bp.BEvent;
 import bp.BProgram;
 import bp.BThread;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * A class for capturing a state of a be-_program.
@@ -24,12 +23,12 @@ public class BPState {
      * The states of the relevant be-threads
      */
     private List<BTState> _btstates;
-    public BEvent _lastEvent;
+    protected Deque<BEvent> _eventLog;
 
     public BPState(BPState other) {
         this._program = other._program;
-        _lastEvent = other._lastEvent;
-        _btstates = new ArrayList<BTState>();
+        _btstates = new ArrayList<>();
+        _eventLog = new LinkedList<>(other._eventLog);
         for (BThread bt : _program.getBThreads()) {
             getBTstates().add(new BTState(bt));
         }
@@ -37,8 +36,8 @@ public class BPState {
 
     public BPState(BProgram bp) {
         this._program = bp;
-        _lastEvent = bp.getLastEvent();
-        _btstates = new ArrayList<BTState>();
+        _eventLog = new LinkedList<>(bp._eventLog);
+        _btstates = new ArrayList<>();
         for (BThread bt : bp.getBThreads()) {
             getBTstates().add(new BTState(bt));
         }
@@ -66,7 +65,7 @@ public class BPState {
     }
 
     public void restore() {
-        _program.setLastEvent(_lastEvent);
+        _program._eventLog = _eventLog;
         for (BTState bts : _btstates) {
             bts.restore();
         }

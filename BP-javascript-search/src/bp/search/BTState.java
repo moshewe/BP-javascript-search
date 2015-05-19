@@ -26,13 +26,13 @@ public class BTState {
      * Temporary storage for bpSync parameters
      */
     public transient RequestableInterface requestedEvents;
-    public transient EventSetInterface watchedEvents;
+    public transient EventSetInterface waitedEvents;
     public transient EventSetInterface blockedEvents;
 
     public BTState(BThread bt) {
         this.bt = bt;
         this.requestedEvents = bt.getRequestedEvents();
-        this.watchedEvents = bt.getWaitedEvents();
+        this.waitedEvents = bt.getWaitedEvents();
         this.blockedEvents = bt.getBlockedEvents();
         this._cont = bt.getCont();
         simMode = false;
@@ -64,7 +64,7 @@ public class BTState {
 
     public void restore() {
         bt.setRequestedEvents(requestedEvents);
-        bt.setWaitedEvents(watchedEvents);
+        bt.setWaitedEvents(waitedEvents);
         bt.setBlockedEvents(blockedEvents);
         bt.setCont(_cont);
         bt.revive();

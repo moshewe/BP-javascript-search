@@ -24,11 +24,11 @@ public class BThread implements Serializable {
     transient protected BProgram bp = null;
     public Scriptable _scope;
     protected Script _script = null;
-    ContinuationPending _cont;
-    RequestableInterface _request;
-    EventSetInterface _wait;
-    EventSetInterface _block;
-    private boolean _alive = true;
+    protected ContinuationPending _cont;
+    protected RequestableInterface _request;
+    protected EventSetInterface _wait;
+    protected EventSetInterface _block;
+    protected boolean _alive = true;
 
 
     public BThread() {
@@ -41,11 +41,6 @@ public class BThread implements Serializable {
         this();
         setScript(source);
     }
-
-//    public BThread(Script script){
-//        this();
-//        setScript(script);
-//    }
 
     public BThread(String name, String source) {
         this(source);
@@ -96,19 +91,11 @@ public class BThread implements Serializable {
     }
 
     public void setName(String name) {
-        this._name = name;
+        _name = name;
     }
 
     public String toString() {
         return "[" + _name + "]";
-    }
-
-    public BProgram getBProgram() {
-        return bp;
-    }
-
-    public void setBProgram(BProgram bp) {
-        this.bp = bp;
     }
 
     public void bplog(String string) {
@@ -170,15 +157,8 @@ public class BThread implements Serializable {
     }
 
     public void start() {
-//        if (_func != null) {
-//            _func.setParentScope(_scope);
-//
-//        }
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
-//        if (_scope == null) {
-//            bplog("null scope?");
-//        }
         try {
             bplog("started!");
             cx.executeScriptWithContinuations(_script, _scope);
@@ -212,9 +192,9 @@ public class BThread implements Serializable {
     public BEvent bsync(RequestableInterface requestedEvents,
                         EventSetInterface waitedEvents,
                         EventSetInterface blockedEvents) {
-        setRequestedEvents(requestedEvents);
-        setWaitedEvents(waitedEvents);
-        setBlockedEvents(blockedEvents);
+        _request = requestedEvents;
+        _wait = waitedEvents;
+        _block = blockedEvents;
         bplog("bsyncing with " + requestedEvents + ", " +
                 waitedEvents + ", " + blockedEvents);
         Context cx = ContextFactory.getGlobal().enterContext();
