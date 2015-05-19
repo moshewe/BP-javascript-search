@@ -7,8 +7,6 @@ import bp.search.adversarial.BPMinimaxSearch;
 import bp.search.adversarial.MinimaxSearchArbiter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
-import tictactoe.bThreads.DetectOWin;
-import tictactoe.bThreads.DetectXWin;
 import tictactoe.events.Move;
 import tictactoe.events.StaticEvents;
 import tictactoe.search.TTTGame;
@@ -85,13 +83,14 @@ public class TicTacToe extends BPSearchApplication {
     }
 
     protected void addBThreads() {
-        _xwins = DetectXWin.constructInstances();
-        _owins = DetectOWin.constructInstances();
+//        _xwins = DetectXWin.constructInstances();
+//        _owins = DetectOWin.constructInstances();
         _squaresTaken = new ArrayList<>();
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/SquareTaken.js");
 
-        _bp.add(_xwins);
-        _bp.add(_owins);
+//        _bp.add(_xwins);
+//        _bp.add(_owins);
+        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/DetectWin.js");
 
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/EnforceTurns.js");
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/DetectDraw.js");
