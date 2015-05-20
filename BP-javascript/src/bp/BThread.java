@@ -133,9 +133,15 @@ public class BThread implements Serializable {
 
     protected void generateBThreadScope(Scriptable programScope) {
         Context cx = ContextFactory.getGlobal().enterContext();
-        Scriptable btScope = (Scriptable) Context.javaToJS(this, programScope);
-        btScope.setPrototype(programScope);
-        _scope = btScope;
+        Scriptable btThisScope = (Scriptable) Context.javaToJS(this, programScope);
+        btThisScope.setPrototype(programScope);
+        _scope = btThisScope;
+        Scriptable tScope = (Scriptable) evaluateInBThreadScope("out/production/BP-javascript/higherlevelidioms/breakupon.js");
+        tScope.setPrototype(_scope);
+        _scope = tScope;
+        tScope = (Scriptable) evaluateInBThreadScope("out/production/BP-javascript/higherlevelidioms/whileblocking.js");
+        tScope.setPrototype(_scope);
+        _scope = tScope;
     }
 
     public Object evaluateInBThreadScope(String path) {
@@ -211,10 +217,6 @@ public class BThread implements Serializable {
         _wait = EventSetConstants.none;
         _block = EventSetConstants.none;
         _cont = null;
-    }
-
-    public Script getScript() {
-        return _script;
     }
 
     public void setScript(String source) {
