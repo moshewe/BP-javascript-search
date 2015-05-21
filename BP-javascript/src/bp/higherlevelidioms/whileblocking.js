@@ -1,7 +1,7 @@
 var oldBsync = bsync;
 
 new Object {
-    blocking: [],
+    blocking: new EventSet(),
 
     whileBlocking: function (blocked, f) {
         blocking.push(blocked);
@@ -10,6 +10,14 @@ new Object {
     },
 
     bsync: function (requested, wait, blocked) {
-        return oldBsync(requested, wait, blocked.concat(blocking));
+        var e;
+        if (!this.blocking.isEmpty()) {
+            var eset = new EventSet([blocked, this.blocking]);
+            e = oldBsync(requested, wait, eset);
+        } else {
+            e = oldBsync(requested, wait, blocked);
+        }
+
+        return e;
     }
 }
