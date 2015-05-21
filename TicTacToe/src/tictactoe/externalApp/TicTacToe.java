@@ -131,8 +131,8 @@ public class TicTacToe extends BPSearchApplication {
             ClassNotFoundException {
         TicTacToe ttt = new TicTacToe();
         ttt.start();
-        BEvent outputEvent = ttt._bp.dequeueOutputEvent();
-        String msg;
+        BEvent outputEvent = ttt._bp.getOutputEvent();
+        String msg = null;
         while (outputEvent != StaticEvents.gameOver) {
             switch (outputEvent.getName()) {
                 case "O":
@@ -143,29 +143,29 @@ public class TicTacToe extends BPSearchApplication {
                     break;
                 case "Draw":
                     msg = "Draw";
-                    break;
                 case "OWin":
                     msg = "O Wins";
                 case "XWin":
                     msg = "X Wins";
-                    ttt.gui.message.setText(msg);
-                    ttt.gui.buttons[0][0].setEnabled(false);
-                    ttt.gui.buttons[0][1].setEnabled(false);
-                    ttt.gui.buttons[0][2].setEnabled(false);
-                    ttt.gui.buttons[1][0].setEnabled(false);
-                    ttt.gui.buttons[1][1].setEnabled(false);
-                    ttt.gui.buttons[1][2].setEnabled(false);
-                    ttt.gui.buttons[2][0].setEnabled(false);
-                    ttt.gui.buttons[2][1].setEnabled(false);
-                    ttt.gui.buttons[2][2].setEnabled(false);
                     break;
             }
 
-            outputEvent = ttt._bp.dequeueOutputEvent();
+            if (msg != null) {
+                ttt.gui.message.setText(msg);
+                ttt.gui.buttons[0][0].setEnabled(false);
+                ttt.gui.buttons[0][1].setEnabled(false);
+                ttt.gui.buttons[0][2].setEnabled(false);
+                ttt.gui.buttons[1][0].setEnabled(false);
+                ttt.gui.buttons[1][1].setEnabled(false);
+                ttt.gui.buttons[1][2].setEnabled(false);
+                ttt.gui.buttons[2][0].setEnabled(false);
+                ttt.gui.buttons[2][1].setEnabled(false);
+                ttt.gui.buttons[2][2].setEnabled(false);
+            }
 
+            //announce game over?
+            outputEvent = ttt._bp.getOutputEvent();
         }
 
-        //announce game over?
     }
-
 }

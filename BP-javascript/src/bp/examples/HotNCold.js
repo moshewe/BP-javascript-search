@@ -15,4 +15,5 @@ bpjs.registerBThread("AlternatorBt", function () {
         bsync(none, coldEvent, hotEvent);
         bsync(none, hotEvent, coldEvent);
     }
+    bsync(allDone, none, none);
 });

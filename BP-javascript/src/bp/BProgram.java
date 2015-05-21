@@ -207,8 +207,8 @@ public class BProgram implements Cloneable, Serializable {
             bplog("no event chosen, waiting for an external event to be fired...");
             next = dequeueInputEvent();
         } else if (next.isOutputEvent()) {
-            bplog("selected event is an output event.");
-            _outputEventQueue.add(next);
+            bplog(next + " is an output event.");
+            publishEvent(next);
         }
 
         triggerEvent(next);
@@ -291,11 +291,11 @@ public class BProgram implements Cloneable, Serializable {
         return e;
     }
 
-    private void publishEvent(BEvent e) {
+    protected void publishEvent(BEvent e) {
         _outputEventQueue.add(e);
     }
 
-    public BEvent dequeueOutputEvent() {
+    public BEvent getOutputEvent() {
         BEvent e = null;
         try {
             e = _outputEventQueue.take();
