@@ -23,7 +23,7 @@ public class BProgram implements Cloneable, Serializable {
     /**
      * Stores the strings of the events that occurred in this run
      */
-    public transient Deque<BEvent> _eventLog = new LinkedList<>();
+    public transient Deque<BEvent> eventLog = new LinkedList<>();
     /**
      * Program name is set to be the simple class name by default.
      */
@@ -111,10 +111,10 @@ public class BProgram implements Cloneable, Serializable {
 
     public void printEventLog() {
 
-        System.out.println("\n ***** Printing last " + _eventLog.size()
-                + " choice points out of " + _eventLog.size() + ":");
+        System.out.println("\n ***** Printing last " + eventLog.size()
+                + " choice points out of " + eventLog.size() + ":");
 
-        for (BEvent ev : _eventLog)
+        for (BEvent ev : eventLog)
             System.out.println(ev);
 
         System.out.println("***** end event bplog ******");
@@ -234,8 +234,8 @@ public class BProgram implements Cloneable, Serializable {
     private void triggerEvent(BEvent lastEvent) {
         String st;
         if (lastEvent != null) {
-            _eventLog.add(lastEvent);
-            st = new String("Event #" + _eventLog.size() + ": " + getLastEvent());
+            eventLog.add(lastEvent);
+            st = new String("Event #" + eventLog.size() + ": " + getLastEvent());
             bplog(st);
             bplog(">> starting bthread wakeup");
             // Interrupt and notify the be-threads that need to be
@@ -258,7 +258,7 @@ public class BProgram implements Cloneable, Serializable {
     }
 
     public BEvent getLastEvent() {
-        return _eventLog.getLast();
+        return eventLog.getLast();
     }
 
     public Arbiter getArbiter() {

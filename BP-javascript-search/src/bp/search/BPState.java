@@ -36,7 +36,7 @@ public class BPState {
 
     public BPState(BProgram bp) {
         this._program = bp;
-        _eventLog = new LinkedList<>(bp._eventLog);
+        _eventLog = new LinkedList<>(bp.eventLog);
         _btstates = new ArrayList<>();
         for (BThread bt : bp.getBThreads()) {
             getBTstates().add(new BTState(bt));
@@ -65,7 +65,7 @@ public class BPState {
     }
 
     public void restore() {
-        _program._eventLog = _eventLog;
+        _program.eventLog = _eventLog;
         for (BTState bts : _btstates) {
             bts.restore();
         }

@@ -38,12 +38,10 @@ public class BPAction implements Action, Comparable<BPAction> {
         bps.restore();
         bplog("APPLYING " + _ev);
         BProgram bp = bps.getProgram();
-        bp._eventLog.add(_ev);
+        bp.eventLog.add(_ev);
         BPState newBps = bps.copy();
         bplog("BEFORE: " + bps.toString());
         for (BTState bts : newBps.getBTstates()) {
-            if (bts.bt.getName().startsWith("SquareTaken"))
-                bplog(bts.bt.getWaitedEvents().toString());
             if (bts.waitedEvents.contains(_ev)
                     || bts.requestedEvents.contains(_ev)) {
                 BThread bt = bts.bt;

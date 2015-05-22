@@ -62,7 +62,9 @@ public class GUI implements ActionListener, Serializable {
 	public void actionPerformed(ActionEvent a) {
 		final TTTButton btt = ((TTTButton) a.getSource());
 		// _program.fireExternalEvent(new Click(btt._row, btt._col));
-		bp.fireExternalEvent(new X(btt.row, btt.col));
+        X move = new X(btt.row, btt.col);
+        bp.fireExternalEvent(move);
+        btt.setText(move.displayString());
 	}
 
 	/**

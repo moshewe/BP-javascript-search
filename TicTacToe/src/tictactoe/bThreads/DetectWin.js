@@ -3,7 +3,7 @@ function genDetectWinBT(first, second, third, winEvent) {
         bsync(none, first, none);
         bsync(none, second, none);
         bsync(none, third, none);
-        var eset = new EventSet([moves, Draw]);
+        var eset = new EventSet([moves, draw]);
         bsync(winEvent, none, eset);
     }
 }

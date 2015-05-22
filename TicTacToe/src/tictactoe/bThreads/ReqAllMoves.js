@@ -7,7 +7,7 @@ for (var i = 2; i >= 0; i--) {
             var func = function () {
                 bsync(playerMove, move, none);
 //                bplog("move is " + move.toString());
-                bsync(none, none, move);
+//                bsync(none, none, move);
             };
             bpjs.registerSimBThread("ReqMove" + playerMove, func);
         });
