@@ -49,13 +49,4 @@ public class EventSet extends HashSet<EventSetInterface> implements
         }
     }
 
-//    @Override
-//    public String jsIdentifier() {
-//        String id = BPJavascriptApplication.toJSIdentifier(name) + "_";
-//        for (Iterator<EventSetInterface> it = iterator(); it.hasNext(); ) {
-//            EventSetInterface next = it.next();
-//            id+= next.jsIdentifier() + "_";
-//        }
-//        return id;
-//    }
 }

@@ -37,10 +37,10 @@ public class BPAction implements Action, Comparable<BPAction> {
     public BPState apply(BPState bps) {
         bps.restore();
         bplog("APPLYING " + _ev);
+        bplog("BEFORE: " + bps.toString());
         BProgram bp = bps.getProgram();
         bp.eventLog.add(_ev);
         BPState newBps = bps.copy();
-        bplog("BEFORE: " + bps.toString());
         for (BTState bts : newBps.getBTstates()) {
             if (bts.waitedEvents.contains(_ev)
                     || bts.requestedEvents.contains(_ev)) {

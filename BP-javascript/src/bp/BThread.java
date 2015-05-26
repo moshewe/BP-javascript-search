@@ -136,10 +136,10 @@ public class BThread implements Serializable {
         Scriptable btThisScope = (Scriptable) Context.javaToJS(this, programScope);
         btThisScope.setPrototype(programScope);
         _scope = btThisScope;
-        Scriptable tScope = (Scriptable) evaluateInBThreadScope("out/production/BP-javascript/bp/higherlevelidioms/breakupon.js");
+        Scriptable tScope = (Scriptable) evaluateInBThreadScope("out/production/BP-javascript/bp/highlevelidioms/breakupon.js");
         tScope.setPrototype(_scope);
         _scope = tScope;
-        tScope = (Scriptable) evaluateInBThreadScope("out/production/BP-javascript/bp/higherlevelidioms/whileblocking.js");
+        tScope = (Scriptable) evaluateInBThreadScope("out/production/BP-javascript/bp/highlevelidioms/whileblocking.js");
         tScope.setPrototype(_scope);
         _scope = tScope;
     }
