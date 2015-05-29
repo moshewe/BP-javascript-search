@@ -19,9 +19,9 @@ public class EventStack extends Stack<EventSetInterface>
         }
     }
 
-    public EventStack(String _name, EventSetInterface... esis) {
+    public EventStack(String name, EventSetInterface... esis) {
         this(esis);
-        this._name = _name;
+        this._name = name;
     }
 
     @Override

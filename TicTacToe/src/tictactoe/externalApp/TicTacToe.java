@@ -8,7 +8,6 @@ import bp.search.adversarial.MinimaxSearchArbiter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import tictactoe.events.Move;
-import tictactoe.events.StaticEvents;
 import tictactoe.search.TTTGame;
 
 import javax.swing.*;
@@ -133,7 +132,7 @@ public class TicTacToe extends BPSearchApplication {
         ttt.start();
         BEvent outputEvent = ttt._bp.getOutputEvent();
         String msg = null;
-        while (outputEvent != StaticEvents.gameOver) {
+        while (true) {
             switch (outputEvent.getName()) {
                 case "O":
                 case "X":
@@ -161,6 +160,7 @@ public class TicTacToe extends BPSearchApplication {
                 ttt.gui.buttons[2][0].setEnabled(false);
                 ttt.gui.buttons[2][1].setEnabled(false);
                 ttt.gui.buttons[2][2].setEnabled(false);
+                break;
             }
 
             //announce game over?

@@ -23,12 +23,12 @@ public class BPState {
      * The states of the relevant be-threads
      */
     private List<BTState> _btstates;
-    protected Deque<BEvent> _eventLog;
+    protected Deque<BEvent> eventLog;
 
     public BPState(BPState other) {
         this._program = other._program;
+        eventLog = new LinkedList<>(other.eventLog);
         _btstates = new ArrayList<>();
-        _eventLog = new LinkedList<>(other._eventLog);
         for (BThread bt : _program.getBThreads()) {
             getBTstates().add(new BTState(bt));
         }
@@ -36,7 +36,7 @@ public class BPState {
 
     public BPState(BProgram bp) {
         this._program = bp;
-        _eventLog = new LinkedList<>(bp.eventLog);
+        eventLog = new LinkedList<>(bp.eventLog);
         _btstates = new ArrayList<>();
         for (BThread bt : bp.getBThreads()) {
             getBTstates().add(new BTState(bt));
@@ -65,7 +65,7 @@ public class BPState {
     }
 
     public void restore() {
-        _program.eventLog = _eventLog;
+        _program.eventLog = new LinkedList<>(eventLog);
         for (BTState bts : _btstates) {
             bts.restore();
         }

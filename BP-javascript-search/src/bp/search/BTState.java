@@ -20,7 +20,7 @@ public class BTState {
     /**
      * Continuation object.
      */
-    protected ContinuationPending _cont;
+    protected ContinuationPending cont;
 
     /**
      * Temporary storage for bpSync parameters
@@ -34,7 +34,7 @@ public class BTState {
         this.requestedEvents = bt.getRequestedEvents();
         this.waitedEvents = bt.getWaitedEvents();
         this.blockedEvents = bt.getBlockedEvents();
-        this._cont = bt.getCont();
+        this.cont = bt.getCont();
         simMode = false;
     }
 
@@ -66,7 +66,7 @@ public class BTState {
         bt.setRequestedEvents(requestedEvents);
         bt.setWaitedEvents(waitedEvents);
         bt.setBlockedEvents(blockedEvents);
-        bt.setCont(_cont);
+        bt.setCont(cont);
         bt.revive();
         //need to implement visitor someday
         if(simMode){
@@ -81,7 +81,7 @@ public class BTState {
     }
 
     public ContinuationPending getCont() {
-        return _cont;
+        return cont;
     }
 
 }

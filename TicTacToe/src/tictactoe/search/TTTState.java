@@ -28,11 +28,6 @@ public class TTTState extends BPState {
     }
 
     @Override
-    public void restore() {
-        super.restore();
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         String[][] board = new String[3][3];

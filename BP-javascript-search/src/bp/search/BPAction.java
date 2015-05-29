@@ -35,18 +35,19 @@ public class BPAction implements Action, Comparable<BPAction> {
      * @throws IOException
      */
     public BPState apply(BPState bps) {
-        bps.restore();
         bplog("APPLYING " + _ev);
+        bps.restore();
         bplog("BEFORE: " + bps.toString());
-        BProgram bp = bps.getProgram();
-        bp.eventLog.add(_ev);
         BPState newBps = bps.copy();
+        BProgram bp = newBps.getProgram();
+        bp.eventLog.add(_ev);
+        newBps.eventLog.add(_ev);
         for (BTState bts : newBps.getBTstates()) {
             if (bts.waitedEvents.contains(_ev)
                     || bts.requestedEvents.contains(_ev)) {
                 BThread bt = bts.bt;
                 bt.resume(_ev);
-                bts._cont = bt.getCont();
+                bts.cont = bt.getCont();
                 bts.requestedEvents = bt.getRequestedEvents();
                 bts.waitedEvents = bt.getWaitedEvents();
                 bts.blockedEvents = bt.getBlockedEvents();

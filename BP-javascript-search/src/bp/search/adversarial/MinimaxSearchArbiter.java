@@ -50,24 +50,8 @@ public class MinimaxSearchArbiter extends Arbiter {
         }
         bplog("== END OF METRICS ==");
 
-//        removeSimBThreads(initialState);
         initialState.restore();
-//        gameOn = false;
         return choice;
     }
-
-//    private void removeSimBThreads(BPState initialState) {
-//        initialState._program.getBThreads().removeAll(_simBThreads);
-//        for (BThread sim : _simBThreads) {
-//            initialState.getBTstates().add(new BTState(sim));
-//        }
-//    }
-//
-//    private void addSimBThreads(BPState initialState) {
-//        initialState._program.getBThreads().addAll(_simBThreads);
-//        for (BThread sim : _simBThreads) {
-//            initialState.getBTstates().add(new BTState(sim));
-//        }
-//    }
 
 }
