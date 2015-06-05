@@ -16,7 +16,7 @@ import java.util.List;
  */
 public abstract class BPSearchApplication extends BPJavascriptApplication {
 
-    protected String _initScript;
+    private String _initScript;
     protected List<BThread> _simBThreads = new ArrayList<>();
 
 

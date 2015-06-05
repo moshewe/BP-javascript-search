@@ -28,7 +28,7 @@ var permutations = [
   var move = winConf[0];
   var winEvent = winConf[1];
   //    java.lang.System.out.println(move);
-  java.lang.System.out.println("adding " + winEvent " rows");
+  // java.lang.System.out.println("adding " + winEvent + " rows");
   for (var row = 2; row >= 0; row--) {
     permutations.forEach(function(perm) {
       var first = new move(row, perm[0]);

@@ -15,7 +15,7 @@ public class BTState {
      * The be-thread whose state is captured
      */
     public final BThread bt;
-    public boolean simMode;
+//    public boolean simMode;
 
     /**
      * Continuation object.
@@ -35,13 +35,13 @@ public class BTState {
         this.waitedEvents = bt.getWaitedEvents();
         this.blockedEvents = bt.getBlockedEvents();
         this.cont = bt.getCont();
-        simMode = false;
+//        simMode = false;
     }
 
     // need to implement visitor someday
     public BTState(SimulatorBThread bt){
         this((BThread) bt);
-        this.simMode = bt._simMode;
+//        this.simMode = bt._simMode;
     }
 
     @Override
@@ -63,25 +63,30 @@ public class BTState {
     }
 
     public void restore() {
+//        bplog("RESTORE FROM:");
+//        bplog("request = " + bt.getRequestedEvents());
+//        bplog("wait = " + bt.getWaitedEvents());
+//        bplog("block = " + bt.getBlockedEvents());
         bt.setRequestedEvents(requestedEvents);
         bt.setWaitedEvents(waitedEvents);
         bt.setBlockedEvents(blockedEvents);
+//        bplog("RESTORED TO:");
+//        bplog("request = " + bt.getRequestedEvents());
+//        bplog("wait = " + bt.getWaitedEvents());
+//        bplog("block = " + bt.getBlockedEvents());
         bt.setCont(cont);
         bt.revive();
         //need to implement visitor someday
-        if(simMode){
-            ((SimulatorBThread) bt)._simMode = simMode;
-            bplog("restoring " + bt + " simMode to " + simMode);
-        }
+//        if(simMode){
+//            ((SimulatorBThread) bt)._simMode = simMode;
+//            bplog("restoring " + bt + " simMode to " + simMode);
+//        }
 //		System.out.println("restored " + bt);
     }
 
     private void bplog(String s) {
-        System.out.println("[BTState]: ");
-    }
-
-    public ContinuationPending getCont() {
-        return cont;
+        System.out.println("[BTState:" +
+                bt.getName() + "]: ");
     }
 
 }

@@ -10,13 +10,13 @@ import bp.search.adversarial.players.BPSystemPlayer;
 /**
  * @author moshewe
  */
-public class MinimaxSearchArbiter extends Arbiter {
+public class AdversarialSearchArbiter extends Arbiter {
 
-    protected BPMinimaxSearch algorithm;
+    protected BPAdversarialSearch _algorithm;
     protected BPGame game;
 
-    public MinimaxSearchArbiter(BPMinimaxSearch algorithm, BPGame game) {
-        this.algorithm = algorithm;
+    public AdversarialSearchArbiter(BPAdversarialSearch algorithm, BPGame game) {
+        this._algorithm = algorithm;
         this.game = game;
     }
 
@@ -34,7 +34,7 @@ public class MinimaxSearchArbiter extends Arbiter {
     public BEvent makeDecision() {
         BPState initialState = game.getInitialState();
         bplog("=== STARTING SEARCH ===");
-        BPAction decision = algorithm.makeDecision(initialState);
+        BPAction decision = _algorithm.makeDecision(initialState);
         BEvent choice;
         if (decision == null) {
             bplog("all decisions are value=-inf! chosen at random...");
@@ -44,7 +44,7 @@ public class MinimaxSearchArbiter extends Arbiter {
         }
         bplog("=== SEARCH FINISHED ===");
         bplog("== METRICS ==");
-        Metrics metrics = algorithm.getMetrics();
+        Metrics metrics = _algorithm.getMetrics();
         for (String k : metrics.keySet()) {
             bplog(k + " = " + metrics.get(k));
         }

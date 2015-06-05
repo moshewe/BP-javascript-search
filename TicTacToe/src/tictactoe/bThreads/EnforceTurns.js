@@ -4,5 +4,3 @@ var turns = bpjs.registerBThread("EnforceTurns", function () {
         bsync(none, oevents, xevents);
     }
 });
-
-ttt._turns = turns

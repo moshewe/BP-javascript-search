@@ -1,22 +1,18 @@
-var oldBsync = bsync;
+var _bsync = bsync;
 new Object {
-    bsync: function (requested, waited, blocked) {
-//        java.lang.System.out.println("in simulation bthread bsync");
-//        java.lang.System.out.println("req = " + requested);
-//        java.lang.System.out.println("waited = " + waited);
-//        java.lang.System.out.println("simStart = " + simStart);
-        if (_simMode) {
-            return oldBsync(requested, waited, blocked);
-        } else {
-            var eset = new EventSet([requested, waited, simStart]);
-//            java.lang.System.out.println("eset = " + eset);
-            var ev = oldBsync(none, eset, blocked);
-            if (ev == simStart) {
-//                bplog("setting simMode = true");
-                _simMode = true;
-                return bsync(requested, waited, blocked);
-            }
-            return ev;
-        }
+  simMode: false,
+  bsync: function(requested, waited, blocked) {
+    if (this.simMode) {
+      return _bsync(requested, waited, blocked);
+    } else {
+      var eset = new EventSet([requested, waited, simStart]);
+      var ev = _bsync(none, eset, blocked);
+      if (ev == simStart) {
+        //                bplog("setting simMode = true");
+        this.simMode = true;
+        return bsync(requested, waited, blocked);
+      }
+      return ev;
     }
+  }
 }

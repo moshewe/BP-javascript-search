@@ -1,25 +1,9 @@
-var bt = bpjs.registerBThread("DetectDraw", function () {
-//    java.lang.System.out.println("this = " + this);
-//    java.lang.System.out.println("this.bsync = " + this.bsync);
+bpjs.registerBThread("DetectDraw", function() {
+  var i;
+  for (i = 1; i < 10; i++) {
     bsync(none, moves, none);
-//    java.lang.System.out.println("DetectDraw move 1");
-    bsync(none, moves, none);
-//    java.lang.System.out.println("DetectDraw move 2");
-    bsync(none, moves, none);
-//    java.lang.System.out.println("DetectDraw move 3")
-    bsync(none, moves, none);
-//    java.lang.System.out.println("DetectDraw move 4");
-    bsync(none, moves, none);
-//    java.lang.System.out.println("DetectDraw move 5");
-    bsync(none, moves, none);
-//    java.lang.System.out.println("DetectDraw move 6");
-    bsync(none, moves, none);
-//    java.lang.System.out.println("DetectDraw move 7");
-    bsync(none, moves, none);
-//    java.lang.System.out.println("DetectDraw move 8");
-    bsync(none, moves, none);
-//    java.lang.System.out.println("DetectDraw move 9");
-    bsync(draw, none, none);
-});
+    bplog("counted " + i + " moves...")
+  }
 
-ttt._draw = bt
+  bsync(draw, none, moves);
+});

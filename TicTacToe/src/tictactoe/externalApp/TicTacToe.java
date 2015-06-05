@@ -3,8 +3,9 @@ package tictactoe.externalApp;
 import bp.BEvent;
 import bp.BThread;
 import bp.search.BPSearchApplication;
+import bp.search.adversarial.BPAdversarialSearch;
 import bp.search.adversarial.BPMinimaxSearch;
-import bp.search.adversarial.MinimaxSearchArbiter;
+import bp.search.adversarial.AdversarialSearchArbiter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import tictactoe.events.Move;
@@ -14,7 +15,6 @@ import javax.swing.*;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static tictactoe.events.StaticEvents.*;
 
@@ -23,74 +23,27 @@ import static tictactoe.events.StaticEvents.*;
  */
 public class TicTacToe extends BPSearchApplication {
 
-    private String initScript;
-
-    public static class Coordinates implements Comparable<Coordinates> {
-        public final int row;
-        public final int col;
-
-        public Coordinates(int row, int col) {
-            this.row = row;
-            this.col = col;
-        }
-
-        @Override
-        public int compareTo(Coordinates o) {
-            if (row - o.row < 0) {
-                return -1;
-            }
-
-            if (col - o.col < 0) {
-                return -1;
-            }
-
-            if (0 < row - o.row) {
-                return 1;
-            }
-
-            if (0 < col - o.col) {
-                return 1;
-            }
-
-            return 0;
-        }
-    }
-
+    private String _initScript;
     public GUI gui;
-    //set from js
-    public BThread _turns;
     public List<BThread> _squaresTaken;
-    public BThread _draw;
-    private Set<BThread> _xwins;
-    private Set<BThread> _owins;
-//    private DeclareWinner declareWinner;
 
     public TicTacToe() {
         super();
         _bp.setName("TicTacToe");
         addBThreads();
-//        bplog("bthreads added");
         setupBThreadScopes();
-//        bplog("setup bthread scopes");
         TTTGame game = new TTTGame(_bp, _squaresTaken);
         BPMinimaxSearch search = new BPMinimaxSearch(game);
-        _arbiter = new MinimaxSearchArbiter(search, game);
+        _arbiter = new AdversarialSearchArbiter((BPAdversarialSearch) search, game);
         _bp.setArbiter(_arbiter);
-//        addBThreads();
         // Start the graphical user interface
         gui = new GUI(_bp);
     }
 
     protected void addBThreads() {
-//        _xwins = DetectXWin.constructInstances();
-//        _owins = DetectOWin.constructInstances();
         _squaresTaken = new ArrayList<>();
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/SquareTaken.js");
-
-//        _bp.add(_xwins);
-//        _bp.add(_owins);
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/DetectWin.js");
-
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/EnforceTurns.js");
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/DetectDraw.js");
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/ReqAllMoves.js");
@@ -118,8 +71,8 @@ public class TicTacToe extends BPSearchApplication {
                     Context.javaToJS(XEvents, _globalScope));
             _globalScope.put("oevents", _globalScope,
                     Context.javaToJS(OEvents, _globalScope));
-            initScript = "out/production/TicTacToe/tictactoe/globalScopeInit.js";
-            evaluateInGlobalScope(initScript);
+            _initScript = "out/production/TicTacToe/tictactoe/globalScopeInit.js";
+            evaluateInGlobalScope(_initScript);
         } finally {
             Context.exit();
         }
