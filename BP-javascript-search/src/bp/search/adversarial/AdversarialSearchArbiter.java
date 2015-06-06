@@ -6,6 +6,7 @@ import bp.BEvent;
 import bp.search.BPAction;
 import bp.search.BPState;
 import bp.search.adversarial.players.BPSystemPlayer;
+import bp.search.events.SimStartEvent;
 
 /**
  * @author moshewe
@@ -33,8 +34,9 @@ public class AdversarialSearchArbiter extends Arbiter {
 
     public BEvent makeDecision() {
         BPState initialState = game.getInitialState();
+        BPState simStartState = applySimStart(initialState);
         bplog("=== STARTING SEARCH ===");
-        BPAction decision = _algorithm.makeDecision(initialState);
+        BPAction decision = _algorithm.makeDecision(simStartState);
         BEvent choice;
         if (decision == null) {
             bplog("all decisions are value=-inf! chosen at random...");
@@ -42,6 +44,7 @@ public class AdversarialSearchArbiter extends Arbiter {
         } else {
             choice = decision.getEvent();
         }
+
         bplog("=== SEARCH FINISHED ===");
         bplog("== METRICS ==");
         Metrics metrics = _algorithm.getMetrics();
@@ -50,8 +53,17 @@ public class AdversarialSearchArbiter extends Arbiter {
         }
         bplog("== END OF METRICS ==");
 
+        game.setLastPlayer(BPSystemPlayer.getInstance());
         initialState.restore();
         return choice;
+    }
+
+    protected BPState applySimStart(BPState state) {
+        BPAction simStartAction = new BPAction(SimStartEvent.getInstance());
+        bplog("creating simulation initial state...");
+        BPState retState = simStartAction.apply(state);
+        bplog("FINISHED creating simulation initial state...");
+        return retState;
     }
 
 }

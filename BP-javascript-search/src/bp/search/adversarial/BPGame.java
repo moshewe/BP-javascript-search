@@ -9,7 +9,6 @@ import bp.search.BPState;
 import bp.search.BTState;
 import bp.search.adversarial.players.BPSystemPlayer;
 import bp.search.adversarial.players.EnvironmentPlayer;
-import bp.search.events.SimStartEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,24 +20,23 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
     protected static BPPlayer[] _players = {BPSystemPlayer.instance,
             EnvironmentPlayer.instance};
     protected BProgram _program;
-    private BPPlayer _lastPlayer;
+
+    public void setLastPlayer(BPPlayer lastPlayer) {
+        _lastPlayer = lastPlayer;
+    }
+
+    protected BPPlayer _lastPlayer;
 
     public BPGame(BProgram bp) {
         _program = bp;
+        _lastPlayer = BPSystemPlayer.instance;
     }
 
     @Override
     public BPState getInitialState() {
         BPState state = new BPState(_program);
-        return applySimStart(state);
-    }
-
-    protected BPState applySimStart(BPState state) {
-        BPAction simStartAction = new BPAction(SimStartEvent.getInstance());
-        bplog("creating simulation initial state...");
-        BPState retState = simStartAction.apply(state);
-        bplog("FINISHED creating simulation initial state...");
-        return retState;
+//        return applySimStart(state);
+        return state;
     }
 
     @Override

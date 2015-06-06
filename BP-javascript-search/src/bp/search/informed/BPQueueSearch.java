@@ -7,7 +7,6 @@ import aima.core.search.framework.QueueSearch;
 import bp.search.BPAction;
 import bp.search.BPState;
 import bp.search.framework.BPNode;
-import bp.search.framework.BPProblem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +16,17 @@ import java.util.List;
  */
 public class BPQueueSearch extends QueueSearch {
 
-    public List<Node> getResultingNodesToAddToFrontier(BPNode nodeToExpand, BPProblem p) {
+    @Override
+    public List<Node> getResultingNodesToAddToFrontier(Node nodeToExpand, Problem p) {
         List<Node> ans = new ArrayList<>();
-        for (Action action : p.getActionsFunction().actions(nodeToExpand)) {
+            BPState bpState = (BPState) nodeToExpand.getState();
+        for (Action action : p.getActionsFunction().actions(bpState)) {
             BPAction bpAction = (BPAction) action;
-            BPState next = bpAction.apply(nodeToExpand.getState());
-            double stepCost = p.getStepCostFunction().c(nodeToExpand.getState(), action, next);
+            BPState next = bpAction.apply(bpState);
+            double stepCost = p.getStepCostFunction().c(bpState, action, next);
             ans.add(new BPNode(next, nodeToExpand, bpAction, stepCost));
         }
 
         return ans;
-    }
-
-    @Override
-    public List<Node> getResultingNodesToAddToFrontier(Node nodeToExpand, Problem p) {
-        return getResultingNodesToAddToFrontier((BPNode) nodeToExpand, (BPProblem) p);
     }
 }

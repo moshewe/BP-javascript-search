@@ -1,20 +1,19 @@
 package tictactoe.externalApp;
 
 import bp.BEvent;
-import bp.BThread;
 import bp.search.BPSearchApplication;
-import bp.search.adversarial.BPAdversarialSearch;
-import bp.search.adversarial.BPMinimaxSearch;
 import bp.search.adversarial.AdversarialSearchArbiter;
+import bp.search.adversarial.BPAdversarialSearch;
+import bp.search.adversarial.BPAlphaBetaSearch;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import tictactoe.events.Move;
+import tictactoe.events.O;
+import tictactoe.events.X;
 import tictactoe.search.TTTGame;
 
 import javax.swing.*;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static tictactoe.events.StaticEvents.*;
 
@@ -25,23 +24,30 @@ public class TicTacToe extends BPSearchApplication {
 
     private String _initScript;
     public GUI gui;
-    public List<BThread> _squaresTaken;
 
     public TicTacToe() {
         super();
         _bp.setName("TicTacToe");
         addBThreads();
         setupBThreadScopes();
-        TTTGame game = new TTTGame(_bp, _squaresTaken);
-        BPMinimaxSearch search = new BPMinimaxSearch(game);
+        TTTGame game = new TTTGame(_bp);
+        BPAlphaBetaSearch search = new BPAlphaBetaSearch(game);
         _arbiter = new AdversarialSearchArbiter((BPAdversarialSearch) search, game);
+//        BPGoalTest goalTest = new TTTGoalTest();
+//        HeuristicFunction heuristic = new TTTHeuristicFunction();
+//        BPQueueSearch bpQSearch = new BPQueueSearch();
+//        _arbiter = new InformedSearchArbiter(
+//                new BPAStarSearch(bpQSearch,
+//                        heuristic),
+//                new TTTInitStateGenerator(_bp),
+//                goalTest);
         _bp.setArbiter(_arbiter);
         // Start the graphical user interface
         gui = new GUI(_bp);
     }
 
     protected void addBThreads() {
-        _squaresTaken = new ArrayList<>();
+//        _squaresTaken = new ArrayList<>();
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/SquareTaken.js");
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/DetectWin.js");
         evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/EnforceTurns.js");
@@ -81,25 +87,28 @@ public class TicTacToe extends BPSearchApplication {
     public static void main(String[] args) throws MalformedURLException,
             InstantiationException, IllegalAccessException,
             ClassNotFoundException {
-        TicTacToe ttt = new TicTacToe();
-        ttt.start();
+        final TicTacToe ttt = new TicTacToe();
+        Thread tttThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ttt.start();
+            }
+        });
+        tttThread.start();
         BEvent outputEvent = ttt._bp.getOutputEvent();
         String msg = null;
         while (true) {
-            switch (outputEvent.getName()) {
-                case "O":
-                case "X":
-                    Move move = (Move) outputEvent;
-                    JButton btt = ttt.gui.buttons[move.row][move.col];
-                    btt.setText(move.displayString());
-                    break;
-                case "Draw":
-                    msg = "Draw";
-                case "OWin":
-                    msg = "O Wins";
-                case "XWin":
-                    msg = "X Wins";
-                    break;
+            if (outputEvent instanceof X ||
+                    outputEvent instanceof O) {
+                Move move = (Move) outputEvent;
+                JButton btt = ttt.gui.buttons[move.row][move.col];
+                btt.setText(move.displayString());
+            } else if (outputEvent.getName().equals("Draw")) {
+                msg = "Draw!";
+            } else if (outputEvent.getName().equals("OWin")) {
+                msg = "O Wins!";
+            } else if (outputEvent.getName().equals("XWin")) {
+                msg = "X Wins!";
             }
 
             if (msg != null) {

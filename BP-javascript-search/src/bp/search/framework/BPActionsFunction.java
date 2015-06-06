@@ -49,4 +49,9 @@ public class BPActionsFunction implements ActionsFunction {
     public Set<Action> actions(Object s) {
         return actions((BPState) s);
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 }

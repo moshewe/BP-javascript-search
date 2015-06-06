@@ -13,7 +13,7 @@ public class BPNode extends Node {
         super(state);
     }
 
-    public BPNode(BPState state, BPNode parent, BPAction action,
+    public BPNode(BPState state, Node parent, BPAction action,
                   double stepCost) {
         super(state, parent, action, stepCost);
     }

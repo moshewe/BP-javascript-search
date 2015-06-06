@@ -1,25 +1,18 @@
 package tictactoe.search;
 
 import bp.BProgram;
-import bp.BThread;
 import bp.search.BPState;
 import tictactoe.events.O;
 import tictactoe.events.X;
 
-import java.util.List;
-
 public class TTTState extends BPState {
 
-    protected List<BThread> _reqMove;
-
-    public TTTState(BProgram bp, List<BThread> taken) {
+    public TTTState(BProgram bp) {
         super(bp);
-        _reqMove = taken;
     }
 
     public TTTState(TTTState other) {
         super(other);
-        _reqMove = other._reqMove;
     }
 
     @Override

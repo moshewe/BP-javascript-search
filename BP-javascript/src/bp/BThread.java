@@ -23,7 +23,7 @@ public class BThread implements Serializable {
     protected String _name = this.getClass().getSimpleName();
     transient protected BProgram bp = null;
     public Scriptable _scope;
-    protected Script _script = null;
+//    protected Script _script = null;
     protected ContinuationPending _cont;
     protected RequestableInterface _request;
     protected EventSetInterface _wait;
@@ -37,21 +37,21 @@ public class BThread implements Serializable {
         _block = none;
     }
 
-    public BThread(String source) {
-        this();
-        setScript(source);
-    }
+//    public BThread(String source) {
+//        this();
+//        setScript(source);
+//    }
 
-    public BThread(String name, String source) {
-        this(source);
-        _name = name;
-    }
+//    public BThread(String name, String source) {
+//        this(source);
+//        _name = name;
+//    }
 
     public BThread(String name, Function func) {
         this();
         _name = name;
         _func = func;
-        setScript("_func();");
+//        setScript("_func();");
     }
 
     public RequestableInterface getRequestedEvents() {
@@ -167,7 +167,9 @@ public class BThread implements Serializable {
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             bplog("started!");
-            cx.executeScriptWithContinuations(_script, _scope);
+//            cx.executeScriptWithContinuations(_script, _scope);
+            cx.callFunctionWithContinuations(_func, _scope,
+                    new Object[0]);
         } catch (ContinuationPending pending) {
             _cont = pending;
         } finally {
@@ -219,15 +221,15 @@ public class BThread implements Serializable {
         _cont = null;
     }
 
-    public void setScript(String source) {
-        Context cx = ContextFactory.getGlobal().enterContext();
-        cx.setOptimizationLevel(-1); // must use interpreter mode
-        try {
-            _script = cx.compileString(source, _name + "-script", 1, null);
-        } finally {
-            Context.exit();
-        }
-    }
+//    public void setScript(String source) {
+//        Context cx = ContextFactory.getGlobal().enterContext();
+//        cx.setOptimizationLevel(-1); // must use interpreter mode
+//        try {
+//            _script = cx.compileString(source, _name + "-script", 1, null);
+//        } finally {
+//            Context.exit();
+//        }
+//    }
 
     public void revive() {
         _alive = true;

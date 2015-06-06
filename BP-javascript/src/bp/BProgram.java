@@ -258,7 +258,7 @@ public class BProgram implements Cloneable, Serializable {
     }
 
     public BEvent getLastEvent() {
-        return eventLog.getLast();
+        return eventLog.peekLast();
     }
 
     public Arbiter getArbiter() {

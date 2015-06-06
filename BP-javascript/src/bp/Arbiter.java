@@ -15,7 +15,7 @@ import static bp.BProgramControls.debugMode;
  */
 public class Arbiter {
 
-    private BProgram _program;
+    protected BProgram _program;
 
     public BProgram getProgram() {
         return _program;

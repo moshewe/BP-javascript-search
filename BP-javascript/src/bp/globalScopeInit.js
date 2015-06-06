@@ -51,5 +51,13 @@ Array.range = function(start, end, step) {
   }
 
   return range;
+}
 
+bploop = function(start,end,step,func){
+  if(start<=end){
+    func(start);
+    bploop(start+step,end,step,func);
+  }else{
+    return end;
+  }
 }
