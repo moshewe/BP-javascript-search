@@ -1,8 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="BP-javascript-search:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/BP_javascript_search_jar</output-path>
-    <root id="archive" name="BP-javascript-search.jar">
-      <element id="module-output" name="BP-javascript-search" />
+  <artifact type="jar" name="BP-javascript:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BP_javascript_jar</output-path>
+    <root id="archive" name="BP-javascript.jar">
       <element id="module-output" name="BP-javascript" />
       <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/junit-4.11.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/hamcrest-core-1.3.jar" path-in-jar="/" />

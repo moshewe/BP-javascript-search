@@ -2,6 +2,8 @@ importPackage(Packages.bp);
 importPackage(Packages.bp.eventSets);
 importPackage(Packages.bp.exceptions);
 
+// add range func to array to allow conts
+// while looping using forEach
 Array.range = function(start, end, step) {
   var range = [];
   var typeofStart = typeof start;
