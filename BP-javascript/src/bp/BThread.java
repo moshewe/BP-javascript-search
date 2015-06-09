@@ -5,14 +5,11 @@ import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
 import org.mozilla.javascript.*;
 
-import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
-import java.nio.file.Path;
 
 import static bp.BProgramControls.debugMode;
 import static bp.eventSets.EventSetConstants.none;
-import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Paths.get;
 
 /**
  * Created by orelmosheweinstock on 3/24/15.
@@ -23,7 +20,6 @@ public class BThread implements Serializable {
     protected String _name = this.getClass().getSimpleName();
     transient protected BProgram bp = null;
     public Scriptable _scope;
-//    protected Script _script = null;
     protected ContinuationPending _cont;
     protected RequestableInterface _request;
     protected EventSetInterface _wait;
@@ -37,21 +33,10 @@ public class BThread implements Serializable {
         _block = none;
     }
 
-//    public BThread(String source) {
-//        this();
-//        setScript(source);
-//    }
-
-//    public BThread(String name, String source) {
-//        this(source);
-//        _name = name;
-//    }
-
     public BThread(String name, Function func) {
         this();
         _name = name;
         _func = func;
-//        setScript("_func();");
     }
 
     public RequestableInterface getRequestedEvents() {
@@ -120,7 +105,6 @@ public class BThread implements Serializable {
         if (_func != null) {
             Scriptable funcScope = _func.getParentScope();
             if (funcScope != programScope) {
-//                bplog("nested/complex func");
                 while (funcScope.getParentScope() != programScope) {
                     funcScope = funcScope.getParentScope();
                 }
@@ -134,32 +118,31 @@ public class BThread implements Serializable {
     protected void generateBThreadScope(Scriptable programScope) {
         Context cx = ContextFactory.getGlobal().enterContext();
         Scriptable btThisScope = (Scriptable) Context.javaToJS(this, programScope);
+        InputStream script;
         btThisScope.setPrototype(programScope);
         _scope = btThisScope;
-        Scriptable tScope = (Scriptable) evaluateInBThreadScope("out/production/BP-javascript/bp/highlevelidioms/breakupon.js");
+        script = BThread.class.getResourceAsStream("highlevelidioms/breakupon.js");
+        Scriptable tScope;
+        tScope = (Scriptable) evaluateInBThreadScope(script,
+                "breakupon");
         tScope.setPrototype(_scope);
         _scope = tScope;
-        tScope = (Scriptable) evaluateInBThreadScope("out/production/BP-javascript/bp/highlevelidioms/whileblocking.js");
+        script = BThread.class.getResourceAsStream("highlevelidioms/whileblocking.js");
+        tScope = (Scriptable) evaluateInBThreadScope(script,
+                "whileblocking");
         tScope.setPrototype(_scope);
         _scope = tScope;
     }
 
+    public Object evaluateInBThreadScope(InputStream script,
+                                         String scriptname) {
+        return BPJavascriptApplication.evaluateInGlobalContext(
+                _scope, script, scriptname);
+    }
+
     public Object evaluateInBThreadScope(String path) {
-        Context cx = ContextFactory.getGlobal().enterContext();
-        cx.setOptimizationLevel(-1); // must use interpreter mode
-        try {
-            Path pathObject = get(path);
-            return cx.evaluateString(_scope,
-                    new String(readAllBytes(pathObject)),
-                    pathObject.getFileName().toString(),
-                    1,
-                    null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            Context.exit();
-        }
-        return null;
+        return BPJavascriptApplication.evaluateInGlobalContext(
+                _scope, path);
     }
 
     public void start() {
@@ -220,16 +203,6 @@ public class BThread implements Serializable {
         _block = EventSetConstants.none;
         _cont = null;
     }
-
-//    public void setScript(String source) {
-//        Context cx = ContextFactory.getGlobal().enterContext();
-//        cx.setOptimizationLevel(-1); // must use interpreter mode
-//        try {
-//            _script = cx.compileString(source, _name + "-script", 1, null);
-//        } finally {
-//            Context.exit();
-//        }
-//    }
 
     public void revive() {
         _alive = true;

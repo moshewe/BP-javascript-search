@@ -8,6 +8,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Function;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import java.util.List;
  */
 public abstract class BPSearchApplication extends BPJavascriptApplication {
 
-    private String _initScript;
     protected List<BThread> _simBThreads = new ArrayList<>();
 
 
@@ -26,14 +26,16 @@ public abstract class BPSearchApplication extends BPJavascriptApplication {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
+            Object simStartInJS = Context.javaToJS(SimStartEvent.getInstance(),
+                    _globalScope);
             _globalScope.put("simStart", _globalScope,
-                    Context.javaToJS(SimStartEvent.getInstance(),
-                            _globalScope));
+                    simStartInJS);
         } finally {
             Context.exit();
         }
-        _initScript = "out/production/BP-javascript-search/bp/search/globalScopeInit.js";
-        evaluateInGlobalScope(_initScript);
+
+        InputStream script = BPSearchApplication.class.getResourceAsStream("globalScopeInit.js");
+        evaluateInGlobalScope(script, "BPSearchGlobalInit");
     }
 
     public SimulatorBThread registerSimBThread(String name, Function func) {

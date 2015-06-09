@@ -4,6 +4,8 @@ import bp.BThread;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
 
+import java.net.URL;
+
 /**
  * Created by orelmosheweinstock on 4/25/15.
  */
@@ -37,7 +39,8 @@ public class SimulatorBThread extends BThread {
     @Override
     protected void generateBThreadScope(Scriptable programScope) {
         super.generateBThreadScope(programScope);
-        String path = "out/production/BP-javascript-search/bp/search/bthreads/simscope.js";
+        URL res = SimulatorBThread.class.getResource("simscope.js");
+        String path = res.getPath();
         Scriptable simScope = (Scriptable) evaluateInBThreadScope(path);
 
         simScope.setPrototype(_scope);

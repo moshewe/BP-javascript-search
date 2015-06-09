@@ -2,9 +2,9 @@ package bp;
 
 import org.mozilla.javascript.*;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.nio.file.Path;
-import java.util.Collection;
 
 import static bp.eventSets.EventSetConstants.all;
 import static bp.eventSets.EventSetConstants.none;
@@ -16,29 +16,70 @@ import static java.nio.file.Paths.get;
  */
 public abstract class BPJavascriptApplication {
 
+    public static final String GLOBAL_SCOPE_INIT = "BPJavascriptGlobalScopeInit";
     protected Arbiter _arbiter;
     protected Scriptable _globalScope;
     protected BProgram _bp;
-    private String _initScript;
 
-    public Object evaluateInGlobalScope(String path) {
+    public static Object evaluateInGlobalContext(Scriptable scope,
+                                                 String script,
+                                                 String scriptName) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
+        return cx.evaluateString(scope,
+                script,
+                scriptName,
+                1,
+                null);
+    }
+
+    public static Object evaluateInGlobalContext(Scriptable scope,
+                                                 String path) {
+        Path pathObject = get(path);
         try {
-            Path pathObject = get(path);
-            return cx.evaluateString(_globalScope,
-                    new String(readAllBytes(pathObject)),
-                    pathObject.getFileName().toString(),
-                    1,
-                    null);
+            String script = new String(readAllBytes(pathObject));
+            return evaluateInGlobalContext(scope, script,
+                    pathObject.toString());
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            Context.exit();
         }
+
         return null;
     }
 
+    public static Object evaluateInGlobalContext(Scriptable scope,
+                                                 InputStream ios,
+                                                 String scriptName) {
+        InputStreamReader streamReader = new InputStreamReader(ios);
+        BufferedReader br = new BufferedReader(streamReader);
+        StringBuilder sb = new StringBuilder();
+        String line;
+        try {
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String script = sb.toString();
+        return evaluateInGlobalContext(scope, script, scriptName);
+    }
+
+    public BPJavascriptApplication() {
+        _bp = new BProgram();
+        setupGlobalScope();
+    }
+
+    public Object evaluateInGlobalScope(String path) {
+        return evaluateInGlobalContext(_globalScope, path);
+    }
+
+    public Object evaluateInGlobalScope(InputStream ios,
+                                        String scriptname) {
+        return evaluateInGlobalContext(_globalScope, ios, scriptname);
+    }
+
+    //    used from JS to register bthreads in the application
     public BThread registerBThread(String name, Function func) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
@@ -56,20 +97,11 @@ public abstract class BPJavascriptApplication {
             System.out.println(getClass().getSimpleName() + ": " + s);
     }
 
-    public BPJavascriptApplication() {
-        _bp = new BProgram();
-        setupGlobalScope();
-    }
-
     protected void setupBThreadScopes() {
-        setupBThreadScopes(_bp.getBThreads());
-    }
-
-    protected void setupBThreadScopes(Collection<BThread> bthreads) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
-            for (BThread bt : bthreads) {
+            for (BThread bt : _bp.getBThreads()) {
 //                bplog("settping up " + bt + " scope");
                 bt.setupScope(_globalScope);
 //                if (bt.getScript() == null)
@@ -86,14 +118,20 @@ public abstract class BPJavascriptApplication {
         _bp.start();
     }
 
+    protected void addBThreads() {
+        URL bthreadsFolderURL = getClass().getResource("bthreads");
+        String bthreadsFolderPath = bthreadsFolderURL.getPath();
+        File bthreadsFolder = new File(bthreadsFolderURL.getPath());
+        for (String filename : bthreadsFolder.list()) {
+            evaluateInGlobalScope(bthreadsFolderPath + "/" + filename);
+        }
+    }
+
     protected void setupGlobalScope() {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             ImporterTopLevel importer = new ImporterTopLevel(cx);
-//            importer.initStandardObjects(cx,false);
-//            _globalScope = cx.initStandardObjects();
-//            _globalScope = importer;
             _globalScope = cx.initStandardObjects(importer);
             _globalScope.put("bpjs", _globalScope,
                     Context.javaToJS(this, _globalScope));
@@ -104,8 +142,10 @@ public abstract class BPJavascriptApplication {
         } finally {
             Context.exit();
         }
-        _initScript = "out/production/BP-javascript/bp/globalScopeInit.js";
-        evaluateInGlobalScope(_initScript);
+
+        InputStream script =
+                BPJavascriptApplication.class.getResourceAsStream("globalScopeInit.js");
+        evaluateInGlobalScope(script, GLOBAL_SCOPE_INIT);
     }
 
 }

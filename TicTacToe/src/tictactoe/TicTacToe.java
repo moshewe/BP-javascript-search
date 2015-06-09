@@ -1,4 +1,4 @@
-package tictactoe.externalApp;
+package tictactoe;
 
 import bp.BEvent;
 import bp.search.BPSearchApplication;
@@ -13,6 +13,7 @@ import tictactoe.events.X;
 import tictactoe.search.TTTGame;
 
 import javax.swing.*;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 
 import static tictactoe.events.StaticEvents.*;
@@ -22,7 +23,6 @@ import static tictactoe.events.StaticEvents.*;
  */
 public class TicTacToe extends BPSearchApplication {
 
-    private String _initScript;
     public GUI gui;
 
     public TicTacToe() {
@@ -44,15 +44,6 @@ public class TicTacToe extends BPSearchApplication {
         _bp.setArbiter(_arbiter);
         // Start the graphical user interface
         gui = new GUI(_bp);
-    }
-
-    protected void addBThreads() {
-//        _squaresTaken = new ArrayList<>();
-        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/SquareTaken.js");
-        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/DetectWin.js");
-        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/EnforceTurns.js");
-        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/DetectDraw.js");
-        evaluateInGlobalScope("out/production/TicTacToe/tictactoe/bThreads/ReqAllMoves.js");
     }
 
     @Override
@@ -77,8 +68,9 @@ public class TicTacToe extends BPSearchApplication {
                     Context.javaToJS(XEvents, _globalScope));
             _globalScope.put("oevents", _globalScope,
                     Context.javaToJS(OEvents, _globalScope));
-            _initScript = "out/production/TicTacToe/tictactoe/globalScopeInit.js";
-            evaluateInGlobalScope(_initScript);
+
+            InputStream ios = getClass().getResourceAsStream("globalScopeInit.js");
+            evaluateInGlobalScope(ios, "TTTGlobalScope");
         } finally {
             Context.exit();
         }

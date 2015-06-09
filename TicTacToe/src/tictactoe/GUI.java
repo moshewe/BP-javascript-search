@@ -1,4 +1,4 @@
-package tictactoe.externalApp;
+package tictactoe;
 
 import bp.BProgram;
 import tictactoe.events.X;

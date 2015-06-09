@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 
+import java.net.URL;
+
 /**
  * Created by orelmosheweinstock on 3/24/15.
  */
@@ -42,7 +44,11 @@ public class HotNCold extends BPJavascriptApplication {
         _arbiter = new Arbiter();
         _bp.setArbiter(_arbiter);
 
-        evaluateInGlobalScope("out/production/BP-javascript/bp/examples/HotNCold.js");
+//        evaluateInGlobalScope("out/production/BP-javascript/bp/examples/HotNCold.js");
+//        String s = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        URL s = getClass().getResource("HotNCold.js");
+        bplog(s.toString());
+        evaluateInGlobalScope(s.getPath());
 
         setupBThreadScopes();
     }
