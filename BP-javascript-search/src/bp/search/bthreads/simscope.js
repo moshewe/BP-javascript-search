@@ -8,7 +8,7 @@ new Object {
       var eset = new EventSet([requested, waited, simStart]);
       var ev = _bsync(none, eset, blocked);
       if (ev == simStart) {
-        //                bplog("setting simMode = true");
+        /*//                bplog("setting simMode = true");*/
         this.simMode = true;
         return bsync(requested, waited, blocked);
       }

@@ -15,6 +15,8 @@ import tictactoe.search.TTTGame;
 import javax.swing.*;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import static tictactoe.events.StaticEvents.*;
 
@@ -33,47 +35,9 @@ public class TicTacToe extends BPSearchApplication {
         TTTGame game = new TTTGame(_bp);
         BPAlphaBetaSearch search = new BPAlphaBetaSearch(game);
         _arbiter = new AdversarialSearchArbiter((BPAdversarialSearch) search, game);
-//        BPGoalTest goalTest = new TTTGoalTest();
-//        HeuristicFunction heuristic = new TTTHeuristicFunction();
-//        BPQueueSearch bpQSearch = new BPQueueSearch();
-//        _arbiter = new InformedSearchArbiter(
-//                new BPAStarSearch(bpQSearch,
-//                        heuristic),
-//                new TTTInitStateGenerator(_bp),
-//                goalTest);
         _bp.setArbiter(_arbiter);
         // Start the graphical user interface
         gui = new GUI(_bp);
-    }
-
-    @Override
-    protected void setupGlobalScope() {
-        super.setupGlobalScope();
-        Context cx = ContextFactory.getGlobal().enterContext();
-        cx.setOptimizationLevel(-1); // must use interpreter mode
-        try {
-            _globalScope.put("ttt", _globalScope,
-                    Context.javaToJS(this, _globalScope));
-            _globalScope.put("draw", _globalScope,
-                    Context.javaToJS(draw, _globalScope));
-            _globalScope.put("XWin", _globalScope,
-                    Context.javaToJS(XWin, _globalScope));
-            _globalScope.put("OWin", _globalScope,
-                    Context.javaToJS(OWin, _globalScope));
-            _globalScope.put("gameOver", _globalScope,
-                    Context.javaToJS(gameOver, _globalScope));
-            _globalScope.put("moves", _globalScope,
-                    Context.javaToJS(Moves, _globalScope));
-            _globalScope.put("xevents", _globalScope,
-                    Context.javaToJS(XEvents, _globalScope));
-            _globalScope.put("oevents", _globalScope,
-                    Context.javaToJS(OEvents, _globalScope));
-
-            InputStream ios = getClass().getResourceAsStream("globalScopeInit.js");
-            evaluateInGlobalScope(ios, "TTTGlobalScope");
-        } finally {
-            Context.exit();
-        }
     }
 
     public static void main(String[] args) throws MalformedURLException,
@@ -121,5 +85,50 @@ public class TicTacToe extends BPSearchApplication {
             outputEvent = ttt._bp.getOutputEvent();
         }
 
+    }
+
+    protected void addBThreads() {
+        InputStream script;
+        List<String> bthreads = new LinkedList<>();
+        bthreads.add("SquareTaken.js");
+        bthreads.add("DetectWin.js");
+        bthreads.add("EnforceTurns.js");
+        bthreads.add("DetectDraw.js");
+        bthreads.add("ReqAllMoves.js");
+        for (String bt : bthreads) {
+            script = getClass().getResourceAsStream("bthreads/" +
+                    bt);
+            evaluateInGlobalScope(script, bt);
+        }
+    }
+
+    @Override
+    protected void setupGlobalScope() {
+        super.setupGlobalScope();
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            _globalScope.put("ttt", _globalScope,
+                    Context.javaToJS(this, _globalScope));
+            _globalScope.put("draw", _globalScope,
+                    Context.javaToJS(draw, _globalScope));
+            _globalScope.put("XWin", _globalScope,
+                    Context.javaToJS(XWin, _globalScope));
+            _globalScope.put("OWin", _globalScope,
+                    Context.javaToJS(OWin, _globalScope));
+            _globalScope.put("gameOver", _globalScope,
+                    Context.javaToJS(gameOver, _globalScope));
+            _globalScope.put("moves", _globalScope,
+                    Context.javaToJS(Moves, _globalScope));
+            _globalScope.put("xevents", _globalScope,
+                    Context.javaToJS(XEvents, _globalScope));
+            _globalScope.put("oevents", _globalScope,
+                    Context.javaToJS(OEvents, _globalScope));
+
+            InputStream ios = getClass().getResourceAsStream("globalScopeInit.js");
+            evaluateInGlobalScope(ios, "TTTGlobalScope");
+        } finally {
+            Context.exit();
+        }
     }
 }

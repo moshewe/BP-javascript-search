@@ -2,8 +2,10 @@ package bp;
 
 import org.mozilla.javascript.*;
 
-import java.io.*;
-import java.net.URL;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 
 import static bp.eventSets.EventSetConstants.all;
@@ -20,6 +22,12 @@ public abstract class BPJavascriptApplication {
     protected Arbiter _arbiter;
     protected Scriptable _globalScope;
     protected BProgram _bp;
+
+    public BPJavascriptApplication() {
+        _bp = new BProgram();
+        _bp.setArbiter(new Arbiter());
+        setupGlobalScope();
+    }
 
     public static Object evaluateInGlobalContext(Scriptable scope,
                                                  String script,
@@ -63,11 +71,6 @@ public abstract class BPJavascriptApplication {
         }
         String script = sb.toString();
         return evaluateInGlobalContext(scope, script, scriptName);
-    }
-
-    public BPJavascriptApplication() {
-        _bp = new BProgram();
-        setupGlobalScope();
     }
 
     public Object evaluateInGlobalScope(String path) {
@@ -118,15 +121,6 @@ public abstract class BPJavascriptApplication {
         _bp.start();
     }
 
-    protected void addBThreads() {
-        URL bthreadsFolderURL = getClass().getResource("bthreads");
-        String bthreadsFolderPath = bthreadsFolderURL.getPath();
-        File bthreadsFolder = new File(bthreadsFolderURL.getPath());
-        for (String filename : bthreadsFolder.list()) {
-            evaluateInGlobalScope(bthreadsFolderPath + "/" + filename);
-        }
-    }
-
     protected void setupGlobalScope() {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
@@ -148,6 +142,17 @@ public abstract class BPJavascriptApplication {
         evaluateInGlobalScope(script, GLOBAL_SCOPE_INIT);
     }
 
+    public void actuatorLoop(BEventVisitor vis) {
+        BEvent outputEvent = _bp.getOutputEvent();
+        while (true) {
+            outputEvent.accept(vis);
+            outputEvent = _bp.getOutputEvent();
+        }
+    }
+
+    public void fire(BEvent event) {
+        _bp.fireExternalEvent(event);
+    }
 }
 
 

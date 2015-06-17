@@ -16,17 +16,23 @@ import static bp.BProgramControls.debugMode;
 public class BEvent implements EventSetInterface, RequestableInterface, Comparable<BEvent> {
 
     protected String _name = this.getClass().getSimpleName();
+    protected boolean _outputEvent = false;
 
     public BEvent(String name, boolean outputEvent) {
         _name = name;
         _outputEvent = outputEvent;
     }
 
+    public BEvent() {
+    }
+
+    public BEvent(String _name) {
+        this._name = _name;
+    }
+
     public boolean isOutputEvent() {
         return _outputEvent;
     }
-
-    protected boolean _outputEvent = false;
 
     @Override
     public boolean contains(Object o) {
@@ -35,13 +41,6 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
 
     public Iterator<RequestableInterface> iterator() {
         return new SingleEventIterator(this);
-    }
-
-    public BEvent() {
-    }
-
-    public BEvent(String _name) {
-        this._name = _name;
     }
 
     public String toString() {
@@ -105,6 +104,9 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
         return _name.compareTo(e.getName());
     }
 
+    public void accept(BEventVisitor vis) {
+        vis.visit(this);
+    }
 
     protected void bplog(String string) {
         if (debugMode)
