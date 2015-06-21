@@ -1,4 +1,4 @@
-package bprobocode.events.input;
+package bprobocode.events.input.robocodeEvents;
 
 import bp.BEvent;
 import robocode.*;

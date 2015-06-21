@@ -1,13 +1,14 @@
 package bprobocode.examples.wikiexample;
 
+import bprobocode.BPRobocodeApplication;
 import bprobocode.BPRobot;
 
 /**
- * Created by orelmosheweinstock on 6/14/15.
+ * Created by orelmosheweinstock on 6/21/15.
  */
 public class WikiExampleRobot extends BPRobot {
 
-    public WikiExampleRobot() {
-        _app = new WikiExampleBPApp();
+    public WikiExampleRobot(BPRobocodeApplication app) {
+        super(app);
     }
 }

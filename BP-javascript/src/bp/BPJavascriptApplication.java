@@ -142,6 +142,17 @@ public abstract class BPJavascriptApplication {
         evaluateInGlobalScope(script, GLOBAL_SCOPE_INIT);
     }
 
+    protected void putInGlobalScope(String objName, Object obj) {
+        Context cx = ContextFactory.getGlobal().enterContext();
+        cx.setOptimizationLevel(-1); // must use interpreter mode
+        try {
+            _globalScope.put(objName, _globalScope,
+                    Context.javaToJS(obj, _globalScope));
+        } finally {
+            Context.exit();
+        }
+    }
+
     public void actuatorLoop(BEventVisitor vis) {
         BEvent outputEvent = _bp.getOutputEvent();
         while (true) {

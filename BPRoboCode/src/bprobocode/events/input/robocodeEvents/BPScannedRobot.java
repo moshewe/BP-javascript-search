@@ -1,4 +1,4 @@
-package bprobocode.events.input;
+package bprobocode.events.input.robocodeEvents;
 
 import robocode.ScannedRobotEvent;
 
@@ -12,7 +12,8 @@ public class BPScannedRobot extends BPRobocodeEvent {
     }
 
     @Override
-    public ScannedRobotEvent getRobocodeEvent() {
-        return (ScannedRobotEvent) super.getRobocodeEvent();
+    public ScannedRobotEvent getWrappedEvent() {
+        return (ScannedRobotEvent) super.getWrappedEvent();
     }
+
 }

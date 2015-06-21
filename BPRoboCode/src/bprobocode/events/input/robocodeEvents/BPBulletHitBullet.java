@@ -1,4 +1,4 @@
-package bprobocode.events.input;
+package bprobocode.events.input.robocodeEvents;
 
 import robocode.BulletHitBulletEvent;
 
@@ -10,8 +10,10 @@ public class BPBulletHitBullet extends BPRobocodeEvent {
         super(event);
     }
 
+
     @Override
-    public BulletHitBulletEvent getRobocodeEvent() {
-        return (BulletHitBulletEvent) super.getRobocodeEvent();
+    public BulletHitBulletEvent getWrappedEvent() {
+        return (BulletHitBulletEvent) super.getWrappedEvent();
     }
+
 }

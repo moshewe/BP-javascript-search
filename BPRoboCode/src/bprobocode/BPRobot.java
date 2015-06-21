@@ -1,6 +1,6 @@
 package bprobocode;
 
-import bprobocode.events.input.BPRobocodeEventFactory;
+import bprobocode.events.input.robocodeEvents.BPRobocodeEventFactory;
 import robocode.*;
 
 /**
@@ -11,6 +11,11 @@ public abstract class BPRobot extends Robot {
     protected BPRobocodeApplication _app;
     protected RobocodeEventVisitor _vis = new RobocodeEventVisitor(this);
     protected BPRobocodeEventFactory _fact = new BPRobocodeEventFactory();
+
+    public BPRobot(BPRobocodeApplication _app) {
+        super();
+        this._app = _app;
+    }
 
     @Override
     public void run() {
