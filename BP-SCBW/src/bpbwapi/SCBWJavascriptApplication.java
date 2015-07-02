@@ -1,29 +1,46 @@
 package bpbwapi;
 
+import bp.eventSets.EventsOfClass;
 import bp.search.BPSearchApplication;
+import bpbwapi.events.input.UnitCreateEvent;
+import bpbwapi.events.input.onFrameEvent;
 import bwapi.Game;
 import bwapi.Mirror;
 import bwapi.Player;
+import bwta.BWTA;
 
 /**
  * Created by orelmosheweinstock on 6/30/15.
  */
 public class SCBWJavascriptApplication extends BPSearchApplication {
 
-    protected Mirror mirror = new Mirror();
-    protected Game game;
-    protected Player self;
+    protected Mirror _mirror = new Mirror();
+    protected Game _game;
+    protected Player _self;
     protected BPBWEventListener _listener;
-
-    public SCBWJavascriptApplication() {
-        game = mirror.getGame();
-        self = game.self();
-    }
 
     @Override
     protected void start() {
         super.start();
-        mirror.getModule().setEventListener(_listener);
-        mirror.startGame();
+        _mirror.startGame();
+        _game = _mirror.getGame();
+        _self = _game.self();
+        _mirror.getModule().setEventListener(_listener);
+
+        //Use BWTA to analyze map
+        //This may take a few minutes if the map is processed first time!
+        bplog("Analyzing map...");
+        BWTA.readMap();
+        BWTA.analyze();
+        bplog("Map data ready");
+    }
+
+    @Override
+    protected void setupGlobalScope() {
+        super.setupGlobalScope();
+        putInGlobalScope("unitCreateEvent",
+                new EventsOfClass(UnitCreateEvent.class));
+        putInGlobalScope("onFrameEvent",
+                new EventsOfClass(onFrameEvent.class));
     }
 }

@@ -8,7 +8,7 @@ public abstract class BEventVisitor {
         bplog("Unimplemented");
     }
 
-    private void bplog(String s) {
+    protected void bplog(String s) {
         if (BProgramControls.debugMode)
             System.out.println(getClass().getSimpleName() + ": " + s);
     }

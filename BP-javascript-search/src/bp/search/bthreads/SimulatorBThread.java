@@ -18,13 +18,10 @@ public class SimulatorBThread extends BThread {
     }
 
     @Override
-    protected void generateBThreadScope(Scriptable programScope) {
-        super.generateBThreadScope(programScope);
-        InputStream res = SimulatorBThread.class.getResourceAsStream("simscope.js");
-        Scriptable simScope = (Scriptable)
-                evaluateInBThreadScope(res, "simscope");
-
-        simScope.setPrototype(_scope);
-        _scope = simScope;
+    protected Scriptable generateBThreadScope(Scriptable programScope) {
+        Scriptable tScope = super.generateBThreadScope(programScope);
+        InputStream ios = SimulatorBThread.class.getResourceAsStream("simscope.js");
+        tScope = generateSubScope(tScope, ios, "SimScope");
+        return tScope;
     }
 }

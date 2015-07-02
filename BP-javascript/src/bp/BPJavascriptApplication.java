@@ -82,6 +82,12 @@ public abstract class BPJavascriptApplication {
         return evaluateInGlobalContext(_globalScope, ios, scriptname);
     }
 
+    public Object evaluateInGlobalScope(String path,
+                                        String scriptname) {
+        InputStream ios = getClass().getResourceAsStream(path);
+        return evaluateInGlobalScope(ios, scriptname);
+    }
+
     //    used from JS to register bthreads in the application
     public BThread registerBThread(String name, Function func) {
         Context cx = ContextFactory.getGlobal().enterContext();

@@ -18,7 +18,6 @@ public class BThread implements Serializable {
 
     public Function _func = null;
     protected String _name = this.getClass().getSimpleName();
-    transient protected BProgram bp = null;
     public Scriptable _scope;
     protected ContinuationPending _cont;
     protected RequestableInterface _request;
@@ -101,7 +100,7 @@ public class BThread implements Serializable {
     }
 
     public void setupScope(Scriptable programScope) {
-        generateBThreadScope(programScope);
+        _scope = generateBThreadScope(programScope);
         if (_func != null) {
             Scriptable funcScope = _func.getParentScope();
             if (funcScope != programScope) {
@@ -115,42 +114,40 @@ public class BThread implements Serializable {
         }
     }
 
-    protected void generateBThreadScope(Scriptable programScope) {
-        Context cx = ContextFactory.getGlobal().enterContext();
-        Scriptable btThisScope = (Scriptable) Context.javaToJS(this, programScope);
-        InputStream script;
-        btThisScope.setPrototype(programScope);
-        _scope = btThisScope;
-        script = BThread.class.getResourceAsStream("highlevelidioms/breakupon.js");
+    protected Scriptable generateBThreadScope(Scriptable programScope) {
         Scriptable tScope;
-        tScope = (Scriptable) evaluateInBThreadScope(script,
-                "breakupon");
-        tScope.setPrototype(_scope);
-        _scope = tScope;
+        InputStream script;
+        Scriptable btThisScope = (Scriptable) Context.javaToJS(this,
+                programScope);
+        btThisScope.setPrototype(programScope);
+        script = BThread.class.getResourceAsStream("highlevelidioms/breakupon.js");
+        tScope = generateSubScope(btThisScope, script, "breakupon");
         script = BThread.class.getResourceAsStream("highlevelidioms/whileblocking.js");
-        tScope = (Scriptable) evaluateInBThreadScope(script,
-                "whileblocking");
-        tScope.setPrototype(_scope);
-        _scope = tScope;
+        tScope = generateSubScope(tScope, script, "whileblocking");
+        return tScope;
     }
 
-    public Object evaluateInBThreadScope(InputStream script,
-                                         String scriptname) {
-        return BPJavascriptApplication.evaluateInGlobalContext(
-                _scope, script, scriptname);
+    public Scriptable generateSubScope(Scriptable scope, InputStream ios,
+                                       String scriptName) {
+        Scriptable tScope = (Scriptable) BPJavascriptApplication.evaluateInGlobalContext(
+                scope,
+                ios,
+                scriptName);
+        tScope.setPrototype(scope);
+        return tScope;
     }
 
-    public Object evaluateInBThreadScope(String path) {
-        return BPJavascriptApplication.evaluateInGlobalContext(
-                _scope, path);
-    }
+//    public Object evaluateInBThreadScope(InputStream script,
+//                                         String scriptname) {
+//        return BPJavascriptApplication.evaluateInGlobalContext(
+//                _scope, script, scriptname);
+//    }
 
     public void start() {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             bplog("started!");
-//            cx.executeScriptWithContinuations(_script, _scope);
             cx.callFunctionWithContinuations(_func, _scope,
                     new Object[0]);
         } catch (ContinuationPending pending) {

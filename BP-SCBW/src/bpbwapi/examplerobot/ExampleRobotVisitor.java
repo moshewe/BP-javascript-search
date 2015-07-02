@@ -9,6 +9,7 @@ import bwapi.*;
 public class ExampleRobotVisitor extends BEventVisitor {
 
     public void visit(ListUnitsEvent event) {
+        bplog("visiting ListUnitsEvent");
         Mirror mirror = new Mirror();
         Game game = mirror.getGame();
         Player self = game.self();
