@@ -43,7 +43,6 @@ public class BProgram implements Cloneable, Serializable {
         _arbiter.setProgram(this);
         _inputEventQueue = new ArrayBlockingQueue<>(100);
         _outputEventQueue = new ArrayBlockingQueue<>(100);
-        bplog("BProgram instantiated");
     }
 
     protected void bplog(String string) {

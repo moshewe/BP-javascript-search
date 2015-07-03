@@ -9,6 +9,8 @@ import bwapi.Mirror;
 import bwapi.Player;
 import bwta.BWTA;
 
+import java.io.InputStream;
+
 /**
  * Created by orelmosheweinstock on 6/30/15.
  */
@@ -42,5 +44,7 @@ public class SCBWJavascriptApplication extends BPSearchApplication {
                 new EventsOfClass(UnitCreateEvent.class));
         putInGlobalScope("onFrameEvent",
                 new EventsOfClass(onFrameEvent.class));
+        InputStream script = SCBWJavascriptApplication.class.getResourceAsStream("globalScopeInit.js");
+        evaluateInGlobalScope(script, "SCBW-js-init");
     }
 }
