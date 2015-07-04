@@ -16,16 +16,14 @@ import static java.nio.file.Paths.get;
 /**
  * Created by orelmosheweinstock on 3/28/15.
  */
-public abstract class BPJavascriptApplication {
+public abstract class BJavascriptProgram extends BProgram {
 
     public static final String GLOBAL_SCOPE_INIT = "BPJavascriptGlobalScopeInit";
     protected Arbiter _arbiter;
     protected Scriptable _globalScope;
-    protected BProgram _bp;
 
-    public BPJavascriptApplication() {
-        _bp = new BProgram();
-        _bp.setArbiter(new Arbiter());
+    public BJavascriptProgram() {
+        _arbiter = new Arbiter();
         setupGlobalScope();
     }
 
@@ -94,7 +92,7 @@ public abstract class BPJavascriptApplication {
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             BThread bt = new BThread(name, func);
-            _bp.add(bt);
+            add(bt);
             return bt;
         } finally {
             Context.exit();
@@ -110,7 +108,7 @@ public abstract class BPJavascriptApplication {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
-            for (BThread bt : _bp.getBThreads()) {
+            for (BThread bt : _bthreads) {
 //                bplog("settping up " + bt + " scope");
                 bt.setupScope(_globalScope);
 //                if (bt.getScript() == null)
@@ -121,10 +119,6 @@ public abstract class BPJavascriptApplication {
         } finally {
             Context.exit();
         }
-    }
-
-    protected void start() {
-        _bp.start();
     }
 
     protected void setupGlobalScope() {
@@ -144,7 +138,7 @@ public abstract class BPJavascriptApplication {
         }
 
         InputStream script =
-                BPJavascriptApplication.class.getResourceAsStream("globalScopeInit.js");
+                BJavascriptProgram.class.getResourceAsStream("globalScopeInit.js");
         evaluateInGlobalScope(script, GLOBAL_SCOPE_INIT);
     }
 
@@ -157,18 +151,6 @@ public abstract class BPJavascriptApplication {
         } finally {
             Context.exit();
         }
-    }
-
-    public void actuatorLoop(BEventVisitor vis) {
-        BEvent outputEvent = _bp.getOutputEvent();
-        while (true) {
-            outputEvent.accept(vis);
-            outputEvent = _bp.getOutputEvent();
-        }
-    }
-
-    public void fire(BEvent event) {
-        _bp.fireExternalEvent(event);
     }
 }
 

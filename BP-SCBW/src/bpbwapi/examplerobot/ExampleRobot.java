@@ -1,6 +1,6 @@
 package bpbwapi.examplerobot;
 
-import bp.ActuatorLooper;
+import bp.tasks.ActuatorLooper;
 import bp.Arbiter;
 import bpbwapi.BPBWEventListener;
 import bpbwapi.SCBWJavascriptApplication;

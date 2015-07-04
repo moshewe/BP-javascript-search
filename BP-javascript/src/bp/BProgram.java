@@ -10,7 +10,7 @@ import java.util.concurrent.BlockingQueue;
 
 import static bp.BProgramControls.debugMode;
 
-public class BProgram implements Cloneable, Serializable {
+public abstract class BProgram implements Cloneable, Serializable {
 
     /**
      * A collection containing all the be-threads in the system. A be-thread
@@ -19,15 +19,14 @@ public class BProgram implements Cloneable, Serializable {
      * removes itself explicitly
      */
     public transient Collection<BThread> _bthreads;
-    static private Object error = null;
     /**
      * Stores the strings of the events that occurred in this run
      */
     public transient Deque<BEvent> eventLog = new LinkedList<>();
     /**
-     * Program name is set to be the simple class name by default.
+     * Program _name is set to be the simple class _name by default.
      */
-    transient private String name = this.getClass().getSimpleName();
+    transient private String _name = this.getClass().getSimpleName();
     private Arbiter _arbiter;
     private volatile BlockingQueue<BEvent> _inputEventQueue;
     private volatile BlockingQueue<BEvent> _outputEventQueue;
@@ -74,10 +73,10 @@ public class BProgram implements Cloneable, Serializable {
     }
 
     /**
-     * @return the given bprogram name
+     * @return the given bprogram _name
      */
     public String getName() {
-        return name;
+        return _name;
     }
 
     /**
@@ -134,23 +133,21 @@ public class BProgram implements Cloneable, Serializable {
      *              an informative toString().
      */
     public static void setError(Object error) {
-        BProgram.error = error;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this._name = name;
     }
 
     @Override
     public String toString() {
-        return name;
+        return _name;
     }
 
     /**
      * Start all added scenarios.
      */
     public void start() {
-        // public void start() {
         bplog("********* Starting " + getBThreads().size()
                 + " scenarios  **************");
         for (BThread bt : getBThreads()) {
@@ -274,7 +271,7 @@ public class BProgram implements Cloneable, Serializable {
         _bthreads.add(bt);
     }
 
-    public void fireExternalEvent(BEvent e) {
+    public void fire(BEvent e) {
         _inputEventQueue.add(e);
     }
 

@@ -2,7 +2,7 @@ package bp.examples;
 
 import bp.Arbiter;
 import bp.BEvent;
-import bp.BPJavascriptApplication;
+import bp.BJavascriptProgram;
 import org.junit.Test;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
@@ -12,7 +12,7 @@ import java.net.URL;
 /**
  * Created by orelmosheweinstock on 3/24/15.
  */
-public class HotNCold extends BPJavascriptApplication {
+public class HotNCold extends BJavascriptProgram {
 
     private class HotEvent extends BEvent {
 

@@ -1,6 +1,6 @@
 package bp.search;
 
-import bp.BPJavascriptApplication;
+import bp.BJavascriptProgram;
 import bp.BThread;
 import bp.search.bthreads.SimulatorBThread;
 import bp.search.events.SimStartEvent;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by orelmosheweinstock on 4/6/15.
  */
-public abstract class BPSearchApplication extends BPJavascriptApplication {
+public abstract class BPSearchApplication extends BJavascriptProgram {
 
     protected List<BThread> _simBThreads = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public abstract class BPSearchApplication extends BPJavascriptApplication {
         try {
             SimulatorBThread simBT = new SimulatorBThread(name, func);
 //            bplog("registering " + simBT);
-            _bp.add(simBT);
+            add(simBT);
             _simBThreads.add(simBT);
             return simBT;
         } finally {

@@ -5,6 +5,7 @@ import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
 import org.mozilla.javascript.*;
 
+import javax.naming.OperationNotSupportedException;
 import java.io.InputStream;
 import java.io.Serializable;
 
@@ -129,7 +130,7 @@ public class BThread implements Serializable {
 
     public Scriptable generateSubScope(Scriptable scope, InputStream ios,
                                        String scriptName) {
-        Scriptable tScope = (Scriptable) BPJavascriptApplication.evaluateInGlobalContext(
+        Scriptable tScope = (Scriptable) BJavascriptProgram.evaluateInGlobalContext(
                 scope,
                 ios,
                 scriptName);
@@ -139,7 +140,7 @@ public class BThread implements Serializable {
 
 //    public Object evaluateInBThreadScope(InputStream script,
 //                                         String scriptname) {
-//        return BPJavascriptApplication.evaluateInGlobalContext(
+//        return BJavascriptProgram.evaluateInGlobalContext(
 //                _scope, script, scriptname);
 //    }
 
@@ -175,6 +176,13 @@ public class BThread implements Serializable {
         _alive = false;
         zombie();
         return null;
+    }
+
+    public BEvent bsync(Object obj1, EventSetInterface waitedEvents,
+                        EventSetInterface blockedEvents) throws OperationNotSupportedException {
+        String explanation = "requestedEvents not of type " +
+                "RequestableInterface not supported.";
+        throw new OperationNotSupportedException(explanation);
     }
 
     public BEvent bsync(RequestableInterface requestedEvents,

@@ -1,12 +1,10 @@
 package bp.eventSets;
 
 import bp.BEvent;
-import bp.BPJavascriptApplication;
 import bp.exceptions.BPJRequestableSetException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 @SuppressWarnings("serial")
 public class RequestableEventSet extends ArrayList<RequestableInterface> implements EventSetInterface, RequestableInterface, Serializable {
@@ -61,7 +59,7 @@ public class RequestableEventSet extends ArrayList<RequestableInterface> impleme
 
 //    @Override
 //    public String jsIdentifier() {
-//        String id = BPJavascriptApplication.toJSIdentifier(name) + "_";
+//        String id = BJavascriptProgram.toJSIdentifier(name) + "_";
 //        for (Iterator<RequestableInterface> it = iterator(); it.hasNext(); ) {
 //            RequestableInterface next = it.next();
 //            id += next.jsIdentifier() + "_";
