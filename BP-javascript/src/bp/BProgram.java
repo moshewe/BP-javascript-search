@@ -2,11 +2,14 @@ package bp;
 
 import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
+import bp.tasks.ActuatorTask;
+import bp.tasks.NextEvent;
+import bp.tasks.ResumeBThread;
+import bp.tasks.StartBThread;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.*;
 
 import static bp.BProgramControls.debugMode;
 
@@ -26,10 +29,12 @@ public abstract class BProgram implements Cloneable, Serializable {
     /**
      * Program _name is set to be the simple class _name by default.
      */
-    transient private String _name = this.getClass().getSimpleName();
+    protected transient String _name = this.getClass().getSimpleName();
     private Arbiter _arbiter;
     private volatile BlockingQueue<BEvent> _inputEventQueue;
     private volatile BlockingQueue<BEvent> _outputEventQueue;
+    protected ExecutorService _executor;
+    protected BActuator _actuator;
 
     public void setArbiter(Arbiter arbiter) {
         this._arbiter = arbiter;
@@ -40,11 +45,12 @@ public abstract class BProgram implements Cloneable, Serializable {
         _bthreads = new ArrayList<BThread>();
         _arbiter = new Arbiter();
         _arbiter.setProgram(this);
-        _inputEventQueue = new ArrayBlockingQueue<>(100);
-        _outputEventQueue = new ArrayBlockingQueue<>(100);
+        _inputEventQueue = new LinkedBlockingQueue<>();
+        _outputEventQueue = new LinkedBlockingQueue<>();
+        _executor = new ForkJoinPool();
     }
 
-    protected void bplog(String string) {
+    public void bplog(String string) {
         if (debugMode)
             System.out.println("[" + this + "]: " + string);
     }
@@ -145,21 +151,6 @@ public abstract class BProgram implements Cloneable, Serializable {
     }
 
     /**
-     * Start all added scenarios.
-     */
-    public void start() {
-        bplog("********* Starting " + getBThreads().size()
-                + " scenarios  **************");
-        for (BThread bt : getBThreads()) {
-            bt.start();
-        }
-
-        bplog("********* " + getBThreads().size()
-                + " scenarios started **************");
-        loop();
-    }
-
-    /**
      * Get all waited-for events when program is idle
      *
      * @return
@@ -192,27 +183,7 @@ public abstract class BProgram implements Cloneable, Serializable {
         return blocked;
     }
 
-    public void loop() {
-        if (_bthreads.isEmpty()) {
-            bplog("=== ALL DONE!!! ===");
-            return;
-        }
-
-        BEvent next = _arbiter.nextEvent();
-        if (next == null) {
-            bplog("no event chosen, waiting for an external event to be fired...");
-            next = dequeueInputEvent();
-        } else if (next.isOutputEvent()) {
-            bplog(next + " is an output event.");
-            publishEvent(next);
-        }
-
-        triggerEvent(next);
-        bthreadCleanup();
-        loop();
-    }
-
-    private void bthreadCleanup() {
+    public void bthreadCleanup() {
         for (Iterator<BThread> it = _bthreads.iterator();
              it.hasNext(); ) {
             BThread bt = it.next();
@@ -227,7 +198,7 @@ public abstract class BProgram implements Cloneable, Serializable {
      *
      * @param lastEvent
      */
-    private void triggerEvent(BEvent lastEvent) {
+    public void triggerEvent(BEvent lastEvent) {
         String st;
         if (lastEvent != null) {
             eventLog.add(lastEvent);
@@ -236,14 +207,23 @@ public abstract class BProgram implements Cloneable, Serializable {
             bplog(">> starting bthread wakeup");
             // Interrupt and notify the be-threads that need to be
             // awaken
+            Collection<ResumeBThread> resumes
+                    = new LinkedList<>();
             for (BThread bt : _bthreads) {
 //                if (bt.getName().startsWith("SquareTaken"))
 //                    bplog(bt + " waitlist:" + bt.getWaitedEvents().toString());
                 boolean waited = bt.isWaited(lastEvent);
                 boolean requested = bt.isRequested(lastEvent);
                 if (waited || requested) {
-                    bt.resume(lastEvent);
+                    resumes.add(new ResumeBThread(bt, lastEvent));
+//                    bt.resume(lastEvent);
                 }
+            }
+            try {
+                _executor.invokeAll(resumes);
+            } catch (InterruptedException e) {
+                bplog("INVOKING BTHREAD RESUMES INTERRUPTED");
+                e.printStackTrace();
             }
             bplog("<< finished bthread wakeup");
         } else { // lastEvent == null -> deadlock?
@@ -275,7 +255,7 @@ public abstract class BProgram implements Cloneable, Serializable {
         _inputEventQueue.add(e);
     }
 
-    private BEvent dequeueInputEvent() {
+    public BEvent getInputEvent() {
         BEvent e = null;
         try {
             e = _inputEventQueue.take();
@@ -287,11 +267,11 @@ public abstract class BProgram implements Cloneable, Serializable {
         return e;
     }
 
-    protected void publishEvent(BEvent e) {
+    public void emit(BEvent e) {
         _outputEventQueue.add(e);
     }
 
-    public BEvent getOutputEvent() {
+    public BEvent dequeueOutputEvent() {
         BEvent e = null;
         try {
             e = _outputEventQueue.take();
@@ -303,4 +283,25 @@ public abstract class BProgram implements Cloneable, Serializable {
         return e;
     }
 
+    public void start() {
+        bplog("********* Starting " + _bthreads.size()
+                + " scenarios  **************");
+        for (BThread bt : _bthreads) {
+            _executor.execute(new StartBThread(bt));
+        }
+
+        bplog("********* " + _bthreads.size()
+                + " scenarios started **************");
+        NextEvent el = new NextEvent(this, _arbiter);
+        _executor.execute(el);
+        _executor.execute(new ActuatorTask(this));
+    }
+
+    public BActuator getActuator() {
+        return _actuator;
+    }
+
+    public void setActuator(BActuator actuator) {
+        _actuator = actuator;
+    }
 }

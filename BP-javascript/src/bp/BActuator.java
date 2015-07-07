@@ -1,9 +1,17 @@
 package bp;
 
+import bwapi.Game;
+import bwapi.Mirror;
+import bwapi.Player;
+
 /**
  * Created by orelmosheweinstock on 6/14/15.
  */
-public abstract class BEventVisitor {
+public abstract class BActuator {
+
+    public BActuator() {
+    }
+
     public void visit(BEvent event) {
         bplog("Unimplemented");
     }

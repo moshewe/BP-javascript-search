@@ -22,7 +22,7 @@ public class AdversarialSearchArbiter extends Arbiter {
     }
 
     @Override
-    protected BEvent nextEvent() {
+    public BEvent nextEvent() {
         BPState bps = new BPState(getProgram());
         BPPlayer player = game.getPlayer(bps);
         if (player instanceof BPSystemPlayer) {

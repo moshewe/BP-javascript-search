@@ -34,7 +34,7 @@ public class InformedSearchArbiter extends Arbiter {
     }
 
     @Override
-    protected BEvent nextEvent() {
+    public BEvent nextEvent() {
         List<Action> res = new ArrayList<>();
         BPState bps = _generator.genInitState();
         BPProblem prob = new BPProblem(bps,

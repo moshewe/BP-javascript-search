@@ -104,7 +104,7 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
         return _name.compareTo(e.getName());
     }
 
-    public void accept(BEventVisitor vis) {
+    public void accept(BActuator vis) {
         vis.visit(this);
     }
 

@@ -41,7 +41,7 @@ public class Arbiter {
      *
      * @throws BPJRequestableSetException
      */
-    protected BEvent nextEvent() {
+    public BEvent nextEvent() {
         BEvent ec = selectEventFromProgram();
         bplog("Event chosen from program is " + ec);
         // if no internal event was selected, wait for an external event

@@ -1,6 +1,6 @@
 package bpbwapi.examplerobot;
 
-import bp.tasks.ActuatorLooper;
+import bp.tasks.ActuatorTask;
 import bp.Arbiter;
 import bpbwapi.BPBWEventListener;
 import bpbwapi.SCBWJavascriptApplication;
@@ -12,31 +12,14 @@ public class ExampleRobot extends SCBWJavascriptApplication {
 
     public ExampleRobot() {
         super();
-        _bp.setName("ExampleRobot");
+        _name = "ExampleRobot";
         evaluateInGlobalScope("example-robots.js", "examplebot");
         setupBThreadScopes();
-        _bp.setArbiter(new Arbiter());
-        _listener = new BPBWEventListener();
+        _actuator = new ExampleRobotActuator(_mirror);
     }
 
     public static void main(String[] args) {
         final ExampleRobot ex = new ExampleRobot();
-        ActuatorLooper looper = new ActuatorLooper(ex,
-                new ExampleRobotVisitor());
-        Thread appThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ex.start();
-            }
-        });
-        Thread looperThread = new Thread(looper);
-        appThread.start();
-        looperThread.start();
-        try {
-            appThread.join();
-            looperThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        ex.start();
     }
 }

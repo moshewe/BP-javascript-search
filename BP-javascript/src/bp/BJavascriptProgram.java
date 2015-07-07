@@ -99,7 +99,7 @@ public abstract class BJavascriptProgram extends BProgram {
         }
     }
 
-    protected void bplog(String s) {
+    public void bplog(String s) {
         if (BProgramControls.debugMode)
             System.out.println(getClass().getSimpleName() + ": " + s);
     }

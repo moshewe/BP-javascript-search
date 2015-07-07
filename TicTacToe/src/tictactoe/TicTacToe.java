@@ -29,15 +29,15 @@ public class TicTacToe extends BPSearchApplication {
 
     public TicTacToe() {
         super();
-        _bp.setName("TicTacToe");
+        setName("TicTacToe");
         addBThreads();
         setupBThreadScopes();
-        TTTGame game = new TTTGame(_bp);
+        TTTGame game = new TTTGame(this);
         BPAlphaBetaSearch search = new BPAlphaBetaSearch(game);
         _arbiter = new AdversarialSearchArbiter((BPAdversarialSearch) search, game);
-        _bp.setArbiter(_arbiter);
+        setArbiter(_arbiter);
         // Start the graphical user interface
-        gui = new GUI(_bp);
+        gui = new GUI(this);
     }
 
     public static void main(String[] args) throws MalformedURLException,
@@ -51,7 +51,7 @@ public class TicTacToe extends BPSearchApplication {
             }
         });
         tttThread.start();
-        BEvent outputEvent = ttt._bp.getOutputEvent();
+        BEvent outputEvent = ttt.dequeueOutputEvent();
         String msg = null;
         while (true) {
             if (outputEvent instanceof X ||
@@ -82,7 +82,7 @@ public class TicTacToe extends BPSearchApplication {
             }
 
             //announce game over?
-            outputEvent = ttt._bp.getOutputEvent();
+            outputEvent = ttt.dequeueOutputEvent();
         }
 
     }

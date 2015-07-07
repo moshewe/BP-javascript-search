@@ -1,29 +1,31 @@
 package bpbwapi.examplerobot;
 
-import bp.BEventVisitor;
+import bpbwapi.BWActuator;
 import bwapi.*;
+import bwapi.Text.Size.Enum;
 
 /**
  * Created by orelmosheweinstock on 7/1/15.
  */
-public class ExampleRobotVisitor extends BEventVisitor {
+public class ExampleRobotActuator extends BWActuator {
+
+    public ExampleRobotActuator(Mirror mirror) {
+        super(mirror);
+    }
 
     public void visit(ListUnitsEvent event) {
         bplog("visiting ListUnitsEvent");
-        Mirror mirror = new Mirror();
-        Game game = mirror.getGame();
-        Player self = game.self();
-        game.setTextSize(bwapi.Text.Size.Enum.Large);
-        game.drawTextScreen(10, 10, "Playing as " + self.getName() + " - " + self.getRace());
+        _game.setTextSize(Enum.Large);
+        _game.drawTextScreen(10, 10, "Playing as " + _self.getName() + " - " + _self.getRace());
 
         StringBuilder units = new StringBuilder("My units:\n");
 
         //iterate through my units
-        for (Unit myUnit : self.getUnits()) {
+        for (Unit myUnit : _self.getUnits()) {
             units.append(myUnit.getType()).append(" ").append(myUnit.getTilePosition()).append("\n");
 
             //if there's enough minerals, train an SCV
-            if (myUnit.getType() == UnitType.Terran_Command_Center && self.minerals() >= 50) {
+            if (myUnit.getType() == UnitType.Terran_Command_Center && _self.minerals() >= 50) {
                 myUnit.train(UnitType.Terran_SCV);
             }
 
@@ -32,7 +34,7 @@ public class ExampleRobotVisitor extends BEventVisitor {
                 Unit closestMineral = null;
 
                 //find the closest mineral
-                for (Unit neutralUnit : game.neutral().getUnits()) {
+                for (Unit neutralUnit : _game.neutral().getUnits()) {
                     if (neutralUnit.getType().isMineralField()) {
                         if (closestMineral == null || myUnit.getDistance(neutralUnit) < myUnit.getDistance(closestMineral)) {
                             closestMineral = neutralUnit;
@@ -48,6 +50,7 @@ public class ExampleRobotVisitor extends BEventVisitor {
         }
 
         //draw my units on screen
-        game.drawTextScreen(10, 25, units.toString());
+        _game.drawTextScreen(10, 25, units.toString());
     }
+
 }

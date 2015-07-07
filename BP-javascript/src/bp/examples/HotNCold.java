@@ -40,9 +40,9 @@ public class HotNCold extends BJavascriptProgram {
 
     public HotNCold() {
         super();
-        _bp.setName("HotNCold");
+        setName("HotNCold");
         _arbiter = new Arbiter();
-        _bp.setArbiter(_arbiter);
+        setArbiter(_arbiter);
 
 //        evaluateInGlobalScope("out/production/BP-javascript/bp/examples/HotNCold.js");
 //        String s = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -59,10 +59,10 @@ public class HotNCold extends BJavascriptProgram {
         hnc.start();
         System.out.println("starting output event read loop");
 //      imagine this is run in a separate thread on another machine
-        BEvent outputEvent = hnc._bp.getOutputEvent();
+        BEvent outputEvent = hnc.dequeueOutputEvent();
         while (!outputEvent.getName().equals("ALLDONE")) {
             System.out.println("program emitted " + outputEvent);
-            outputEvent = hnc._bp.getOutputEvent();
+            outputEvent = hnc.dequeueOutputEvent();
         }
         System.out.println("got ALLDONE event");
     }
