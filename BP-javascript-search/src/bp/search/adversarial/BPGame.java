@@ -2,7 +2,7 @@ package bp.search.adversarial;
 
 import aima.core.search.adversarial.Game;
 import bp.BEvent;
-import bp.BProgram;
+import bp.BPApplication;
 import bp.eventSets.RequestableInterface;
 import bp.search.BPAction;
 import bp.search.BPState;
@@ -19,7 +19,7 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
 
     protected static BPPlayer[] _players = {BPSystemPlayer.instance,
             EnvironmentPlayer.instance};
-    protected BProgram _program;
+    protected BPApplication _program;
 
     public void setLastPlayer(BPPlayer lastPlayer) {
         _lastPlayer = lastPlayer;
@@ -27,7 +27,7 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
 
     protected BPPlayer _lastPlayer;
 
-    public BPGame(BProgram bp) {
+    public BPGame(BPApplication bp) {
         _program = bp;
         _lastPlayer = BPSystemPlayer.instance;
     }

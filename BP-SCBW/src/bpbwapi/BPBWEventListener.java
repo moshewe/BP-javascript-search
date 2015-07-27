@@ -1,9 +1,9 @@
 package bpbwapi;
 
 import bp.BProgramControls;
+import bpbwapi.events.input.OnFrameEvent;
 import bpbwapi.events.input.OnStartEvent;
 import bpbwapi.events.input.UnitCreateEvent;
-import bpbwapi.events.input.onFrameEvent;
 import bwapi.DefaultBWListener;
 import bwapi.Unit;
 import bwta.BWTA;
@@ -13,18 +13,29 @@ import bwta.BWTA;
  */
 public class BPBWEventListener extends DefaultBWListener {
 
-    protected SCBWJavascriptApplication _app;
+    private final BPBWRobot _robot;
+    protected BWJavascriptApplication _app;
+
+    public BPBWEventListener(BPBWRobot robot, BWJavascriptApplication app) {
+        this._app = app;
+        _robot = robot;
+    }
 
     @Override
     public void onStart() {
-        bplog("onStart event fired!");
+        //Use BWTA to analyze map
+        bplog("Analyzing map...");
+        BWTA.readMap();
+        BWTA.analyze();
+        bplog("Map data ready");
+        _robot.setGameFromMirror();
+        _robot.setPlayerFromGame();
         _app.fire(new OnStartEvent());
     }
 
     @Override
     public void onFrame() {
-        bplog("onFrame event fired!");
-        _app.fire(new onFrameEvent());
+        _app.fire(new OnFrameEvent());
     }
 
     @Override

@@ -16,7 +16,7 @@ import static java.nio.file.Paths.get;
 /**
  * Created by orelmosheweinstock on 3/28/15.
  */
-public abstract class BJavascriptProgram extends BProgram {
+public abstract class BJavascriptProgram extends BPApplication {
 
     public static final String GLOBAL_SCOPE_INIT = "BPJavascriptGlobalScopeInit";
     protected Arbiter _arbiter;

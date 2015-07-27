@@ -42,12 +42,16 @@ public class TicTacToe extends BPSearchApplication {
 
     public static void main(String[] args) throws MalformedURLException,
             InstantiationException, IllegalAccessException,
-            ClassNotFoundException {
+            ClassNotFoundException, InterruptedException {
         final TicTacToe ttt = new TicTacToe();
         Thread tttThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ttt.start();
+                try {
+                    ttt.start();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         tttThread.start();

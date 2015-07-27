@@ -1,21 +1,23 @@
 package bpbwapi.examplerobot;
 
 import bpbwapi.BWActuator;
-import bwapi.*;
-import bwapi.Text.Size.Enum;
+import bwapi.Game;
+import bwapi.Unit;
+import bwapi.UnitType;
 
 /**
- * Created by orelmosheweinstock on 7/1/15.
+ * Created by moshewe on 27/07/2015.
  */
-public class ExampleRobotActuator extends BWActuator {
+public class ListUnitsActuator extends BWActuator<ListUnitsEvent, Void> {
 
-    public ExampleRobotActuator(Mirror mirror) {
-        super(mirror);
+    public ListUnitsActuator(Game _game) {
+        super(_game);
     }
 
-    public void visit(ListUnitsEvent event) {
-        bplog("visiting ListUnitsEvent");
-        _game.setTextSize(Enum.Large);
+    @Override
+    public Void actuate(ListUnitsEvent event) {
+        bplog("actuating ListUnitsEvent");
+        _game.setTextSize(bwapi.Text.Size.Enum.Large);
         _game.drawTextScreen(10, 10, "Playing as " + _self.getName() + " - " + _self.getRace());
 
         StringBuilder units = new StringBuilder("My units:\n");
@@ -51,6 +53,6 @@ public class ExampleRobotActuator extends BWActuator {
 
         //draw my units on screen
         _game.drawTextScreen(10, 25, units.toString());
+        return null;
     }
-
 }

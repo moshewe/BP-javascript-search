@@ -1,7 +1,7 @@
 package bp.search;
 
 import bp.BEvent;
-import bp.BProgram;
+import bp.BPApplication;
 import bp.BThread;
 
 import java.util.*;
@@ -11,14 +11,14 @@ import java.util.*;
  */
 public class BPState {
 
-    public BProgram getProgram() {
+    public BPApplication getProgram() {
         return _program;
     }
 
     /**
      * The be-_program whose state is captured
      */
-    public final BProgram _program;
+    public final BPApplication _program;
     /**
      * The states of the relevant be-threads
      */
@@ -34,7 +34,7 @@ public class BPState {
         }
     }
 
-    public BPState(BProgram bp) {
+    public BPState(BPApplication bp) {
         this._program = bp;
         eventLog = new LinkedList<>(bp.eventLog);
         _btstates = new ArrayList<>();

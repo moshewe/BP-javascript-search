@@ -2,10 +2,7 @@ package bp;
 
 import bp.eventSets.EventSetInterface;
 import bp.eventSets.RequestableInterface;
-import bp.tasks.ActuatorTask;
-import bp.tasks.NextEvent;
-import bp.tasks.ResumeBThread;
-import bp.tasks.StartBThread;
+import bp.tasks.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -13,7 +10,7 @@ import java.util.concurrent.*;
 
 import static bp.BProgramControls.debugMode;
 
-public abstract class BProgram implements Cloneable, Serializable {
+public abstract class BPApplication implements Cloneable, Serializable {
 
     /**
      * A collection containing all the be-threads in the system. A be-thread
@@ -34,14 +31,13 @@ public abstract class BProgram implements Cloneable, Serializable {
     private volatile BlockingQueue<BEvent> _inputEventQueue;
     private volatile BlockingQueue<BEvent> _outputEventQueue;
     protected ExecutorService _executor;
-    protected BActuator _actuator;
 
     public void setArbiter(Arbiter arbiter) {
         this._arbiter = arbiter;
         arbiter.setProgram(this);
     }
 
-    public BProgram() {
+    public BPApplication() {
         _bthreads = new ArrayList<BThread>();
         _arbiter = new Arbiter();
         _arbiter.setProgram(this);
@@ -132,7 +128,7 @@ public abstract class BProgram implements Cloneable, Serializable {
     }
 
     /**
-     * Sets the error that occurred during the run, to make BProgram terminate
+     * Sets the error that occurred during the run, to make BPApplication terminate
      * at the next bSync and print the error.
      *
      * @param error An Object of the error occurred during the run - better have
@@ -252,6 +248,7 @@ public abstract class BProgram implements Cloneable, Serializable {
     }
 
     public void fire(BEvent e) {
+//        bplog(e + " fired!");
         _inputEventQueue.add(e);
     }
 
@@ -259,6 +256,7 @@ public abstract class BProgram implements Cloneable, Serializable {
         BEvent e = null;
         try {
             e = _inputEventQueue.take();
+            bplog("dequeued input event " + e);
         } catch (InterruptedException ie) {
             // TODO Auto-generated catch block
             ie.printStackTrace();
@@ -268,40 +266,30 @@ public abstract class BProgram implements Cloneable, Serializable {
     }
 
     public void emit(BEvent e) {
+        bplog("emitted " + e);
         _outputEventQueue.add(e);
     }
 
-    public BEvent dequeueOutputEvent() {
-        BEvent e = null;
-        try {
-            e = _outputEventQueue.take();
-        } catch (InterruptedException ie) {
-            // TODO Auto-generated catch block
-            ie.printStackTrace();
-        }
-
-        return e;
+    public BEvent dequeueOutputEvent() throws InterruptedException {
+        BEvent take = _outputEventQueue.take();
+        bplog("read " + take + " from output queue");
+        return take;
     }
 
-    public void start() {
+    public void start() throws InterruptedException {
         bplog("********* Starting " + _bthreads.size()
                 + " scenarios  **************");
+
+        Collection<StartBThread> startBtTasks =
+                new ArrayList<>(_bthreads.size());
         for (BThread bt : _bthreads) {
-            _executor.execute(new StartBThread(bt));
+            startBtTasks.add(new StartBThread(bt));
         }
 
+        _executor.invokeAll(startBtTasks);
         bplog("********* " + _bthreads.size()
                 + " scenarios started **************");
-        NextEvent el = new NextEvent(this, _arbiter);
-        _executor.execute(el);
-        _executor.execute(new ActuatorTask(this));
+        _executor.execute(new NextEvent(this, _arbiter));
     }
 
-    public BActuator getActuator() {
-        return _actuator;
-    }
-
-    public void setActuator(BActuator actuator) {
-        _actuator = actuator;
-    }
 }

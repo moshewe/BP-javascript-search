@@ -15,13 +15,13 @@ import static bp.BProgramControls.debugMode;
  */
 public class Arbiter {
 
-    protected BProgram _program;
+    protected BPApplication _program;
 
-    public BProgram getProgram() {
+    public BPApplication getProgram() {
         return _program;
     }
 
-    public void setProgram(BProgram program) {
+    public void setProgram(BPApplication program) {
         this._program = program;
     }
 

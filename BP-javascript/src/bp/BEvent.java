@@ -13,7 +13,8 @@ import static bp.BProgramControls.debugMode;
  * A base class for events
  */
 @SuppressWarnings("serial")
-public class BEvent implements EventSetInterface, RequestableInterface, Comparable<BEvent> {
+public class BEvent implements EventSetInterface,
+        RequestableInterface, Comparable<BEvent> {
 
     protected String _name = this.getClass().getSimpleName();
     protected boolean _outputEvent = false;
@@ -102,10 +103,6 @@ public class BEvent implements EventSetInterface, RequestableInterface, Comparab
     @Override
     public int compareTo(BEvent e) {
         return _name.compareTo(e.getName());
-    }
-
-    public void accept(BActuator vis) {
-        vis.visit(this);
     }
 
     protected void bplog(String string) {

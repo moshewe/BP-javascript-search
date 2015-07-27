@@ -1,6 +1,6 @@
 package bp.search.informed;
 
-import bp.BProgram;
+import bp.BPApplication;
 import bp.search.BPAction;
 import bp.search.BPState;
 import bp.search.events.SimStartEvent;
@@ -12,9 +12,9 @@ import static bp.BProgramControls.debugMode;
  */
 public class InitStateGenerator {
 
-    protected BProgram _program;
+    protected BPApplication _program;
 
-    public InitStateGenerator(BProgram program) {
+    public InitStateGenerator(BPApplication program) {
         _program = program;
     }
 

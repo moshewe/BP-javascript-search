@@ -2,7 +2,7 @@ package bp.search;
 
 import aima.core.agent.Action;
 import bp.BEvent;
-import bp.BProgram;
+import bp.BPApplication;
 import bp.BThread;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class BPAction implements Action, Comparable<BPAction> {
         bps.restore();
         bplog("BEFORE: " + bps.toString());
         BPState newBps = bps.copy();
-        BProgram bp = newBps.getProgram();
+        BPApplication bp = newBps.getProgram();
         bp.eventLog.add(_ev);
         newBps.eventLog.add(_ev);
         for (BTState bts : newBps.getBTstates()) {

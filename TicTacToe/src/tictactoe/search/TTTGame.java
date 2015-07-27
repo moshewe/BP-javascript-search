@@ -1,7 +1,7 @@
 package tictactoe.search;
 
 import bp.BEvent;
-import bp.BProgram;
+import bp.BPApplication;
 import bp.search.BPState;
 import bp.search.adversarial.BPGame;
 import bp.search.adversarial.BPPlayer;
@@ -17,7 +17,7 @@ public class TTTGame extends BPGame {
     public static final BPPlayer oPlayer = new OPlayer();
     public static final BPPlayer[] players = {xPlayer, oPlayer};
 
-    public TTTGame(BProgram bp) {
+    public TTTGame(BPApplication bp) {
         super(bp);
     }
 

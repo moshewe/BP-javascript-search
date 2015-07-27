@@ -1,13 +1,13 @@
 package tictactoe.search;
 
-import bp.BProgram;
+import bp.BPApplication;
 import bp.search.BPState;
 import tictactoe.events.O;
 import tictactoe.events.X;
 
 public class TTTState extends BPState {
 
-    public TTTState(BProgram bp) {
+    public TTTState(BPApplication bp) {
         super(bp);
     }
 

@@ -1,6 +1,6 @@
 package tictactoe.search;
 
-import bp.BProgram;
+import bp.BPApplication;
 import bp.search.informed.InitStateGenerator;
 
 /**
@@ -8,7 +8,7 @@ import bp.search.informed.InitStateGenerator;
  */
 public class TTTInitStateGenerator extends InitStateGenerator {
 
-    public TTTInitStateGenerator(BProgram program) {
+    public TTTInitStateGenerator(BPApplication program) {
         super(program);
     }
 

@@ -1,6 +1,6 @@
 package tictactoe;
 
-import bp.BProgram;
+import bp.BPApplication;
 import tictactoe.events.X;
 
 import javax.swing.*;
@@ -17,13 +17,13 @@ public class GUI implements ActionListener, Serializable {
 	public JButton buttons[][] = new JButton[3][];
 	public JLabel message = new JLabel();
 
-	private BProgram bp;
+	private BPApplication bp;
 
 	/**
 	 * Constructor.
 	 */
 
-	public GUI(BProgram bp) {
+	public GUI(BPApplication bp) {
 		this.bp = bp;
 
 		// Create window

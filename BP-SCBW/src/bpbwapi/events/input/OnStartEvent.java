@@ -8,7 +8,7 @@ import bp.BEvent;
 public class OnStartEvent extends BEvent{
 
     public OnStartEvent() {
-        _name = "onStart";
         _outputEvent = true;
     }
+
 }

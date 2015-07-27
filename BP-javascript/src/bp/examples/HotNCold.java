@@ -54,7 +54,7 @@ public class HotNCold extends BJavascriptProgram {
     }
 
     @Test
-    public void hotNColdTest() {
+    public void hotNColdTest() throws InterruptedException {
         final HotNCold hnc = new HotNCold();
         hnc.start();
         System.out.println("starting output event read loop");

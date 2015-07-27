@@ -2,19 +2,17 @@ package bp.tasks;
 
 import bp.Arbiter;
 import bp.BEvent;
-import bp.BProgram;
-
-import java.util.concurrent.RecursiveAction;
+import bp.BPApplication;
 
 /**
  * Created by moshewe on 04/07/2015.
  */
 public class NextEvent extends BPTask {
 
-    protected BProgram _bp;
+    protected BPApplication _bp;
     protected Arbiter _arbiter;
 
-    public NextEvent(BProgram bp, Arbiter arbiter) {
+    public NextEvent(BPApplication bp, Arbiter arbiter) {
         this._bp = bp;
         this._arbiter = arbiter;
     }
@@ -22,18 +20,18 @@ public class NextEvent extends BPTask {
     @Override
     public void run() {
         if (_bp.getBThreads().isEmpty()) {
-            _bp.bplog("=== ALL DONE!!! ===");
+            bplog("=== ALL DONE!!! ===");
             return;
         }
 
         BEvent next = _arbiter.nextEvent();
         if (next == null) {
-            _bp.bplog("no event chosen, waiting for an external event to be fired...");
+            bplog("no event chosen, waiting for an external event to be fired...");
             next = _bp.getInputEvent();
         }
 
         if (next.isOutputEvent()) {
-            _bp.bplog(next + " is an output event.");
+            bplog(next + " is an output event.");
             _bp.emit(next);
         }
 

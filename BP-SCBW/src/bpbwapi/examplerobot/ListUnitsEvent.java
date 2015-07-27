@@ -7,4 +7,8 @@ import bp.BEvent;
  */
 public class ListUnitsEvent extends BEvent {
 
+    public ListUnitsEvent() {
+        _outputEvent = true;
+    }
+
 }
