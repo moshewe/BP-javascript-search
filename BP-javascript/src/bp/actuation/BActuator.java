@@ -15,7 +15,8 @@ public abstract class BActuator<EventType extends BEvent,
 
     protected void bplog(String s) {
         if (BProgramControls.debugMode)
-            System.out.println(getClass().getSimpleName() + ": " + s);
+            System.out.println("[" + getClass().getSimpleName() +
+                    "]: " + s);
     }
 
 }

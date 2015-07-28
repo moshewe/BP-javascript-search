@@ -55,7 +55,7 @@ public class TicTacToe extends BPSearchApplication {
             }
         });
         tttThread.start();
-        BEvent outputEvent = ttt.dequeueOutputEvent();
+        BEvent outputEvent = ttt.readOutputEvent();
         String msg = null;
         while (true) {
             if (outputEvent instanceof X ||
@@ -86,7 +86,7 @@ public class TicTacToe extends BPSearchApplication {
             }
 
             //announce game over?
-            outputEvent = ttt.dequeueOutputEvent();
+            outputEvent = ttt.readOutputEvent();
         }
 
     }

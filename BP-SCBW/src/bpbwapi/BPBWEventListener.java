@@ -30,6 +30,8 @@ public class BPBWEventListener extends DefaultBWListener {
         bplog("Map data ready");
         _robot.setGameFromMirror();
         _robot.setPlayerFromGame();
+        _robot.setupActuationService();
+        _robot.startActuation();
         _app.fire(new OnStartEvent());
     }
 

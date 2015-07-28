@@ -24,8 +24,7 @@ public class ActuationTask implements Callable<Void>, Runnable {
     public Void call() throws Exception {
         System.out.println("ActuationTask started!");
         while (true) {
-            BEvent event = _app.dequeueOutputEvent();
-            System.out.println(event + " read from output queue");
+            BEvent event = _app.readOutputEvent();
             _actService.actuate(event);
         }
     }

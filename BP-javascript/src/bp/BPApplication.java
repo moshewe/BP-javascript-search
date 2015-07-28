@@ -270,9 +270,8 @@ public abstract class BPApplication implements Cloneable, Serializable {
         _outputEventQueue.add(e);
     }
 
-    public BEvent dequeueOutputEvent() throws InterruptedException {
+    public BEvent readOutputEvent() throws InterruptedException {
         BEvent take = _outputEventQueue.take();
-        bplog("read " + take + " from output queue");
         return take;
     }
 

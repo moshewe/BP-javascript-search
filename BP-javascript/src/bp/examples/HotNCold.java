@@ -59,10 +59,10 @@ public class HotNCold extends BJavascriptProgram {
         hnc.start();
         System.out.println("starting output event read loop");
 //      imagine this is run in a separate thread on another machine
-        BEvent outputEvent = hnc.dequeueOutputEvent();
+        BEvent outputEvent = hnc.readOutputEvent();
         while (!outputEvent.getName().equals("ALLDONE")) {
             System.out.println("program emitted " + outputEvent);
-            outputEvent = hnc.dequeueOutputEvent();
+            outputEvent = hnc.readOutputEvent();
         }
         System.out.println("got ALLDONE event");
     }
