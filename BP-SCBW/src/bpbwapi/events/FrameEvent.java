@@ -1,10 +1,10 @@
-package bpbwapi.events.input;
+package bpbwapi.events;
 
 import bp.BEvent;
 
 /**
  * Created by orelmosheweinstock on 7/1/15.
  */
-public class OnFrameEvent extends BEvent {
+public class FrameEvent extends BEvent {
 
 }

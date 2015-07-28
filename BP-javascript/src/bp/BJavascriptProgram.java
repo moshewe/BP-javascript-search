@@ -92,7 +92,7 @@ public abstract class BJavascriptProgram extends BPApplication {
         cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
             BThread bt = new BThread(name, func);
-            add(bt);
+            super.registerBThread(bt);
             return bt;
         } finally {
             Context.exit();

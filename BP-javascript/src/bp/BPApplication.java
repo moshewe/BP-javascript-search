@@ -31,6 +31,7 @@ public abstract class BPApplication implements Cloneable, Serializable {
     private volatile BlockingQueue<BEvent> _inputEventQueue;
     private volatile BlockingQueue<BEvent> _outputEventQueue;
     protected ExecutorService _executor;
+    private boolean _started = false;
 
     public void setArbiter(Arbiter arbiter) {
         this._arbiter = arbiter;
@@ -276,6 +277,7 @@ public abstract class BPApplication implements Cloneable, Serializable {
     }
 
     public void start() throws InterruptedException {
+        _started = true;
         bplog("********* Starting " + _bthreads.size()
                 + " scenarios  **************");
 
@@ -289,6 +291,13 @@ public abstract class BPApplication implements Cloneable, Serializable {
         bplog("********* " + _bthreads.size()
                 + " scenarios started **************");
         _executor.execute(new NextEvent(this, _arbiter));
+    }
+
+    public void registerBThread(BThread bt) {
+        add(bt);
+        if (_started) {
+            _executor.execute(new StartBThread(bt));
+        }
     }
 
 }

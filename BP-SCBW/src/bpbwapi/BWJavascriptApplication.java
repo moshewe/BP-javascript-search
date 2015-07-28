@@ -2,9 +2,8 @@ package bpbwapi;
 
 import bp.eventSets.EventsOfClass;
 import bp.search.BPSearchApplication;
-import bpbwapi.events.input.UnitCreateEvent;
-import bpbwapi.events.input.OnFrameEvent;
-import bwapi.Mirror;
+import bpbwapi.events.UnitCreate;
+import bpbwapi.events.FrameEvent;
 
 import java.io.InputStream;
 
@@ -26,9 +25,9 @@ public class BWJavascriptApplication extends BPSearchApplication {
     protected void setupGlobalScope() {
         super.setupGlobalScope();
         putInGlobalScope("unitCreateEvent",
-                new EventsOfClass(UnitCreateEvent.class));
+                new EventsOfClass(UnitCreate.class));
         putInGlobalScope("onFrameEvent",
-                new EventsOfClass(OnFrameEvent.class));
+                new EventsOfClass(FrameEvent.class));
         InputStream script = BWJavascriptApplication.class.getResourceAsStream("globalScopeInit.js");
         evaluateInGlobalScope(script, "SCBW-js-init");
     }

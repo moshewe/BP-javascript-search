@@ -1,4 +1,4 @@
-package bpbwapi.events.input;
+package bpbwapi.events;
 
 import bp.events.WrapperEvent;
 import bwapi.Unit;
@@ -6,9 +6,9 @@ import bwapi.Unit;
 /**
  * Created by orelmosheweinstock on 6/30/15.
  */
-public class UnitCreateEvent extends WrapperEvent<Unit> {
+public class UnitCreate extends UnitEvent {
 
-    public UnitCreateEvent(Unit event) {
+    public UnitCreate(Unit event) {
         super(event);
     }
 
