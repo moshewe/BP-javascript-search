@@ -25,12 +25,18 @@ public class BThread implements Serializable {
     protected EventSetInterface _wait;
     protected EventSetInterface _block;
     protected boolean _alive = true;
+    private Context _globalContext;
 
 
     public BThread() {
         _request = none;
         _wait = none;
         _block = none;
+    }
+
+    private void openGlobalContext() {
+        _globalContext = ContextFactory.getGlobal().enterContext();
+        _globalContext.setOptimizationLevel(-1); // must use interpreter mode
     }
 
     public BThread(String name, Function func) {
@@ -138,44 +144,44 @@ public class BThread implements Serializable {
         return tScope;
     }
 
-//    public Object evaluateInBThreadScope(InputStream script,
-//                                         String scriptname) {
-//        return BJavascriptProgram.evaluateInGlobalContext(
-//                _scope, script, scriptname);
-//    }
-
     public void start() {
-        Context cx = ContextFactory.getGlobal().enterContext();
-        cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
+            openGlobalContext();
             bplog("started!");
-            cx.callFunctionWithContinuations(_func, _scope,
+            _globalContext.callFunctionWithContinuations(_func, _scope,
                     new Object[0]);
         } catch (ContinuationPending pending) {
             _cont = pending;
         } finally {
-            Context.exit();
+            closeGlobalContext();
         }
     }
 
+    private void closeGlobalContext() {
+        Context.exit();
+    }
+
     public ContinuationPending resume(BEvent event) {
-        Context cx = ContextFactory.getGlobal().enterContext();
-        cx.setOptimizationLevel(-1); // must use interpreter mode
         try {
+            openGlobalContext();
             Object eventInJS = Context.javaToJS(event, _scope);
-            cx.resumeContinuation(_cont.getContinuation(), _scope,
-                    eventInJS);
+            resumeContinuation(eventInJS);
         } catch (ContinuationPending pending) {
             _cont = pending;
             return _cont;
         } finally {
-            Context.exit();
+            closeGlobalContext();
         }
 
         bplog(" I'm over!");
         _alive = false;
         zombie();
         return null;
+    }
+
+    private void resumeContinuation(Object eventInJS) {
+        _globalContext.resumeContinuation(_cont.getContinuation(), _scope,
+                eventInJS);
     }
 
     public BEvent bsync(Object obj1, EventSetInterface waitedEvents,
@@ -193,12 +199,12 @@ public class BThread implements Serializable {
         _block = blockedEvents;
         bplog("bsyncing with " + requestedEvents + ", " +
                 waitedEvents + ", " + blockedEvents);
-        Context cx = ContextFactory.getGlobal().enterContext();
         try {
-            ContinuationPending pending = cx.captureContinuation();
+            ContinuationPending pending =
+                    _globalContext.captureContinuation();
             throw pending;
         } finally {
-            Context.exit();
+            closeGlobalContext();
         }
     }
 

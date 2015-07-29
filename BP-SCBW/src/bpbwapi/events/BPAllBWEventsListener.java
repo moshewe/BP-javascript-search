@@ -1,53 +1,23 @@
-package bpbwapi;
+package bpbwapi.events;
 
-import bp.BProgramControls;
-import bpbwapi.events.*;
-import bwapi.DefaultBWListener;
+import bpbwapi.BPBWRobot;
+import bpbwapi.BWJavascriptApplication;
 import bwapi.Player;
 import bwapi.Position;
 import bwapi.Unit;
-import bwta.BWTA;
 
 /**
  * Created by moshewe on 30/06/2015.
  */
-public class BPBWEventListener extends DefaultBWListener {
+public class BPAllBWEventsListener extends BPDefaultBWListener {
 
-    private final BPBWRobot _robot;
-    protected BWJavascriptApplication _app;
-
-    public BPBWEventListener(BPBWRobot robot, BWJavascriptApplication app) {
-        this._app = app;
-        _robot = robot;
-    }
-
-    @Override
-    public void onStart() {
-        //Use BWTA to analyze map
-        bplog("Analyzing map...");
-        BWTA.readMap();
-        BWTA.analyze();
-        bplog("Map data ready");
-        _robot.setGameFromMirror();
-        _robot.setPlayerFromGame();
-        _robot.setupActuationService();
-        _robot.startActuation();
-        _app.fire(new StartEvent());
-    }
-
-    @Override
-    public void onFrame() {
-        _app.fire(new FrameEvent());
+    public BPAllBWEventsListener(BPBWRobot robot, BWJavascriptApplication app) {
+        super(app, robot);
     }
 
     @Override
     public void onUnitCreate(Unit unit) {
         _app.fire(new UnitCreate(unit));
-    }
-
-    @Override
-    public void onEnd(boolean b) {
-        _app.fire(new OnEndEvent(b));
     }
 
     @Override
@@ -118,11 +88,6 @@ public class BPBWEventListener extends DefaultBWListener {
     @Override
     public void onPlayerDropped(Player player) {
         _app.fire(new PlayerDropped(player));
-    }
-
-    private void bplog(String s) {
-        if (BProgramControls.debugMode)
-            System.out.println(getClass().getSimpleName() + ": " + s);
     }
 
 }

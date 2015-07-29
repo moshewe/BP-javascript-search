@@ -207,14 +207,7 @@ public abstract class BPApplication implements Cloneable, Serializable {
             Collection<ResumeBThread> resumes
                     = new LinkedList<>();
             for (BThread bt : _bthreads) {
-//                if (bt.getName().startsWith("SquareTaken"))
-//                    bplog(bt + " waitlist:" + bt.getWaitedEvents().toString());
-                boolean waited = bt.isWaited(lastEvent);
-                boolean requested = bt.isRequested(lastEvent);
-                if (waited || requested) {
-                    resumes.add(new ResumeBThread(bt, lastEvent));
-//                    bt.resume(lastEvent);
-                }
+                resumes.add(new ResumeBThread(bt, lastEvent));
             }
             try {
                 _executor.invokeAll(resumes);
@@ -277,7 +270,6 @@ public abstract class BPApplication implements Cloneable, Serializable {
     }
 
     public void start() throws InterruptedException {
-        _started = true;
         bplog("********* Starting " + _bthreads.size()
                 + " scenarios  **************");
 
@@ -290,6 +282,7 @@ public abstract class BPApplication implements Cloneable, Serializable {
         _executor.invokeAll(startBtTasks);
         bplog("********* " + _bthreads.size()
                 + " scenarios started **************");
+        _started = true;
         _executor.execute(new NextEvent(this, _arbiter));
     }
 

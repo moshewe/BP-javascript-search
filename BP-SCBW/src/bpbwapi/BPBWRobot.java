@@ -2,6 +2,9 @@ package bpbwapi;
 
 import bp.actuation.ActuatorService;
 import bp.tasks.ActuationTask;
+import bpbwapi.events.BPAllBWEventsListener;
+import bpbwapi.events.BPDefaultBWListener;
+import bwapi.BWEventListener;
 import bwapi.Game;
 import bwapi.Mirror;
 import bwapi.Player;
@@ -16,7 +19,7 @@ public class BPBWRobot {
 
     protected BWJavascriptApplication _app;
     protected Mirror _mirror = new Mirror();
-    protected BPBWEventListener _listener;
+    protected BWEventListener _listener;
     protected Game _game;
     protected Player _self;
     protected ActuatorService _actService;
@@ -25,8 +28,7 @@ public class BPBWRobot {
 
     public BPBWRobot(BWJavascriptApplication app) {
         _app = app;
-        _listener = new BPBWEventListener(this, _app);
-        _mirror.getModule().setEventListener(_listener);
+        setBWListener(new BPDefaultBWListener(_app, this));
         _startTask = new Runnable() {
             @Override
             public void run() {
@@ -38,6 +40,11 @@ public class BPBWRobot {
                 }
             }
         };
+    }
+
+    protected void setBWListener(BPDefaultBWListener listener) {
+        _listener = listener;
+        _mirror.getModule().setEventListener(_listener);
     }
 
     public void start() throws InterruptedException {

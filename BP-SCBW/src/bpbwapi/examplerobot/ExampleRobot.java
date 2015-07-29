@@ -14,6 +14,7 @@ public class ExampleRobot extends BPBWRobot {
 
     public ExampleRobot(BWJavascriptApplication app) {
         super(app);
+        setBWListener(new ExampleListener(app, this));
     }
 
     @Override
