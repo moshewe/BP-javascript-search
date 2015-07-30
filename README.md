@@ -18,7 +18,7 @@ A bot building interface with BP! Built using BWMirror and BWAPI.
 7. Import this repository to your favorite IDE.
 
 ## Map Pack & ChaosLauncher Configuration
-Follow instructions on this page:
+Install the map pack linked in this page and follow the instructions for configuring ChaosLauncher automatically.
 http://www.sscaitournament.com/index.php?action=tutorial
 
 > Implemented by Moshe Weinstock for his MS.C. thesis at Ben-Gurion University.
