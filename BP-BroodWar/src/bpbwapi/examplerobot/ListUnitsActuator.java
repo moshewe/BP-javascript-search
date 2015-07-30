@@ -7,6 +7,8 @@ import bwapi.UnitType;
 
 /**
  * Created by moshewe on 27/07/2015.
+ *
+ * the idea is to separate the action from the bp behavior
  */
 public class ListUnitsActuator extends BWActuator<ListUnitsEvent, Void> {
 

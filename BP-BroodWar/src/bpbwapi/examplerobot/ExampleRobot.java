@@ -17,6 +17,11 @@ public class ExampleRobot extends BPBWRobot {
         setBWListener(new ExampleListener(app, this));
     }
 
+    /**
+     * a mechanism that takes events automaticly from output queue
+     * operates the relevant actuator (the one that executes the action in the real world)
+     * by event Type
+     */
     @Override
     public void setupActuationService() {
         super.setupActuationService();
@@ -24,7 +29,7 @@ public class ExampleRobot extends BPBWRobot {
         ActuatorFactory<ListUnitsActuator> factory =
                 new ActuatorFactory<>(ListUnitsActuator.class,
                         paramList);
-        _actService.put(ListUnitsEvent.class, factory);
+        _actService.put(ListUnitsEvent.class, factory);// event type - "list units"
     }
 
     public static void main(String[] args) throws InterruptedException {
