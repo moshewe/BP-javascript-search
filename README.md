@@ -12,13 +12,15 @@ A bot building interface with BP! Built using BWMirror and BWAPI.
 1. Install Starcraft.
 2. Install Brood War.
 3. Install BWAPI.
-4. Install Visual C++ Redistributable Packages for Visual Studio 2013 (https://www.microsoft.com/en-us/download/details.aspx?id=40784) (vcredist_x86.exe)
-5. Install the latest 32-bit Java 7 SDK (http://download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-windows-i586.exe).
-6. Install Git.
-7. Import this repository to your favorite IDE.
+4. Install BroodWar path v1.161 (http://www.gamershell.com/download_38354.shtml)
+5. Install Visual C++ Redistributable Packages for Visual Studio 2013 (https://www.microsoft.com/en-us/download/details.aspx?id=40784) (vcredist_x86.exe)
+6. Install the latest 32-bit Java 7 SDK (http://download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-windows-i586.exe).
+7. Install Git.
+8. Import this repository to your favorite IDE.
 
 ## Map Pack & ChaosLauncher Configuration
 Install the map pack linked in this page and follow the instructions for configuring ChaosLauncher automatically.
 http://www.sscaitournament.com/index.php?action=tutorial
 
+> PLEASE BUY THIS GREAT GAME.
 > Implemented by Moshe Weinstock for his MS.C. thesis at Ben-Gurion University.
