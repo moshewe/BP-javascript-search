@@ -14,6 +14,8 @@ A bot building interface with BP! Built using BWMirror and BWAPI.
 3. Install BWAPI.
 4. Install Visual C++ Redistributable Packages for Visual Studio 2013 (https://www.microsoft.com/en-us/download/details.aspx?id=40784) (vcredist_x86.exe)
 5. Install a 32-bit Java 7 SDK.
+6. Install Git.
+7. Import this repository to your favorite IDE.
 
 
 
