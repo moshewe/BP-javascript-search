@@ -11,7 +11,7 @@ A bot building interface with BP! Built using BWMirror and BWAPI.
 
 1. Install Starcraft.
 2. Install Brood War.
-3. Install BWAPI.
+3. Install BWAPI. (https://github.com/bwapi/bwapi/releases/download/v4.1.0-Beta/BWAPI_410B_2_Setup.exe)
 4. Install BroodWar path v1.161 (http://www.gamershell.com/download_38354.shtml)
 5. Install Visual C++ Redistributable Packages for Visual Studio 2013 (https://www.microsoft.com/en-us/download/details.aspx?id=40784) (vcredist_x86.exe)
 6. Install the latest 32-bit Java 7 SDK (http://download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-windows-i586.exe).
