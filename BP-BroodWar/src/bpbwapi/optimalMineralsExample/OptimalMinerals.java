@@ -11,4 +11,14 @@ public class OptimalMinerals extends BPBWRobot {
     public OptimalMinerals(BWJavascriptApplication app) {
         super(app);
     }
+
+    public static void main(String[] args) {
+
+    }
+
+    @Override
+    public void setupActuationService() {
+        super.setupActuationService();
+    }
 }
+
