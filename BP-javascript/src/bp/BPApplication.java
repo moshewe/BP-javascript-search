@@ -241,6 +241,10 @@ public abstract class BPApplication implements Cloneable, Serializable {
         _bthreads.add(bt);
     }
 
+    /**
+     * a method that sends events as input for the application
+     * @param e
+     */
     public void fire(BEvent e) {
 //        bplog(e + " fired!");
         _inputEventQueue.add(e);
