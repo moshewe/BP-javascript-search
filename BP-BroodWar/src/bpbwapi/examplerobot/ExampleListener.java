@@ -1,6 +1,6 @@
 package bpbwapi.examplerobot;
 
-import bpbwapi.BPBWRobot;
+import bpbwapi.BPBroodWarBot;
 import bpbwapi.BWJavascriptApplication;
 import bpbwapi.events.BPDefaultBWListener;
 import bpbwapi.events.UnitCreate;
@@ -11,7 +11,7 @@ import bwapi.Unit;
  */
 public class ExampleListener extends BPDefaultBWListener {
 
-    public ExampleListener(BWJavascriptApplication app, BPBWRobot robot) {
+    public ExampleListener(BWJavascriptApplication app, BPBroodWarBot robot) {
         super(app, robot);
     }
 

@@ -1,21 +1,21 @@
 package bpbwapi.examplerobot;
 
-import bp.actuation.ActuatorFactory;
-import bpbwapi.BPBWRobot;
+import bpbwapi.BPBroodWarBot;
+import bpbwapi.BWActuatorFactory;
 
 /**
  * Created by moshewe on 27/07/2015.
  */
-public class ExampleRobot extends BPBWRobot {
+public class ExampleBot extends BPBroodWarBot {
 
-    public ExampleRobot(ExampleRobotApp app) {
+    public ExampleBot(ExampleBotApp app) {
         super(app);
         setBWListener(new ExampleListener(app, this));
     }
 
     public static void main(String[] args) throws InterruptedException {
-        ExampleRobotApp app = new ExampleRobotApp();
-        final ExampleRobot ex = new ExampleRobot(app);
+        ExampleBotApp app = new ExampleBotApp();
+        final ExampleBot ex = new ExampleBot(app);
         ex.start();
     }
 
@@ -27,10 +27,9 @@ public class ExampleRobot extends BPBWRobot {
     @Override
     public void setupActuationService() {
         super.setupActuationService();
-        Object[] paramList = {_game};
-        ActuatorFactory<ListUnitsActuator> factory =
-                new ActuatorFactory<>(ListUnitsActuator.class,
-                        paramList);
-        _actService.put(ListUnitsEvent.class, factory);// event type - "list units"
+        BWActuatorFactory<ListUnitsActuator> factory =
+                new BWActuatorFactory<>(ListUnitsActuator.class,
+                        _game);
+        _actService.register(ListUnitsEvent.class, factory);// event type - "list units"
     }
 }

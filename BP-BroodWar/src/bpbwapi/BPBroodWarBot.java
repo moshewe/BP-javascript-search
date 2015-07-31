@@ -2,7 +2,6 @@ package bpbwapi;
 
 import bp.actuation.ActuatorService;
 import bp.tasks.ActuationTask;
-import bpbwapi.events.BPAllBWEventsListener;
 import bpbwapi.events.BPDefaultBWListener;
 import bwapi.BWEventListener;
 import bwapi.Game;
@@ -15,7 +14,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by moshewe on 27/07/2015.
  */
-public class BPBWRobot {
+public class BPBroodWarBot {
 
     protected BWJavascriptApplication _app;
     protected Mirror _mirror = new Mirror();
@@ -26,7 +25,7 @@ public class BPBWRobot {
     protected ExecutorService _executor = Executors.newCachedThreadPool();
     protected Runnable _startTask;
 
-    public BPBWRobot(BWJavascriptApplication app) {
+    public BPBroodWarBot(BWJavascriptApplication app) {
         _app = app;
         setBWListener(new BPDefaultBWListener(_app, this));
         _startTask = new Runnable() {

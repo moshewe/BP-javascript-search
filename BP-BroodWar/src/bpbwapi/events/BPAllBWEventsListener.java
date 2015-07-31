@@ -1,6 +1,6 @@
 package bpbwapi.events;
 
-import bpbwapi.BPBWRobot;
+import bpbwapi.BPBroodWarBot;
 import bpbwapi.BWJavascriptApplication;
 import bwapi.Player;
 import bwapi.Position;
@@ -11,7 +11,7 @@ import bwapi.Unit;
  */
 public class BPAllBWEventsListener extends BPDefaultBWListener {
 
-    public BPAllBWEventsListener(BPBWRobot robot, BWJavascriptApplication app) {
+    public BPAllBWEventsListener(BPBroodWarBot robot, BWJavascriptApplication app) {
         super(app, robot);
     }
 

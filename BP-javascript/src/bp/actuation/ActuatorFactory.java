@@ -2,7 +2,6 @@ package bp.actuation;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 /**
  * Created by moshewe on 27/07/2015.
@@ -12,10 +11,10 @@ public class ActuatorFactory<Actuator extends BActuator> {
     protected Constructor<Actuator> _ctor;
     protected Object[] _actParams;
 
-    public ActuatorFactory(Class<Actuator> clazz, Object[] actParams) {
+    public ActuatorFactory(Class<Actuator> clazz, Object... actParams) {
         Constructor<?>[] constructors = clazz.getConstructors();
         _ctor = (Constructor<Actuator>) constructors[0];
-        setParameters(actParams);
+        _actParams = actParams;
     }
 
     public Actuator newInstance(){
@@ -44,11 +43,4 @@ public class ActuatorFactory<Actuator extends BActuator> {
         e.printStackTrace();
     }
 
-    public void setParameters(List<Object> parameters) {
-        _actParams = parameters.toArray();
-    }
-
-    public void setParameters(Object... parameters) {
-        _actParams = parameters;
-    }
 }

@@ -2,7 +2,7 @@ package bp.tasks;
 
 import bp.BEvent;
 import bp.BPApplication;
-import bp.actuation.ActuatorService;
+import bp.actuation.IActuatorService;
 
 import java.util.concurrent.Callable;
 
@@ -12,10 +12,10 @@ import java.util.concurrent.Callable;
 public class ActuationTask implements Callable<Void>, Runnable {
 
     protected BPApplication _app;
-    protected ActuatorService _actService;
+    protected IActuatorService _actService;
 
     public ActuationTask(BPApplication _app,
-                         ActuatorService actuationService) {
+                         IActuatorService actuationService) {
         this._app = _app;
         _actService = actuationService;
     }

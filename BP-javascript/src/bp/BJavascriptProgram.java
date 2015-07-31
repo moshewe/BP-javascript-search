@@ -113,7 +113,7 @@ public abstract class BJavascriptProgram extends BPApplication {
                 bt.setupScope(_globalScope);
 //                if (bt.getScript() == null)
 //                    bt.setScript("runBThread();\n");
-//                _globalScope.put(bt.getName(),
+//                _globalScope.register(bt.getName(),
 //                        _globalScope, Context.javaToJS(bt, _globalScope));
             }
         } finally {

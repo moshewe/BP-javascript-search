@@ -1,7 +1,7 @@
 package bpbwapi.events;
 
 import bp.BProgramControls;
-import bpbwapi.BPBWRobot;
+import bpbwapi.BPBroodWarBot;
 import bpbwapi.BWJavascriptApplication;
 import bwapi.DefaultBWListener;
 import bwta.BWTA;
@@ -10,10 +10,10 @@ import bwta.BWTA;
  * Created by moshewe on 29/07/2015.
  */
 public class BPDefaultBWListener extends DefaultBWListener {
-    protected final BPBWRobot _robot;
+    protected final BPBroodWarBot _robot;
     protected BWJavascriptApplication _app;
 
-    public BPDefaultBWListener(BWJavascriptApplication app, BPBWRobot robot) {
+    public BPDefaultBWListener(BWJavascriptApplication app, BPBroodWarBot robot) {
         this._app = app;
         _robot = robot;
     }

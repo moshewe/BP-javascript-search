@@ -5,11 +5,11 @@ import bpbwapi.BWJavascriptApplication;
 /**
  * Created by moshewe on 01/07/2015.
  */
-public class ExampleRobotApp extends BWJavascriptApplication {
+public class ExampleBotApp extends BWJavascriptApplication {
 
-    public ExampleRobotApp() {
+    public ExampleBotApp() {
         super();
-        _name = "ExampleRobotApp";
+        _name = "ExampleBotApp";
         evaluateInGlobalScope("example-robots.js", "examplebot");
         setupBThreadScopes();
     }
