@@ -5,15 +5,15 @@ import bp.BEvent;
 /**
  * Created by orelmosheweinstock on 6/19/15.
  */
-public abstract class WrapperEvent<E> extends BEvent {
+public abstract class WrapperEvent<T> extends BEvent {
 
-    protected E _event;
+    protected T _object;
 
-    public WrapperEvent(E event) {
-        _event = event;
+    public WrapperEvent(T obj) {
+        _object = obj;
     }
 
-    public E getWrappedEvent() {
-        return _event;
+    public T getWrappedObject() {
+        return _object;
     }
 }
