@@ -86,7 +86,14 @@ public abstract class BJavascriptProgram extends BPApplication {
         return evaluateInGlobalScope(ios, scriptname);
     }
 
-    //    used from JS to register bthreads in the application
+    /**
+     * Called from JS to add BThreads running func as their
+     * runnable code.
+     *
+     * @param name
+     * @param func
+     * @return
+     */
     public BThread registerBThread(String name, Function func) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode

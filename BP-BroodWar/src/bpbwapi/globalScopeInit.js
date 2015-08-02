@@ -7,4 +7,6 @@ function bw_heartbeat(){
   }
 }
 
+unitCreateEvents = new EventsOfClass(UnitCreate);
+
 bpjs.registerSimBThread("BW-Heartbeat", bw_heartbeat);

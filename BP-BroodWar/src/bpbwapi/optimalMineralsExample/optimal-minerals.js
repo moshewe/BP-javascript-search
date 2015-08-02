@@ -1,5 +1,22 @@
 importPackage(Packages.bpbwapi.optimalMineralsExample);
 
+requestKnownMinerals = new BEvent("ReqKnownMinerals");
+var trackMineralsWaitEvents = new EventSet(unitCreateEvents,
+  requestKnownMinerals);
+function trackMineralFields(){
+  trackMineralFields_h([]);
+}
+function trackMineralFields_h(list){
+  var event = bsync(none, , none);
+  var unit = event.getWrappedObject();
+  if(unit.getType().isMineralField()){
+    var newList = list.concat(unit);
+    trackMineralFields_h(newList);
+  }
+  else{
+  }
+}
+
 function workerFindAndHarvestMinerals(worker) {
   return function findAndHarvestMinerals() {
     while (true) {
