@@ -18,6 +18,9 @@ A bot building interface with BP! Built using BWMirror and BWAPI.
 7. Install Git.
 8. Import this repository to your favorite IDE.
 
+## BWMIrror Javadoc
+http://bwmirror.jurenka.sk/javadoc/index.html
+
 ## Map Pack & ChaosLauncher Configuration
 Install the map pack linked in this page and follow the instructions for configuring ChaosLauncher automatically.
 http://www.sscaitournament.com/index.php?action=tutorial
