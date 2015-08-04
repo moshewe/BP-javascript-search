@@ -1,4 +1,4 @@
-package bpbwapi.examplerobot;
+package bpbwapi.examplebot;
 
 import bpbwapi.BPBroodWarBot;
 import bpbwapi.BWActuatorFactory;

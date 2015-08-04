@@ -1,0 +1,1 @@
+bpjs.registerSimBThread("BW-Heartbeat", bw_heartbeat);

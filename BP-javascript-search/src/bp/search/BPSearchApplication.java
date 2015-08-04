@@ -17,8 +17,12 @@ import java.util.List;
  */
 public abstract class BPSearchApplication extends BJavascriptProgram {
 
-    protected List<BThread> _simBThreads = new ArrayList<>();
+    protected List<BThread> _simBThreads;
 
+    public BPSearchApplication() {
+        super();
+        _simBThreads = new ArrayList<>();
+    }
 
     @Override
     protected void setupGlobalScope() {

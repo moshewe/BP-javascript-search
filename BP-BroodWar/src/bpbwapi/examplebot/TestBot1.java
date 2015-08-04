@@ -1,7 +1,6 @@
-package bpbwapi.examplerobot;
+package bpbwapi.examplebot;
 
 import bwapi.*;
-import bwapi.Text.Size.*;
 import bwta.BWTA;
 
 public class TestBot1 extends DefaultBWListener {

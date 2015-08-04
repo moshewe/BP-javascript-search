@@ -149,6 +149,12 @@ public abstract class BJavascriptProgram extends BPApplication {
         evaluateInGlobalScope(script, GLOBAL_SCOPE_INIT);
     }
 
+    /**
+     *  makes the obj available in the java script code , under the given name "objName"
+     *
+     * @param objName
+     * @param obj
+     */
     protected void putInGlobalScope(String objName, Object obj) {
         Context cx = ContextFactory.getGlobal().enterContext();
         cx.setOptimizationLevel(-1); // must use interpreter mode
