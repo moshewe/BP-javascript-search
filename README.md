@@ -17,8 +17,11 @@ http://www.sscaitournament.com/index.php?action=tutorial
 
 
 # How it works
-* Brood War is accessed via `BWAPI` and `BWMirror`. BWAPI triggers callbacks (of the interface `BWEventListener`) that are registered in `BWMirror`'s `Mirror` global object. For BP, we just wrap the data from these callbacks into events that we fire into the `BPApplication`.
+* Brood War is accessed via `BWAPI` and `BWMirror`. BWAPI triggers callbacks (in an implementation of the `BWEventListener` interface) that are registered in `BWMirror`'s `Mirror` global object. For BP, we just wrap the data from these callbacks into events that we fire into the `BPApplication`.
 * 
+
+
+
 ## BWMirror Javadoc
 http://bwmirror.jurenka.sk/javadoc/index.html
 
