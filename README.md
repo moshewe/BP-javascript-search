@@ -21,7 +21,8 @@ http://www.sscaitournament.com/index.php?action=tutorial
 
 
 # How it works
-Brood War is accessed via `BWAPI` and `BWMirror`. BWAPI calls callbacks (of the interface `BWEventListener`) that are registered in `BWMirror`'s `Mirror` global object.
+* Brood War is accessed via `BWAPI` and `BWMirror`. BWAPI triggers callbacks (of the interface `BWEventListener`) that are registered in `BWMirror`'s `Mirror` global object. For BP, we just wrap the data from these callbacks into events that we fire into the `BPApplication`.
+* 
 
 Seach is done via continuations in Rhino.
 
