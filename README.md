@@ -1,14 +1,6 @@
-# BP-javascript
-Implementation of BP in JS on top of Java using Rhino.
+Welcome to the Brood War Behavioral Programming page!
 
-# BP-javascript-search
-Implementation of BP-search using BP-Javascript.
-
-# BP-Brood War
-A bot building interface with BP! Built using BWMirror and BWAPI.
-
-## Installation Instructions
-
+# Installation Instructions
 1. Install Starcraft.
 2. Install Brood War.
 3. Install BWAPI. (https://github.com/bwapi/bwapi/releases/download/v4.1.0-Beta/BWAPI_410B_2_Setup.exe)
@@ -18,7 +10,7 @@ A bot building interface with BP! Built using BWMirror and BWAPI.
 7. Install Git.
 8. Import this repository to your favorite IDE.
 
-## BWMIrror
+## BWMirror
 This library is the Java bridge to BWAPI, which is written in C++.
 ### Javadoc
 http://bwmirror.jurenka.sk/javadoc/index.html
@@ -26,6 +18,18 @@ http://bwmirror.jurenka.sk/javadoc/index.html
 ## Map Pack & ChaosLauncher Configuration
 Install the map pack linked in this page and follow the instructions for configuring ChaosLauncher automatically.
 http://www.sscaitournament.com/index.php?action=tutorial
+
+
+
+
+
+
+
+
+
+
+
+
 
 > PLEASE BUY THIS GREAT GAME.
 
