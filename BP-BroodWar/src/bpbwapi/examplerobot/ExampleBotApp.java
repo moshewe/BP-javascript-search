@@ -10,7 +10,7 @@ public class ExampleBotApp extends BWJavascriptApplication {
     public ExampleBotApp() {
         super();
         _name = "ExampleBotApp";
-        evaluateInGlobalScope("example-robots.js", "examplebot");
+        evaluateInGlobalScope("example-bot.js", "examplebot");
         setupBThreadScopes();
     }
 

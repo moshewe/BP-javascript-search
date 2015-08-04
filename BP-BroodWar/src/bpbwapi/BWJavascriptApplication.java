@@ -29,6 +29,6 @@ public class BWJavascriptApplication extends BPSearchApplication {
         putInGlobalScope("onFrameEvent",
                 new EventsOfClass(FrameEvent.class));
         InputStream script = BWJavascriptApplication.class.getResourceAsStream("globalScopeInit.js");
-        evaluateInGlobalScope(script, "SCBW-js-init");
+        evaluateInGlobalScope(script, "bw-js-init");
     }
 }

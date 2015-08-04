@@ -1,5 +1,5 @@
 importPackage(Packages.bwapi);
-importPackage(Packages.bwapi.events.input);
+importPackage(Packages.bpbwapi.events);
 
 function bw_heartbeat(){
   while(true){
