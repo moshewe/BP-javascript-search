@@ -10,10 +10,6 @@ Welcome to the Brood War Behavioral Programming page!
 7. Install Git.
 8. Import this repository to your favorite IDE.
 
-## BWMirror
-This library is the Java bridge to BWAPI, which is written in C++.
-### Javadoc
-http://bwmirror.jurenka.sk/javadoc/index.html
 
 ## Map Pack & ChaosLauncher Configuration
 Install the map pack linked in this page and follow the instructions for configuring ChaosLauncher automatically.
@@ -23,6 +19,8 @@ http://www.sscaitournament.com/index.php?action=tutorial
 # How it works
 * Brood War is accessed via `BWAPI` and `BWMirror`. BWAPI triggers callbacks (of the interface `BWEventListener`) that are registered in `BWMirror`'s `Mirror` global object. For BP, we just wrap the data from these callbacks into events that we fire into the `BPApplication`.
 * 
+## BWMirror Javadoc
+http://bwmirror.jurenka.sk/javadoc/index.html
 
 Seach is done via continuations in Rhino.
 
