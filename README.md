@@ -20,8 +20,11 @@ Install the map pack linked in this page and follow the instructions for configu
 http://www.sscaitournament.com/index.php?action=tutorial
 
 
-
-
+# How it works
+Brood War is accessed via BWAPI and BWMirror. BWAPI calls certain callbacks in the Java code that are registered on the main ```java 
+Mirror
+``` 
+Seach is done via continuations in Rhino.
 
 
 
