@@ -21,9 +21,8 @@ http://www.sscaitournament.com/index.php?action=tutorial
 
 
 # How it works
-Brood War is accessed via BWAPI and BWMirror. BWAPI calls certain callbacks in the Java code that are registered on the main ```java 
-Mirror
-``` 
+Brood War is accessed via `BWAPI` and `BWMirror`. BWAPI calls callbacks (of the interface `BWEventListener`) that are registered in `BWMirror`'s `Mirror` global object.
+
 Seach is done via continuations in Rhino.
 
 
