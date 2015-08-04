@@ -18,14 +18,16 @@ A bot building interface with BP! Built using BWMirror and BWAPI.
 7. Install Git.
 8. Import this repository to your favorite IDE.
 
-## BWMIrror Javadoc
+## BWMIrror
+### Javadoc
 http://bwmirror.jurenka.sk/javadoc/index.html
 
-BWMirror is the Java interface to BWAPI. This library is the Java bridge to BWAPI, which is written in C++.
+This library is the Java bridge to BWAPI, which is written in C++.
 
 ## Map Pack & ChaosLauncher Configuration
 Install the map pack linked in this page and follow the instructions for configuring ChaosLauncher automatically.
 http://www.sscaitournament.com/index.php?action=tutorial
 
 > PLEASE BUY THIS GREAT GAME.
+
 > Implemented by Moshe Weinstock for his MS.C. thesis at Ben-Gurion University.
