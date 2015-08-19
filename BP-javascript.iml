@@ -19,6 +19,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="com.google.code.gson:gson:2.3.1" level="project" />
   </component>
 </module>

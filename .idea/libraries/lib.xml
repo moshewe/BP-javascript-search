@@ -5,19 +5,15 @@
       <root url="file://$PROJECT_DIR$/lib" />
       <root url="file://$PROJECT_DIR$/lib" />
       <root url="file://$PROJECT_DIR$/lib" />
-      <root url="file://$USER_HOME$/robocode/libs" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="file://$USER_HOME$/Downloads/aima-java-1.8.1-Chp7-Complete/aima-core/src/main/java" />
-      <root url="file://$USER_HOME$/Downloads/aima-java-1.8.1-Chp7-Complete/aima-core/src/test/java" />
       <root url="file://$PROJECT_DIR$/lib" />
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
     <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
     <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
     <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
-    <jarDirectory url="file://$USER_HOME$/robocode/libs" recursive="false" />
     <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" type="SOURCES" />
   </library>
 </component>
