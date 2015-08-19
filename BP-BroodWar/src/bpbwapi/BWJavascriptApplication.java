@@ -14,12 +14,12 @@ public class BWJavascriptApplication extends BPSearchApplication {
 
     public BWJavascriptApplication() {
         super();
+        InputStream script = BWJavascriptApplication.class.getResourceAsStream("bw-sim-bthreads.js");
+        evaluateInGlobalScope(script, "bw-sim-bthreads");
     }
 
     @Override
     public void start() throws InterruptedException {
-        InputStream script = BWJavascriptApplication.class.getResourceAsStream("bw-sim-bthreads.js");
-        evaluateInGlobalScope(script, "bw-sim-bthreads");
         super.start();
     }
 

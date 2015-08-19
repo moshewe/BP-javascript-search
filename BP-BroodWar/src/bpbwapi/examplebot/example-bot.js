@@ -10,7 +10,7 @@ bpjs.registerBThread("OnUnitCreate", function() {
 
 bpjs.registerBThread("OnFrame", function() {
   while (true) {
-    bsync(none, onFrameEvent, none);
+    bsync(none, aFrameEvent, none);
     bsync(new ListUnitsEvent(), none, none);
   }
 });
