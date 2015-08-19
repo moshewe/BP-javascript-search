@@ -70,7 +70,7 @@ public class EventsOfClass extends ArrayList<Class<?>> implements EventSetInterf
     }
 
     public String toString() {
-        return name + "s";
+        return name + "'s";
     }
 
 }
