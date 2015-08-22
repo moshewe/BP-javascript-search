@@ -1,9 +1,10 @@
-importPackage(Packages.bpbwapi.examplerobot);
+importPackage(Packages.bpbwapi.examplebot);
 
 bpjs.registerBThread("OnUnitCreate", function() {
   while (true) {
     var create = bsync(none, unitCreateEvent, none);
-    var unit = create.getWrappedEvent();
+    bplog("Got a new unit!");
+    var unit = create.getWrappedObject();
     bplog("New unit " + unit.getType());
   }
 });
@@ -11,6 +12,7 @@ bpjs.registerBThread("OnUnitCreate", function() {
 bpjs.registerBThread("OnFrame", function() {
   while (true) {
     bsync(none, aFrameEvent, none);
+    bplog("received OnFrame event!");
     bsync(new ListUnitsEvent(), none, none);
   }
 });

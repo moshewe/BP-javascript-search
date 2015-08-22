@@ -200,6 +200,7 @@ public class BThread implements Serializable {
         bplog("bsyncing with " + requestedEvents + ", " +
                 waitedEvents + ", " + blockedEvents);
         try {
+            openGlobalContext();
             ContinuationPending pending =
                     _globalContext.captureContinuation();
             throw pending;

@@ -1,5 +1,4 @@
 java.lang.System.out.println("Registering BroodWar simulation bthreads...");
-
 function bw_heartbeat() {
   while (true) {
     bsync(aFrameEvent, none, none);

@@ -209,10 +209,17 @@ public abstract class BPApplication implements Cloneable, Serializable {
             for (BThread bt : _bthreads) {
                 resumes.add(new ResumeBThread(bt, lastEvent));
             }
+            List<Future<Void>> futures = null;
             try {
-                _executor.invokeAll(resumes);
+                futures = _executor.invokeAll(resumes);
+                for (Future future : futures) {
+                    future.get();
+                }
             } catch (InterruptedException e) {
                 bplog("INVOKING BTHREAD RESUMES INTERRUPTED");
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                bplog("EXCEPTION WHILE EXECUTING BTHREAD");
                 e.printStackTrace();
             }
             bplog("<< finished bthread wakeup");
@@ -243,6 +250,7 @@ public abstract class BPApplication implements Cloneable, Serializable {
 
     /**
      * a method that sends events as input for the application
+     *
      * @param e
      */
     public void fire(BEvent e) {
@@ -287,7 +295,7 @@ public abstract class BPApplication implements Cloneable, Serializable {
         bplog("********* " + _bthreads.size()
                 + " scenarios started **************");
         _started = true;
-        _executor.execute(new NextEvent(this, _arbiter));
+        _executor.execute(new EventLoopTask(this, _arbiter));
     }
 
     public void registerBThread(BThread bt) {

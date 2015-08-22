@@ -18,13 +18,13 @@ public class ResumeBThread extends BPTask {
     @Override
     public void run() {
         if(_bt.isWaited(_event)){
-//            bplog(this + " waits for " + _event);
+            bplog("resuming " + this);
             _bt.resume(_event);
             return;
         }
 
         if(_bt.isRequested(_event)){
-//            bplog(this + " requests " + _event);
+            bplog("resuming " + this);
             _bt.resume(_event);
             return;
         }
