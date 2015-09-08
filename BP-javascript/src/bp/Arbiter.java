@@ -15,14 +15,14 @@ import static bp.BProgramControls.debugMode;
  */
 public class Arbiter {
 
-    protected BPApplication _program;
+    protected BPApplication _app;
 
     public BPApplication getProgram() {
-        return _program;
+        return _app;
     }
 
     public void setProgram(BPApplication program) {
-        this._program = program;
+        this._app = program;
     }
 
     protected void bplog(String s) {
@@ -36,7 +36,7 @@ public class Arbiter {
     }
 
     /**
-     * Choose the next event to be fired. Notifies the _program which thread
+     * Choose the next event to be fired. Notifies the _app which thread
      * asked for it.
      *
      * @throws BPJRequestableSetException
@@ -50,7 +50,7 @@ public class Arbiter {
     }
 
     protected BEvent selectEventFromProgram() {
-        Set<BEvent> legals = _program.legalEvents();
+        Set<BEvent> legals = _app.legalEvents();
         Iterator<BEvent> it = legals.iterator();
         if (it.hasNext()) {
             return it.next();

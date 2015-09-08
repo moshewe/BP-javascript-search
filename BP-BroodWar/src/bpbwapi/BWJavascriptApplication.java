@@ -1,9 +1,8 @@
 package bpbwapi;
 
-import bp.eventSets.EventsOfClass;
 import bp.search.BPSearchApplication;
-import bpbwapi.events.UnitCreate;
-import bpbwapi.events.FrameEvent;
+import bp.search.adversarial.BPGame;
+import bp.search.adversarial.BPIterativeDeepeningAlphaBeta;
 
 import java.io.InputStream;
 
@@ -14,6 +13,9 @@ public class BWJavascriptApplication extends BPSearchApplication {
 
     public BWJavascriptApplication() {
         super();
+        BPGame bwgame = new
+        _arbiter = new BPIterativeDeepeningAlphaBeta(bwgame, Double.MIN_VALUE,
+                Double.MAX_VALUE, 100);
         InputStream script = BWJavascriptApplication.class.getResourceAsStream("bw-sim-bthreads.js");
         evaluateInGlobalScope(script, "bw-sim-bthreads");
     }

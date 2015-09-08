@@ -25,6 +25,13 @@ public class InformedSearchArbiter extends Arbiter {
     protected BPResultFunction _result = new BPResultFunction();
     protected InitStateGenerator _generator;
 
+    public InformedSearchArbiter() {
+    }
+
+    public InformedSearchArbiter(Search _algorithm) {
+        this._algorithm = _algorithm;
+    }
+
     public InformedSearchArbiter(Search algorithm,
                                  InitStateGenerator generator,
                                  BPGoalTest goal) {
@@ -37,8 +44,7 @@ public class InformedSearchArbiter extends Arbiter {
     public BEvent nextEvent() {
         List<Action> res = new ArrayList<>();
         BPState bps = _generator.genInitState();
-        BPProblem prob = new BPProblem(bps,
-                _actions, _result, _goal);
+        BPProblem prob = getProblem(bps);
         try {
             res = _algorithm.search(prob);
         } catch (Exception e) {
@@ -52,6 +58,11 @@ public class InformedSearchArbiter extends Arbiter {
             BPAction action = (BPAction) res.get(0);
             return action.getEvent();
         }
+    }
+
+    private BPProblem getProblem(BPState bps) {
+        return new BPProblem(bps,
+                _actions, _result, _goal);
     }
 
 }

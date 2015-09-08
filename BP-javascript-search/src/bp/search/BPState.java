@@ -7,7 +7,7 @@ import bp.BThread;
 import java.util.*;
 
 /**
- * A class for capturing a state of a be-_program.
+ * A class for capturing a state of a be-_app.
  */
 public class BPState {
 
@@ -16,7 +16,7 @@ public class BPState {
     }
 
     /**
-     * The be-_program whose state is captured
+     * The be-_app whose state is captured
      */
     public final BPApplication _program;
     /**

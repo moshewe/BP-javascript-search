@@ -21,7 +21,7 @@ import java.util.List;
 import static tictactoe.events.StaticEvents.*;
 
 /**
- * The main entry point to the TicTacToe _program.
+ * The main entry point to the TicTacToe _app.
  */
 public class TicTacToe extends BPSearchApplication {
 

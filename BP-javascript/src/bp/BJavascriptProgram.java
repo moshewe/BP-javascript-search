@@ -20,6 +20,11 @@ public abstract class BJavascriptProgram extends BPApplication {
 
     public static final String GLOBAL_SCOPE_INIT = "BPJavascriptGlobalScopeInit";
     protected Arbiter _arbiter;
+
+    public Scriptable getGlobalScope() {
+        return _globalScope;
+    }
+
     protected Scriptable _globalScope;
 
     public BJavascriptProgram() {
