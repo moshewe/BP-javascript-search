@@ -9,6 +9,7 @@ import bp.search.BPState;
 import bp.search.BTState;
 import bp.search.adversarial.players.BPSystemPlayer;
 import bp.search.adversarial.players.EnvironmentPlayer;
+import bp.search.informed.BPJSHeuristicFunction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +21,23 @@ public abstract class BPGame implements Game<BPState, BPAction, BPPlayer> {
     protected static BPPlayer[] _players = {BPSystemPlayer.instance,
             EnvironmentPlayer.instance};
     protected BPApplication _program;
-
-    public void setLastPlayer(BPPlayer lastPlayer) {
-        _lastPlayer = lastPlayer;
-    }
-
+    protected BPJSHeuristicFunction _heuristic;
     protected BPPlayer _lastPlayer;
+
+    protected double getUtilityFromHeuristics(BPState state, BPPlayer player) {
+        if (player == BPSystemPlayer.instance)
+            return _heuristic.h(state);
+        else
+            return -_heuristic.h(state);
+    }
 
     public BPGame(BPApplication bp) {
         _program = bp;
         _lastPlayer = BPSystemPlayer.instance;
+    }
+
+    public void setLastPlayer(BPPlayer lastPlayer) {
+        _lastPlayer = lastPlayer;
     }
 
     @Override

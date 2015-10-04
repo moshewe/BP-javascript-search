@@ -13,8 +13,8 @@ public class BWJavascriptApplication extends BPSearchApplication {
 
     public BWJavascriptApplication() {
         super();
-        BPGame bwgame = new
-        _arbiter = new BPIterativeDeepeningAlphaBeta(bwgame, Double.MIN_VALUE,
+        BPGame bwgame = new BWGame(this);
+        super._arbiter = new BPIterativeDeepeningAlphaBeta(bwgame, Double.MIN_VALUE,
                 Double.MAX_VALUE, 100);
         InputStream script = BWJavascriptApplication.class.getResourceAsStream("bw-sim-bthreads.js");
         evaluateInGlobalScope(script, "bw-sim-bthreads");

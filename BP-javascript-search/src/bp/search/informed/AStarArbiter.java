@@ -1,11 +1,7 @@
 package bp.search.informed;
 
 import aima.core.search.framework.HeuristicFunction;
-import aima.core.search.framework.Search;
 import aima.core.search.informed.AStarSearch;
-import bp.search.framework.BPGoalTest;
-import bp.search.informed.*;
-import bpbwapi.BWJavascriptApplication;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
 
@@ -26,7 +22,7 @@ public class AStarArbiter extends InformedSearchArbiter {
     }
 
     public void registerHeuristicFunction(final Function func) {
-        _hf = new BPHeuristicFunction((Scriptable) new Object(), func);
+        _hf = new BPJSHeuristicFunction((Scriptable) new Object(), func);
     }
 
 }

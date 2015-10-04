@@ -46,9 +46,7 @@ public class HotNCold extends BJavascriptProgram {
 
 //        evaluateInGlobalScope("out/production/BP-javascript/bp/examples/HotNCold.js");
 //        String s = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-        URL s = getClass().getResource("HotNCold.js");
-        bplog(s.toString());
-        evaluateInGlobalScope(s.getPath());
+        evaluateInGlobalScope(HotNCold.class.getResourceAsStream("HotNCold.js"), "HotNCold");
 
         setupBThreadScopes();
     }
