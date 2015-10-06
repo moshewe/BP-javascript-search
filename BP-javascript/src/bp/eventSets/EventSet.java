@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 
-// Main class
 @SuppressWarnings("serial")
 public class EventSet extends HashSet<EventSetInterface> implements
         EventSetInterface, Serializable {
@@ -13,7 +12,6 @@ public class EventSet extends HashSet<EventSetInterface> implements
 
     public EventSet(EventSetInterface... eSetInterfaces) {
         super();
-
         for (EventSetInterface eSetInterface : eSetInterfaces) {
             add(eSetInterface);
         }
@@ -25,15 +23,11 @@ public class EventSet extends HashSet<EventSetInterface> implements
     }
 
     public boolean contains(Object o) {
-        Iterator<EventSetInterface> itr = this.iterator();
-
-        while (itr.hasNext()) {
-            EventSetInterface eSetInterface = itr.next();
+        for (EventSetInterface eSetInterface : this) {
             if (eSetInterface.contains(o)) {
                 return true;
             }
         }
-
         return false;
     }
 

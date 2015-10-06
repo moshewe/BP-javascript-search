@@ -5,13 +5,16 @@ import bp.exceptions.BPJRequestableSetException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @SuppressWarnings("serial")
-public class RequestableEventSet extends ArrayList<RequestableInterface> implements EventSetInterface, RequestableInterface, Serializable {
+public class RequestableEventSet extends ArrayList<RequestableInterface>
+        implements EventSetInterface, RequestableInterface, Serializable {
 
     private String name = this.getClass().getSimpleName();
 
     public RequestableEventSet(RequestableInterface... reqs) {
+        super(reqs.length);
         for (RequestableInterface r : reqs) {
             add(r);
         }
@@ -30,10 +33,6 @@ public class RequestableEventSet extends ArrayList<RequestableInterface> impleme
         return name;
     }
 
-    public boolean isEvent() {
-        return (false);
-    }
-
     public boolean contains(Object o) {
         for (RequestableInterface r : this)
             if (r.contains(o))
@@ -41,29 +40,4 @@ public class RequestableEventSet extends ArrayList<RequestableInterface> impleme
         return false;
     }
 
-    public BEvent getEvent() throws BPJRequestableSetException {
-        throw new BPJRequestableSetException();
-    }
-
-    public ArrayList<BEvent> getEventList() {
-        ArrayList<BEvent> list = new ArrayList<BEvent>();
-        this.addEventsToList(list);
-        return list;
-    }
-
-    public void addEventsToList(ArrayList<BEvent> list) {
-        for (RequestableInterface ri : this) {
-            ri.addEventsToList(list);
-        }
-    }
-
-//    @Override
-//    public String jsIdentifier() {
-//        String id = BJavascriptProgram.toJSIdentifier(name) + "_";
-//        for (Iterator<RequestableInterface> it = iterator(); it.hasNext(); ) {
-//            RequestableInterface next = it.next();
-//            id += next.jsIdentifier() + "_";
-//        }
-//        return id;
-//    }
 }
