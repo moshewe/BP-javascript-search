@@ -81,13 +81,9 @@ public class BEvent implements EventSetInterface,
     }
 
     public ArrayList<BEvent> getEventList() {
-        ArrayList<BEvent> list = new ArrayList<BEvent>();
-        this.addEventsToList(list);
-        return list;
-    }
-
-    public void addEventsToList(ArrayList<BEvent> list) {
+        ArrayList<BEvent> list = new ArrayList<BEvent>(1);
         list.add(this);
+        return list;
     }
 
     @Override

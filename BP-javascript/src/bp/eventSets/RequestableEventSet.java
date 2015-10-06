@@ -6,6 +6,8 @@ import bp.exceptions.BPJRequestableSetException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class RequestableEventSet extends ArrayList<RequestableInterface>
@@ -38,6 +40,15 @@ public class RequestableEventSet extends ArrayList<RequestableInterface>
             if (r.contains(o))
                 return true;
         return false;
+    }
+
+    @Override
+    public List<BEvent> getEventList() {
+        List<BEvent> list = new LinkedList<>();
+        for (RequestableInterface req : this) {
+            list.addAll(req.getEventList());
+        }
+        return list;
     }
 
 }

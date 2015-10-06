@@ -65,7 +65,7 @@ public abstract class BPApplication implements Cloneable, Serializable {
             if (bt.getRequestedEvents() == null)
                 continue;
 
-            ArrayList<BEvent> reqList = bt.getRequestedEvents().getEventList();
+            List<BEvent> reqList = bt.getRequestedEvents().getEventList();
             for (BEvent e : reqList) {
                 if (!isBlocked(e)) {
                     enabled.add(e);
@@ -164,15 +164,11 @@ public abstract class BPApplication implements Cloneable, Serializable {
     public Collection<BEvent> getRequestedBlockedEvents() {
         Collection<BEvent> blocked = new ArrayList<BEvent>();
         for (BThread bt : _bthreads) {
-            Iterator<RequestableInterface> it = bt.getRequestedEvents().iterator();
-            while (it.hasNext()) {
-                RequestableInterface req = it.next();
-                if (req.isEvent()) {
-                    BEvent e = (BEvent) req;
-                    for (BThread other : _bthreads) {
-                        if (other.getBlockedEvents().contains(e)) {
-                            blocked.add(e);
-                        }
+            for (BEvent e :
+                    bt.getRequestedEvents().getEventList()) {
+                for (BThread other : _bthreads) {
+                    if (other.getBlockedEvents().contains(e)) {
+                        blocked.add(e);
                     }
                 }
             }
